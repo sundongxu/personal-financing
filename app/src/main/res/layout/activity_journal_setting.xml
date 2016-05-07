@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/jz_main_bg"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/jz_mingxi_title"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/jz_shezhi"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_psd_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/jz_paper_bg"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_psd_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jz_jiami"
+                android:textColor="#000000"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_psd_set_area"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@drawable/bw_new_et_bg_1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/et_new_psd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="@string/jz_jiami_hint1"
+                android:inputType="number"
+                android:maxLength="6" />
+
+            <EditText
+                android:id="@+id/et_psd_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="@string/jz_jiami_hint2"
+                android:inputType="number"
+                android:maxLength="6" />
+
+            <LinearLayout
+                android:id="@+id/ll_btn_area"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_psd_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/jz_addbt_selector"
+                    android:text="@string/jz_tab2_queding"
+                    android:textColor="#000000" />
+
+                <Button
+                    android:id="@+id/btn_psd_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/jz_addbt_selector"
+                    android:text="@string/jz_shezhi_shanchumima"
+                    android:textColor="#000000" />
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:background="@drawable/jz_addbt_selector"
+                    android:text="@string/jz_add_quxiao"
+                    android:textColor="#000000" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_delete_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/jz_paper_bg"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_delete_all_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jz_shezhi_qingchu"
+                android:textColor="#000000"
+                android:textSize="25dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_about_software"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/jz_paper_bg"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_about_software"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/jz_shezhi_about"
+                android:textColor="#000000"
+                android:textSize="25dp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

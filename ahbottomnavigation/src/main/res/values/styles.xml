@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MainActivity的主题 -->
+    <style name="MyAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/holo_blue_bright</item>
+        <item name="colorPrimaryDark">@color/holo_blue_bright</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorForeground">@android:color/background_dark</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,63 @@
+<resources>
+
+    <!--&lt;!&ndash;Base application theme.&ndash;&gt;-->
+    <!--<style name="AppBaseTheme" parent="Theme.AppCompat.NoActionBar">-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--&lt;!&ndash; ToolBar（ActionBar）颜色 &ndash;&gt;-->
+    <!--<item name="colorPrimary">#4876FF</item>-->
+    <!--&lt;!&ndash; 状态栏颜色 &ndash;&gt;-->
+    <!--<item name="colorPrimaryDark">#3A5FCD</item>-->
+    <!--&lt;!&ndash; EditText下划线颜色 &ndash;&gt;-->
+    <!--<item name="colorAccent">#FF4081</item>-->
+    <!--&lt;!&ndash; 窗口的背景颜色 &ndash;&gt;-->
+    <!--<item name="android:windowBackground">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--<style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">-->
+    <!--<item name="actionMenuTextColor">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--<style name="AppTheme" parent="@style/AppBaseTheme"/>-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--&lt;!&ndash; toolbar（actionbar）颜色 &ndash;&gt;-->
+        <!--<item name="colorPrimary">#2196F3</item>-->
+        <!--&lt;!&ndash;toolbar标题文字颜色&ndash;&gt;-->
+        <!--<item name="android:textColorPrimary">@android:color/white</item>-->
+    <!--</style>-->
+
+    <!--<style name="LoginTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/holo_blue_bright</item>-->
+        <!--<item name="colorPrimaryDark">@color/holo_blue_bright</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
+
+    <!-- toolbar菜单样式 -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="actionMenuTextAppearance">@style/ToolbarMenuTextSize</item>
+    </style>
+    <!-- toolbar弹出菜单样式 -->
+    <style name="ToolbarPopupTheme" parent="@style/ThemeOverlay.AppCompat">
+        <item name="android:colorBackground">#212121</item>
+    </style>
+    <!-- toolbar标题样式 -->
+    <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+    <!-- toolbar菜单文字尺寸 -->
+    <style name="ToolbarMenuTextSize" parent="@style/TextAppearance.AppCompat.Menu">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- ToolBar搜索框 下面有模糊遮罩-->
+    <style name="MaterialSearch" parent="@android:style/Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+    </style>
+
+</resources>

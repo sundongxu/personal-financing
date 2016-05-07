@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_alignParentTop="true"
+              android:background="@drawable/bg_1"
+              android:orientation="vertical">
+
+
+    <com.ssdut.roysun.personalfinancialrecommendationsystem.service.Marrquee
+        android:id="@+id/mq_text_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:autoLink="web|phone"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/dialog_about"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+
+        <EditText
+            android:id="@+id/et_content_translated"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/bw_new_et_bg_1"
+            android:hint="@string/fy_hint"
+            android:singleLine="false"
+            android:visibility="visible">
+
+            <requestFocus/>
+        </EditText>
+
+        <Button
+            android:id="@+id/btn_translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/et_content_translated"
+            android:layout_alignBottom="@+id/et_content_translated"
+            android:layout_alignRight="@+id/et_content_translated"
+            android:background="@drawable/find"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_translation"
+        android:layout_width="match_parent"
+        android:layout_height="398dp"
+        android:layout_marginLeft="-25dp"
+        android:layout_marginRight="-25dp"
+        android:layout_marginTop="-10dp"
+        android:background="@drawable/tq_bg"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/sv_translation_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="33dp"
+            android:layout_marginLeft="48dp"
+            android:layout_marginRight="44dp"
+            android:layout_marginTop="85dp">
+
+            <LinearLayout
+                android:id="@+id/ll_btn_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_translation_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="16dp"/>
+            </LinearLayout>
+        </ScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</LinearLayout>

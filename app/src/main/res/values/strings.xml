@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">随心记</string>
+    <string name="main_jizhangqi">记账工具</string>
+    <string name="main_benwang">备忘记事</string>
+    <string name="main_jisuan">简易计算</string>
+    <string name="main_location">股票信息</string>
+    <string name="main_tianqi">搜索天气</string>
+    <string name="main_fangdao">手机防盗</string>
+    <string name="main_set_quanjushezhi">全局设置</string>
+    <string name="main_bt_exit">退出程序</string>
+    <string name="main_bt_about">关于软件</string>
+    <string name="main_bt_zhuangtai">手机状态</string>
+    <string name="jz_name">小日子计帐器</string>
+    <string name="jz_zhichu">当前支出</string>
+    <string name="jz_shouru">当前收入</string>
+    <string name="jz_zhichu_bennian">本年支出</string>
+    <string name="jz_zhichu_benyue">本月支出</string>
+    <string name="jz_zhichu_jintian">今天支出</string>
+    <string name="jz_benzhou_zhichu">本周支出</string>
+    <string name="jz_benyue_zhichu">本月支出</string>
+    <string name="jz_benyue_shouru">本月收入</string>
+    <string name="jz_yusuan">本月预算：</string>
+    <string name="jz_yusuanshengyu">预算余额</string>
+    <string name="jz_shouru_bennian">本年收入</string>
+    <string name="jz_shouru_benyue">本月收入</string>
+    <string name="jz_shouru_jintian">今天收入</string>
+    <string name="jz_tab2_zhichu">支出</string>
+    <string name="jz_tab2_shouru">收入</string>
+    <string name="jz_tab2_jiedai">借贷</string>
+    <string name="jz_tab2_jine">金额</string>
+    <string name="jz_tab2_leibie">类别</string>
+    <string name="jz_tab2_shijian">时间</string>
+    <string name="jz_tab2_beizhu">备注</string>
+    <string name="jz_tab2_tianjiapic">照片</string>
+    <string name="jz_tab2_jinenum">0.00</string>
+    <string name="jz_tab2_leibieres">餐饮>晚餐</string>
+    <string name="jz_tab2_timeres">20140320</string>
+    <string name="jz_tab2_beizhures">无备注</string>
+    <string name="jz_1">1</string>
+    <string name="jz_2">2</string>
+    <string name="jz_3">3</string>
+    <string name="jz_4">4</string>
+    <string name="jz_5">5</string>
+    <string name="jz_6">6</string>
+    <string name="jz_7">7</string>
+    <string name="jz_8">8</string>
+    <string name="jz_9">9</string>
+    <string name="jz_0">0</string>
+    <string name="jz_d">.</string>
+    <string name="jz_tab2_fanhui">返回</string>
+    <string name="jz_tab2_queding">确定</string>
+    <string name="jz_del">del</string>
+    <string name="jz_main_add">添加</string>
+    <string name="jz_main_mingxi">明细</string>
+    <string name="jz_main_baobiao">报表</string>
+    <string name="jz_main_yusuan">预算</string>
+    <string name="jz_main_setting">设置</string>
+    <string name="jz_add_save">保存</string>
+    <string name="jz_add_quxiao">取消</string>
+    <string name="leibie_item0_bt">明细类别</string>
+    <string name="leibie_item_bt">添加子类</string>
+    <string name="beizhu_item_bt">备注</string>
+    <string name="time_item_bt">时间</string>
+    <string name="jz_add_nowtime">15:15</string>
+    <string name="jz_mingxi_tittle">账目明细</string>
+    <string name="jz_mingxi_huizhong">汇总</string>
+    <string name="jz_mingxi_shengyu">本月剩余</string>
+    <string name="jz_add_del">删除</string>
+    <string name="bw_text_size">T</string>
+    <string name="memo_main_select_all">全选所有</string>
+    <string name="memo_main_delete">删除选中</string>
+    <string name="memo_main_cancelselect">取消选择</string>
+    <string name="wz_mywz">我的位置</string>
+    <string name="wz_jingdu">经度：</string>
+    <string name="wz_weidu">纬度：</string>
+    <string name="wz_guojia">国家：</string>
+    <string name="wz_sheng">省份：</string>
+    <string name="wz_shi">城市：</string>
+    <string name="wz_jiedao">街道：</string>
+    <string name="wz_jingqudu">精确度：</string>
+    <string name="wz_dingwei">定位</string>
+    <string name="wz_lianxiren">联系人姓名</string>
+    <string name="wz_send_bt">发送</string>
+    <string name="tq_serch">搜索</string>
+    <string name="tq_title">天气</string>
+    <string name="tq_jintian">今天：</string>
+    <string name="tq_mingtian">明天：</string>
+    <string name="tq_houtian">后天：</string>
+    <string name="tq_dahoutian">大后天：</string>
+    <string name="tq_chengshi">请输入城市名称</string>
+    <string name="tq_qiehuan">切换城市</string>
+    <string name="tq_dangqian">当前天气</string>
+    <string name="tq_gengxintime">数据更新时间:</string>
+    <string name="fy_hint">请输入内容，单词、短语、\r\n长句（中英皆可）。</string>
+    <string name="fy_fanyi">翻译</string>
+    <string name="fy_huyi">中英互译</string>
+    <string name="fanyi">中英互译</string>
+    <string name="js_jia">+</string>
+    <string name="js_jian">-</string>
+    <string name="js_cheng">*</string>
+    <string name="js_dian">．</string>
+    <string name="js_chu">/</string>
+    <string name="js_deng">=</string>
+    <string name="js_shanchu">删除</string>
+    <string name="js_qingkong">清空</string>
+    <string name="jz_shezhi">程序设置</string>
+    <string name="jz_jiami">程序加密</string>
+    <string name="jz_jiami_hint1">请输入新密码（六位）</string>
+    <string name="jz_jiami_hint2">请确认密码</string>
+    <string name="jz_shezhi_about">关于软件</string>
+    <string name="jz_shezhi_qingchu">清除所有消费记录</string>
+    <string name="jz_shezhi_jiumima">请输入旧密码</string>
+    <string name="jz_shezhi_shanchumima">删除密码</string>
+    <string name="jz_benyueyusuan">本月预算</string>
+    <string name="dialog_mima">请输入记账器密码</string>
+    <string name="dialog_about">如果您要了解理财助手每个子功能的特点和使用方法，请在该功能对应的图标上长按不放，程序将会弹出相应的提示信息。该程序目前适用于Android2.2及以上的版本，如有问题反馈请发送邮件至785554157@qq.com</string>
+    <string name="bw_hint">输入完后直接按返回键，程序将自动保存。</string>
+    <string name="main_hiddenguanggao">隐藏提醒</string>
+    <string name="main_help">使用帮助</string>
+    <string name="stockapp1">                                                </string>
+    <string name="stockapp2">   确定        </string>
+	<string name="stockapp3">   股票代号输入注意事项：因上海股票和深圳股票在代号上有重叠，
+	    所以在输入上海股票请在代号前加 SH，深圳加 SZ（不区分大小写），
+	    例：上证指数 sh000001，深发展A sz000001。
+	    如不输入股票代号默认上证指数 sh000001</string>
+    <string name="stockapp4">  请输入股票代号： </string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--<string name="app_name">AHBottomNavigation</string>-->
+    <string name="tab_1">流水</string>
+    <string name="tab_2">理财</string>
+    <string name="tab_3">账户</string>
+    <string name="tab_4">其它</string>
+    <string name="tab_5">测试</string>
+    <string name="exit_app">退出随心记</string>
+    <string name="exit_confirm">确认退出？</string>
+    <string name="cancel">取消</string>
+    <string name="exit_journal">退出记账</string>
+    <string name="exit_stock">退出股票</string>
+    <string name="exit_weather">退出天气</string>
+    <string name="exit_translation">退出翻译</string>
+    <string name="exit_calculation">退出计算</string>
+    <string name="exit_memo">退出备忘</string>
+    <string name="confirm">确定</string>
+    <string name="confirm_delete_memo_item">是否确认删除该条记录？</string>
+    <string name="success_export">导出成功</string>
+
+    <string-array name="fun_array">
+        <item>备忘</item>
+        <item>天气</item>
+        <item>翻译</item>
+        <item>计算</item>
+    </string-array>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="open_txt">Open</string>
+    <string name="close_txt">Close</string>
+    <string name="info_device">设备信息</string>
+    <string name="info_app">关于</string>
+</resources>
