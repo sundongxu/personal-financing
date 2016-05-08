@@ -36,7 +36,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     private Button mBtnSelectAll, mBtnDelete, mBtnCancelSelect;  // 多选、删除、取消选择三个按钮，包含在mMenu(linearLayout)
 
     private Handler handler;
-    private MemoManager mMemoDataHelper;  // 创建数据库对象
+    private MemoManager mMemoManager;  // 创建数据库对象
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,24 +47,24 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        mMemoListAdapter = new MemoListAdapter(this);
+        handler = new Handler();
+        mMemoManager = new MemoManager(this);
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         mMenu = (LinearLayout) this.findViewById(R.id.ll_menu);
-        mMenu.setVisibility(View.GONE);  //初始不可见，在onMenuItemSelected方法触发后可见（即长按menu键）
+        mMenu.setVisibility(View.VISIBLE);  //初始不可见，在onMenuItemSelected方法触发后可见（即长按menu键）
         mMemoList = (ListView) this.findViewById(R.id.lv_memo);
         mIBAddNewMemo = (ImageButton) this.findViewById(R.id.ib_add);
         mIBAddNewMemo.setOnClickListener(this);
         mMemoList.setAdapter(mMemoListAdapter);
         mMemoList.setOnItemClickListener(this);
         initMenuEvent();
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
-        mMemoListAdapter = new MemoListAdapter(this);
-        handler = new Handler();
-        mMemoDataHelper = new MemoManager(this);
     }
 
     private void initMenuEvent() {
@@ -129,7 +129,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     private void deleteMemo() {
         if (mMemoListAdapter.mIdList != null && mMemoListAdapter.mIdList.size() > 0) {
             for (int id : mMemoListAdapter.mIdList) {
-                mMemoDataHelper.deleteMemoInfo(id);
+                mMemoManager.deleteMemoInfo(id);
             }
             mMemoListAdapter.initList();
             mMemoListAdapter.isShowCheck = false;  //每一次多选框标志位置位操作之后才能执行notifyDataSetChanged() -> getView()更新视图

@@ -1,7 +1,7 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.MD.adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -10,12 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity.MainActivityMD;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.AppInfoActivity;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.DeviceInfoActivity;
 
 /**
  * Created by roysun on 16/5/3.
@@ -24,71 +23,81 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.DeviceInf
  */
 public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAdapter.ViewHolder> {
 
-    public static final String TAG = "DrawerMenuListAdapter";
+    public static final String TAG = "DrawerListAdapter";
+
+    public static final int TYPE_HEADER = 1;  // Drawer新增的HeaderView
+    public static final int TYPE_NORMAL = 2;  // 前面两个可点击视图，显示ImageView + TextView + SwitchCompat三个控件
+    public static final int TYPE_SPECIAL = 3;  // 后面三个可点击视图，显示ImageView + TextView两个控件
+
+    private View mDrawerHeader;
 
     private String[] mMenuItemNameList;
     private Context mContext;
+    private OnItemClickListener mListener;
+    private Resources mResources;
 
-    public void setListener(OnDrawerItemSelectedListener listener) {
-        mListener = listener;
-    }
-
-    private OnDrawerItemSelectedListener mListener;
-
-    public DrawerMenuListAdapter(Context context, String[] itemList) {
+    public DrawerMenuListAdapter(Context context) {
         mContext = context;
-        mMenuItemNameList = itemList;
+        mMenuItemNameList = initItemNameList();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public String[] initItemNameList() {
+        mResources = mContext.getResources();
+        return new String[]{mResources.getString(R.string.drawer_item_0),
+                mResources.getString(R.string.drawer_item_1),
+                mResources.getString(R.string.drawer_item_2),
+                mResources.getString(R.string.drawer_item_3),
+                mResources.getString(R.string.drawer_item_4)};
+    }
 
-        public ImageView mItemPic;
-        public TextView mItemText;
-        public SwitchCompat mBtnChange;
-
-        public ViewHolder(View v) {
-            super(v);
-            mItemPic = (ImageView) v.findViewById(R.id.iv_menu_item);
-            mItemText = (TextView) v.findViewById(R.id.tv_menu_item);
-            mBtnChange = (SwitchCompat) v.findViewById(R.id.sc_menu_item);
-            v.setOnClickListener(this);
-            System.out.println("sdx---位置:" + getPosition());
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mContext instanceof MainActivityMD) {
-                switch (mItemText.getText().toString()) {
-                    case "设备信息":
-                        mContext.startActivity(new Intent(mContext, DeviceInfoActivity.class));
-                        mListener.onItemSelectedFinished();
-                        break;
-                    case "关于":
-                        mContext.startActivity(new Intent(mContext, AppInfoActivity.class));
-                        mListener.onItemSelectedFinished();
-                        break;
-                    case "退出":
-                        ((MainActivityMD) mContext).exitApplication();
-                        mListener.onItemSelectedFinished();
-                        break;
-
-                }
+    @Override
+    public int getItemViewType(int position) {
+        if (mDrawerHeader == null) {
+            if (position >= 0 && position < 2) {
+                return TYPE_NORMAL;
+            } else {
+                return TYPE_SPECIAL;
+            }
+        } else {
+            if (position == 0) {
+                return TYPE_HEADER;
+            } else if (position > 0 && position < 3) {
+                return TYPE_NORMAL;
+            } else {
+                return TYPE_SPECIAL;
             }
         }
     }
 
+    // 对外暴露设置RecycleView的HeaderView的接口（类似ListView的addHeaderView()）
+    public void setHeaderView(View headerView) {
+        mDrawerHeader = headerView;
+        notifyItemInserted(0);
+    }
+
     @Override
     public DrawerMenuListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_HEADER) {
+            return new ViewHolder(mDrawerHeader);
+        }
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_menu_list_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.mItemText.setText(mMenuItemNameList[position]);
+        if (getItemViewType(position) == TYPE_HEADER) {
+            return;  //提前结束该方法，Header不需要绑定信息，事件处理可以放到MainActivityMD中去
+        }
+        // 走下来position至少是1，所以getRealPosition方法get到的pos至少是0，数组不会越界，放心！
+        final int pos = getRealPosition(holder);
+
+        // 无论NORMAL还是SPECIAL都可这样设置TextView的文案
+        holder.mItemText.setText(mMenuItemNameList[pos]);
+
         if (mContext instanceof MainActivityMD) {
-            switch (position) {
+            // 无header
+            switch (pos) {
                 case 0:
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_1_main_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
@@ -112,33 +121,71 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     });
                     break;
                 case 2:
+                    // 点击的ripple效果
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_4_main_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 3:
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_3_main_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 4:
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_5_main_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
             }
+            holder.mMenuItemArea.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.OnItemClick(v, position);
+                    }
+                }
+            });
         }
+    }
 
+    public int getRealPosition(RecyclerView.ViewHolder holder) {
+        int position = holder.getLayoutPosition();
+        return mDrawerHeader == null ? position : position - 1;
     }
 
     @Override
     public int getItemCount() {
-        return mMenuItemNameList.length;
+        return mDrawerHeader == null ? mMenuItemNameList.length : mMenuItemNameList.length + 1;
     }
 
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
-    // 通知Activity已经点击过Menu item了，此时应该关闭抽屉
-    public interface OnDrawerItemSelectedListener {
-        public void onItemSelectedFinished();
+    // RecycleView的Item点击响应
+    public interface OnItemClickListener {
+        void OnItemClick(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public RelativeLayout mMenuItemArea;
+        public ImageView mItemPic;
+        public TextView mItemText;
+        public SwitchCompat mBtnChange;
+
+        public ViewHolder(View v) {
+            super(v);
+            if (v == mDrawerHeader) {
+                return;
+            }
+            mMenuItemArea = (RelativeLayout) v.findViewById(R.id.rl_menu_item);
+            mItemPic = (ImageView) v.findViewById(R.id.iv_menu_item);
+            mItemText = (TextView) v.findViewById(R.id.tv_menu_item);
+            mBtnChange = (SwitchCompat) v.findViewById(R.id.sc_menu_item);
+        }
     }
 }
 

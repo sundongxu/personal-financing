@@ -17,6 +17,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,8 +36,10 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity.fragme
 import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.adapter.DrawerMenuListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.adapter.SearchAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.AppInfoActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.BaseActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.CalculationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.DeviceInfoActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.TranslationActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.WeatherActivity;
@@ -57,33 +60,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * MD风格的主Activity，采用AHBottomNavigation底部导航栏，上滑时导航栏隐藏，下滑时出现
  * bug1：搜索框软键盘点击左上角返回键之后不能关闭软键盘
  * bug2：快速返回关闭Drawer后需返回两次才可以出现退出对话框
+ * bug3：点击Drawer item跳转其它的Activity后出现RecycleView: No adapter attached
  */
 public class MainActivityMD extends BaseActivity {
 
     public static final String TAG = "MainActivityMD";
-
+    public final int DRAWER_OPEN = 0;
+    public final int DRAWER_CLOSED = 1;
     private OthersFragmentMD mCurrentFragment;
     private ArrayList<AHBottomNavigationItem> mBottomNavigationItems = new ArrayList<>();
     private FragmentManager mFragmentManager = getFragmentManager();
     private AHBottomNavigation mBottomNavigation;
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout mDrawer;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
-
     private boolean mCanCloseDrawer;  // 只要抽屉开始滑动了就可以返回键关闭
-    public final int DRAWER_OPEN = 0;
-    public final int DRAWER_CLOSED = 1;
     private int mPreDrawerState;
 
     //侧边导航栏item，应该都在抽屉的适配器adapter中添加处理时间
     private CircleImageView mUserIconView;  // item0：侧边抽屉导航头像
     //        mUserIconView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.main_bg));  //圆形CircleImageView动态设置icon
-    private RecyclerView mMenuItemList;  //包含侧边Drawer5个菜单项
-    private LinearLayout mDrawerHeader;
+    private RecyclerView mDrawerList;  //包含侧边Drawer5个菜单项
+    private DrawerMenuListAdapter mDrawerAdapter;
 
     private Dialog mDialog;
-    //    private MaterialDialog mMaterialDialog;
     private ArrayList<String> mThingList;
-    private String[] mMenuItemNameList;
 
     private Context mContext;
     private InputMethodManager mInputMethodManager;
@@ -148,6 +148,12 @@ public class MainActivityMD extends BaseActivity {
     }
 
     @Override
+    protected void onPause() {
+        closeDrawer();
+        super.onPause();
+    }
+
+    @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mActionBarDrawerToggle.syncState();
@@ -193,16 +199,8 @@ public class MainActivityMD extends BaseActivity {
     }
 
     private void initDrawer() {
-        mDrawerHeader = (LinearLayout) findViewById(R.id.ll_drawer_header);
-        mDrawerHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //屏蔽抽屉Header的点击事件
-            }
-        });
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_menu_side);
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.open_txt, R.string.close_txt) {
+        mDrawer = (DrawerLayout) findViewById(R.id.dl_menu_side);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_txt, R.string.close_txt) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -228,46 +226,62 @@ public class MainActivityMD extends BaseActivity {
                 }
             }
         };
-        mDrawerLayout.addDrawerListener(mActionBarDrawerToggle);
+        mDrawer.addDrawerListener(mActionBarDrawerToggle);
+        mDrawerList = (RecyclerView) findViewById(R.id.rv_drawer_menu_list);
+        mDrawerAdapter = new DrawerMenuListAdapter(this);
+        mDrawerAdapter.setOnItemClickListener(new DrawerMenuListAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                switch (position) {
+                    case 3:
+                        startActivity(new Intent(mContext, DeviceInfoActivity.class));
+                        break;
+                    case 4:
+                        startActivity(new Intent(mContext, AppInfoActivity.class));
+                        break;
+                    case 5:
+                        DialogUtils.showExitDialog(mContext, BaseActivity.ACTIVITY_MAIN_MD);
+                        break;
+                }
+            }
+        });
+        mDrawerList.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mDrawerList.setLayoutManager(mLayoutManager);
+        mDrawerList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mDrawerList.setItemAnimator(new DefaultItemAnimator());
+        mDrawerList.setAdapter(mDrawerAdapter);
+        setDrawerListHeader(mDrawerList);
 
         User _user = mUserManager.getCurUser();
         if (_user != null) {
             Log.v(TAG, _user.getPic());
         }
-        mUserIconView = (CircleImageView) findViewById(R.id.civ_menu_user_icon);
+
+    }
+
+    public void setDrawerListHeader(RecyclerView recyclerView) {
+        View _header = LayoutInflater.from(this).inflate(R.layout.drawer_header, recyclerView, false);
+        mUserIconView = (CircleImageView) _header.findViewById(R.id.civ_menu_user_icon);
         //设置用户头像
         mUserIconView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mUserManager.isSignIn()) {
                     startActivity(new Intent(mContext, LoginActivityMD.class));
-                    closeDrawer();
+//                    closeDrawer();
                 }
             }
         });
-
-        mMenuItemNameList = new String[]{"彩色风格", "更多Tab", "设备信息", "关于", "退出"};
-        mMenuItemList = (RecyclerView) findViewById(R.id.rv_drawer_menu_list);
-        mMenuItemList.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mMenuItemList.setLayoutManager(mLayoutManager);
-        mMenuItemList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        mMenuItemList.setItemAnimator(new DefaultItemAnimator());
-        DrawerMenuListAdapter _drawerAdapter = new DrawerMenuListAdapter(this, mMenuItemNameList);
-        _drawerAdapter.setListener(new DrawerMenuListAdapter.OnDrawerItemSelectedListener() {
-            @Override
-            public void onItemSelectedFinished() {
-                closeDrawer();
-            }
-        });
-        mMenuItemList.setAdapter(_drawerAdapter);
+        mDrawerAdapter.setHeaderView(_header);
     }
 
-    public void closeDrawer(){
-        if (mDrawerLayout !=null && mCanCloseDrawer){
+    public void closeDrawer() {
+        if (mDrawer != null && mCanCloseDrawer) {
             mCanCloseDrawer = false;
             mPreDrawerState = DRAWER_CLOSED;
-            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            mDrawer.closeDrawer(Gravity.LEFT);
         }
     }
 
@@ -392,7 +406,7 @@ public class MainActivityMD extends BaseActivity {
             case KeyEvent.KEYCODE_BACK:
                 if (mDialog != null && mDialog.isShowing()) {
                     mDialog.dismiss();
-                } else if (mDrawerLayout != null && mCanCloseDrawer) {
+                } else if (mDrawer != null && mCanCloseDrawer) {
                     closeDrawer();
                 } else {
                     DialogUtils.showExitDialog(this, ACTIVITY_MAIN_MD);
