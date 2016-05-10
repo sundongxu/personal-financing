@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.UserManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.MyApplication;
 
 import java.text.SimpleDateFormat;
@@ -18,16 +19,14 @@ import java.util.Date;
 
 public class BaseActivity extends AppCompatActivity {
 
-    MyApplication mApplication;  //管理Activity
+    //主页面ID
+    public static final int ACTIVITY_MAIN_MD = 8000;
 
     //Activity ID，命名规则：四位数从高到低依次为：
     //千位 -> 随意定义的首数字，此处为8
     //百位 -> 0代表一般页面（基础Activity和MainActivity等），1~4代表对应Fragment中包含的页面
     //十位 -> 0代表一般功能（一般页面该位置0），1及大于1代表该Fragment中包含的大功能
     //个位 -> 0代表一般功能（一般页面该位置0），1及大于1代表该Fragment中包含的子功能，特别地基础Activity此位取1表示与MainActivity（0）区分
-
-    //主页面ID
-    public static final int ACTIVITY_MAIN_MD = 8000;
     //基础Activity ID
     public static final int ACTIVITY_BASE = 8001;
     //第一个Fragment中包含的Activity ID
@@ -49,8 +48,9 @@ public class BaseActivity extends AppCompatActivity {
     public static final int ACTIVITY_WEATHER = 8421;
     public static final int ACTIVITY_CAlCULATION = 8431;
     public static final int ACTIVITY_TRANSLATION = 8441;
-
     protected Toolbar mToolbar;  // 通用toolbar，部分Activity为特殊toolbar（登录界面）
+    protected UserManager mUserManager;  // 所有Activity都需要继承
+    MyApplication mApplication;  //管理Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,14 @@ public class BaseActivity extends AppCompatActivity {
         mApplication = MyApplication.getInstance();
         mApplication.addActivity(this);
 //        setContentView(R.layout.activity_base);
+    }
+
+    protected void initData() {
+        mUserManager = UserManager.getInstance(getApplicationContext());
+    }
+
+    protected void initView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     @Override
@@ -77,14 +85,6 @@ public class BaseActivity extends AppCompatActivity {
         mApplication.finishActivity(this);
     }
 
-    protected void initData() {
-
-    }
-
-    protected void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-    }
-
     /*
      * 通过后缀和时间拼凑文件名
      */
@@ -102,7 +102,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void exitApplication() {
+        mUserManager.signOut();  // no toast
         mApplication.AppExit();
+    }
+
+    public UserManager getUserManager() {
+        return mUserManager;
     }
 
 }

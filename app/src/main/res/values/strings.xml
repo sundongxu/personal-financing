@@ -163,7 +163,8 @@
     <string name="info_app">关于</string>
     <string name="drawer_item_0">彩色风格</string>
     <string name="drawer_item_1">更多Tab</string>
-    <string name="drawer_item_2">设备信息</string>
-    <string name="drawer_item_3">关于</string>
-    <string name="drawer_item_4">退出</string>
+    <string name="drawer_item_2">退出登录</string>
+    <string name="drawer_item_3">设备信息</string>
+    <string name="drawer_item_4">关于</string>
+    <string name="drawer_item_5">退出</string>
 </resources>

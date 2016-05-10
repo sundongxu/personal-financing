@@ -15,71 +15,61 @@ import java.util.List;
  */
 public class SharedPreferenceUtils {
     // Avoid magic numbers.
-    private static final int MAX_SIZE = 3;
-
+    public static final int MAX_SIZE = 5;
 
     public SharedPreferenceUtils() {
         super();
     }
 
-
-    public static void storeList(Context context, String pref_name, String key, List wordList) {
+    public static void storeList(Context context, String fileName, String key, List list) {
         SharedPreferences settings;
         SharedPreferences.Editor editor;
-        settings = context.getSharedPreferences(pref_name, Context.MODE_PRIVATE);
+        settings = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
         editor = settings.edit();
         Gson gson = new Gson();
-        String jsonFavorites = gson.toJson(wordList);
-        editor.putString(key, jsonFavorites);
+        String strJson = gson.toJson(list);
+        editor.putString(key, strJson);
         editor.apply();
     }
 
-    public static ArrayList<String> loadList(Context context, String pref_name, String key) {
+    public static ArrayList<String> loadList(Context context, String fileName, String key) {
         SharedPreferences settings;
-        List<String> favorites;
-        settings = context.getSharedPreferences(pref_name, Context.MODE_PRIVATE);
+        List<String> itemList;
+        settings = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
         if (settings.contains(key)) {
-            String jsonFavorites = settings.getString(key, null);
+            String strJson = settings.getString(key, null);
             Gson gson = new Gson();
-            String[] favoriteItems = gson.fromJson(jsonFavorites, String[].class);
-            favorites = Arrays.asList(favoriteItems);
-            favorites = new ArrayList<>(favorites);
-        } else
+            String[] Items = gson.fromJson(strJson, String[].class);
+            itemList = Arrays.asList(Items);
+            itemList = new ArrayList<>(itemList);
+        } else {
             return null;
-        return (ArrayList<String>) favorites;
+        }
+        return (ArrayList<String>) itemList;
     }
 
-    public static void addList(Context context, String pref_name, String key, String word) {
-        List<String> _wordList = loadList(context, pref_name, key);
-        if (_wordList == null)
-            _wordList = new ArrayList<>();
+    public static void addToList(Context context, String fileName, String key, String value) {
+        List<String> list = loadList(context, fileName, key);
+        if (list == null)
+            list = new ArrayList<>();
 
-        if (_wordList.size() > MAX_SIZE) {
-            _wordList.clear();
-            deleteList(context, pref_name);
+        if (list.contains(value)) {
+            list.remove(value);
         }
 
-        if (_wordList.contains(word)) {
-            _wordList.remove(word);
+        // 不应该删除吧，应该删除第一个加入list的item
+        if (list.size() > MAX_SIZE) {
+//            list.clear();
+//            deleteList(context, fileName);
+            list.remove(0);
         }
-//        if (!country.equals("删除历史记录")){
-        _wordList.add(word);
-//        }
 
-        storeList(context, pref_name, key, _wordList);
+        list.add(value);
+        storeList(context, fileName, key, list);
     }
 
-//    public static void removeList(Context context,String pref_name, String key, String country) {
-//        ArrayList favorites = loadList(context, pref_name,key);
-//        if (favorites != null) {
-//            favorites.remove(country);
-//            storeList(context, pref_name, key, favorites);
-//        }
-//    }
-
-
-    public static void deleteList(Context context, String pref_name) {
-        SharedPreferences myPrefs = context.getSharedPreferences(pref_name, Context.MODE_PRIVATE);
+    public static void deleteList(Context context, String fileName) {
+        SharedPreferences myPrefs = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = myPrefs.edit();
         editor.clear();
         editor.apply();

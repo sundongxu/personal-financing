@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent_toolbar_search"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trans_black_25"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar_search_bar"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:background="@color/chrome_grey"/>
+
+
+    <ListView
+        android:id="@+id/lv_search_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:divider="@android:color/transparent"
+        android:scrollbars="vertical"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_not_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="20dp"
+        android:textColor="@color/secondary_text"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -16,14 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
-import android.widget.TextView;
 
+import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.PicBaseActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.UserManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.PicUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
@@ -43,20 +42,21 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     public static final String TAG = "RegisterActivity";
 
     private CircleImageView mUserIconView;
-    private TextView mUserNameText;
-    private EditText mUserNameView;
-    private TextView mPasswordText;
-    private EditText mPasswordView;
-    private TextView mSecurityQuestionText;
-    private EditText mSecurityQuestionView;
-    private TextView mSecurityAnswerText;
-    private EditText mSecurityAnswerView;
+    private FloatLabel mUserNameView;
+    private FloatLabel mPasswordView;
+    private FloatLabel mPasswordRepeatView;
+    private FloatLabel mSecurityQuestionView;
+    private FloatLabel mSecurityAnswerView;
+    private ImageView mUserNameIcon;
+    private ImageView mPasswordIcon;
+    private ImageView mPasswordRepeatIcon;
+    private ImageView mSecurityQuestionIcon;
+    private ImageView mSecurityAnswerIcon;
     private CheckBox mSpecialAccountBox;
     private Button mBtnRegister;
 
-    private String mPicPath;// 文件路径
+    private String mPicPath;  // 文件路径
     private Context mContext;
-    private UserManager mUserManager;
     private int mIsSpecialAccount;
 
 
@@ -73,7 +73,6 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
         super.initData();
         mPicPath = "";
         mContext = this;
-        mUserManager = UserManager.getInstance(getApplicationContext());
         mIsSpecialAccount = 0;  // 初始为非管理员
     }
 
@@ -87,16 +86,88 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
         }
         mUserIconView = (CircleImageView) findViewById(R.id.civ_user_icon);
         mUserIconView.setOnClickListener(this);
-        mUserNameView = (EditText) findViewById(R.id.et_user_name);
-        mPasswordView = (EditText) findViewById(R.id.et_password);
-        mSecurityQuestionView = (EditText) findViewById(R.id.et_security_question);
-        mSecurityAnswerView = (EditText) findViewById(R.id.et_password);
-        mSpecialAccountBox = (CheckBox) findViewById(R.id.cb_remember_me);
+
+        mUserNameIcon = (ImageView) findViewById(R.id.iv_username_hint);
+        mPasswordIcon = (ImageView) findViewById(R.id.iv_password_hint);
+        mPasswordRepeatIcon = (ImageView) findViewById(R.id.iv_password_retype_hint);
+        mSecurityQuestionIcon = (ImageView) findViewById(R.id.iv_security_question_hint);
+        mSecurityAnswerIcon = (ImageView) findViewById(R.id.iv_security_answer_hint);
+
+        mUserNameView = (FloatLabel) findViewById(R.id.et_user_name);
+        mPasswordView = (FloatLabel) findViewById(R.id.et_password);
+        mPasswordRepeatView = (FloatLabel) findViewById(R.id.et_password_retype);
+        mSecurityQuestionView = (FloatLabel) findViewById(R.id.et_security_question);
+        mSecurityAnswerView = (FloatLabel) findViewById(R.id.et_security_answer);
+
+        mUserNameView.getEditText().setTextColor(R.color.black);
+        mPasswordView.getEditText().setTextColor(R.color.black);
+        mPasswordRepeatView.getEditText().setTextColor(R.color.black);
+        mSecurityQuestionView.getEditText().setTextColor(R.color.black);
+        mSecurityAnswerView.getEditText().setTextColor(R.color.black);
+
+        mUserNameView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mUserNameIcon.setImageResource(R.drawable.icon_username_hint_input);
+                } else {
+                    mUserNameIcon.setImageResource(R.drawable.icon_username_hint);
+                }
+            }
+        });
+
+        mPasswordView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mPasswordIcon.setImageResource(R.drawable.icon_password_hint_input);
+                } else {
+                    mPasswordIcon.setImageResource(R.drawable.icon_password_hint);
+                }
+            }
+        });
+
+        mPasswordRepeatView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mPasswordRepeatIcon.setImageResource(R.drawable.icon_password_hint_input);
+                } else {
+                    mPasswordRepeatIcon.setImageResource(R.drawable.icon_password_hint);
+                }
+            }
+        });
+
+        mSecurityQuestionView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mSecurityQuestionIcon.setImageResource(R.drawable.icon_security_question_hint_input);
+                } else {
+                    mSecurityQuestionIcon.setImageResource(R.drawable.icon_security_question_hint);
+                }
+            }
+        });
+
+        mSecurityAnswerView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mSecurityAnswerIcon.setImageResource(R.drawable.icon_security_answer_hint_input);
+                } else {
+                    mSecurityAnswerIcon.setImageResource(R.drawable.icon_security_answer_hint);
+                }
+            }
+        });
+
+        mSpecialAccountBox = (CheckBox) findViewById(R.id.cb_special_account);
         mSpecialAccountBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mIsSpecialAccount = 1;
+                } else {
+                    mIsSpecialAccount = 0;
                 }
             }
         });
@@ -118,7 +189,6 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.civ_user_icon:
-                // 怎么才能更换图片？
                 if (mPicPath != null && mPicPath.endsWith("jpg")) {
                     final Context dialogContext = new ContextThemeWrapper(v.getContext(), android.R.style.Theme_Light);
                     String[] choices;
@@ -151,16 +221,16 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_register:
-                String _userName = mUserNameView.getText().toString();
-                String _password = mPasswordView.getText().toString();
+                String _userName = mUserNameView.getEditText().getText().toString();
+                String _password = mPasswordView.getEditText().getText().toString();
                 String _pic = mPicPath;
                 String _createTime = TimeUtils.getYear() + "." + TimeUtils.getMonth() + "." + TimeUtils.getDay();
                 String _updateTime = _createTime;
-                String _securityQuestion = mSecurityQuestionView.getText().toString();
-                String _securityAnswer = mSecurityAnswerView.getText().toString();
+                String _securityQuestion = mSecurityQuestionView.getEditText().getText().toString();
+                String _securityAnswer = mSecurityAnswerView.getEditText().getText().toString();
                 int _isSpecial = mIsSpecialAccount;
                 if (mUserManager.isUserExists(_userName)) {
-                    ToastUtils.showMsg(mContext, "用户名已存在，请更改！");
+                    ToastUtils.showMsg(mContext, "用户名已存在！");
                 } else {
                     User _user = new User();
                     _user.setName(_userName);
@@ -171,9 +241,9 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
                     _user.setQuestion(_securityQuestion);
                     _user.setAnswer(_securityAnswer);
                     _user.setSpecial(_isSpecial);
-                    if (mUserManager.register(_user) != -1){
-                        ToastUtils.showMsg(mContext, "注册成功！密码是："+_user.getPassword());
-
+                    if (mUserManager.register(_user) != -1) {
+                        ToastUtils.showMsg(mContext, "注册成功！");
+                        finish();
                     } else {
                         //数据库insert操作出错
                         ToastUtils.showMsg(mContext, "注册失败！");
@@ -190,13 +260,13 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
         Bitmap _bmp;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
-                case PHOTO_FROM_CAMERA:// 获取拍摄的文件
+                case PHOTO_FROM_CAMERA:  // 获取拍摄的文件
                     mPicPath = captureFile.getAbsolutePath();
                     _file = new File(mPicPath);
                     _bmp = PicUtils.decodeFileAndCompress(_file);
                     mUserIconView.setImageBitmap(_bmp);
                     break;
-                case PHOTO_FROM_DATA:// 获取从图库选择的文件
+                case PHOTO_FROM_DATA:  // 获取从图库选择的文件
                     Uri uri = data.getData();
                     String scheme = uri.getScheme();
                     if (scheme.equalsIgnoreCase("file")) {

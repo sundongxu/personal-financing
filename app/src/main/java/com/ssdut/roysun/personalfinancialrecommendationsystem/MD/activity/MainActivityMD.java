@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -45,9 +46,9 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.Translati
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.WeatherActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.component.DividerItemDecoration;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.UserManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SharedPreferenceUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.Utils;
 
 import java.util.ArrayList;
@@ -58,15 +59,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by roysun on 16/4/1
  * MD风格的主Activity，采用AHBottomNavigation底部导航栏，上滑时导航栏隐藏，下滑时出现
- * bug1：搜索框软键盘点击左上角返回键之后不能关闭软键盘
- * bug2：快速返回关闭Drawer后需返回两次才可以出现退出对话框
- * bug3：点击Drawer item跳转其它的Activity后出现RecycleView: No adapter attached
+ * bug1：快速返回关闭Drawer后需返回两次才可以出现退出对话框
+ * bug2：点击Drawer item跳转其它的Activity后出现RecycleView: No adapter attached
+ * 记住密码功能没做
  */
 public class MainActivityMD extends BaseActivity {
 
     public static final String TAG = "MainActivityMD";
+
     public final int DRAWER_OPEN = 0;
     public final int DRAWER_CLOSED = 1;
+
     private OthersFragmentMD mCurrentFragment;
     private ArrayList<AHBottomNavigationItem> mBottomNavigationItems = new ArrayList<>();
     private FragmentManager mFragmentManager = getFragmentManager();
@@ -76,10 +79,9 @@ public class MainActivityMD extends BaseActivity {
     private boolean mCanCloseDrawer;  // 只要抽屉开始滑动了就可以返回键关闭
     private int mPreDrawerState;
 
-    //侧边导航栏item，应该都在抽屉的适配器adapter中添加处理时间
-    private CircleImageView mUserIconView;  // item0：侧边抽屉导航头像
-    //        mUserIconView.setImageBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.main_bg));  //圆形CircleImageView动态设置icon
-    private RecyclerView mDrawerList;  //包含侧边Drawer5个菜单项
+    private CircleImageView mUserIconView;  // 侧边抽屉导航头像
+    private TextView mUserNameText;  // 头像下面用户名区域
+    private RecyclerView mDrawerList;  // 包含侧边Drawer5个菜单项
     private DrawerMenuListAdapter mDrawerAdapter;
 
     private Dialog mDialog;
@@ -87,7 +89,6 @@ public class MainActivityMD extends BaseActivity {
 
     private Context mContext;
     private InputMethodManager mInputMethodManager;
-    private UserManager mUserManager;
     private LinearLayoutManager mLayoutManager;
 
     @Override
@@ -103,9 +104,30 @@ public class MainActivityMD extends BaseActivity {
         super.initData();
         mContext = this;
         mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mUserManager = UserManager.getInstance(getApplicationContext());  // 以ApplicationContext获得UserManager单例
         mCanCloseDrawer = false;
         mPreDrawerState = DRAWER_CLOSED;
+        ArrayList<String> _userList = SharedPreferenceUtils.loadList(mContext, Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN);
+        ArrayList<String> _passwordList = SharedPreferenceUtils.loadList(mContext, Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN);
+        if (_userList != null && _userList.size() <= SharedPreferenceUtils.MAX_SIZE && _passwordList != null && _passwordList.size() <= SharedPreferenceUtils.MAX_SIZE) {
+            // 有记住上次登录的用户名
+            String _userNameLastLogin = _userList.get(_userList.size() - 1);
+            String _passwordLastLogin = _passwordList.get(_passwordList.size() - 1);
+            mUserManager.signIn(_userNameLastLogin, _passwordLastLogin);
+            if (mUserManager.isSignIn()) {
+                if (mUserManager.isSpecialAccount() == 1) {
+                    ToastUtils.showMsg(mContext, "管理员" + _userNameLastLogin + " 登录成功！");
+                } else {
+                    ToastUtils.showMsg(mContext, _userNameLastLogin + " 登录成功！");
+                }
+            } else {
+                //登录失败
+                if (mUserManager.isUserExists(_userNameLastLogin)) {
+                    ToastUtils.showMsg(mContext, "密码错误！");
+                } else {
+                    ToastUtils.showMsg(mContext, "用户名不存在！");
+                }
+            }
+        }
     }
 
     @Override
@@ -145,6 +167,13 @@ public class MainActivityMD extends BaseActivity {
         mFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, mCurrentFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 触发情形（1）
+        onLoginStateChanged(mUserManager.isSignIn());
     }
 
     @Override
@@ -234,12 +263,20 @@ public class MainActivityMD extends BaseActivity {
             public void OnItemClick(View view, int position) {
                 switch (position) {
                     case 3:
-                        startActivity(new Intent(mContext, DeviceInfoActivity.class));
+                        if (mUserManager.isSignIn()) {
+                            mUserManager.signOut();
+                            ToastUtils.showMsg(mContext, "用户已注销", Toast.LENGTH_SHORT);
+                            // 触发情形（3）
+                            onLoginStateChanged(false);
+                        }
                         break;
                     case 4:
-                        startActivity(new Intent(mContext, AppInfoActivity.class));
+                        startActivity(new Intent(mContext, DeviceInfoActivity.class));
                         break;
                     case 5:
+                        startActivity(new Intent(mContext, AppInfoActivity.class));
+                        break;
+                    case 6:
                         DialogUtils.showExitDialog(mContext, BaseActivity.ACTIVITY_MAIN_MD);
                         break;
                 }
@@ -258,12 +295,40 @@ public class MainActivityMD extends BaseActivity {
         if (_user != null) {
             Log.v(TAG, _user.getPic());
         }
-
     }
 
-    public void setDrawerListHeader(RecyclerView recyclerView) {
+    /**
+     * 三种情形触发：
+     * （1）在LoginActivityMD中登录成功后触发，isLogin = true
+     * （2）在记住密码后重启App，自动登录时触发，isLogin = true
+     * （3）注销用户后触发，isLogin = false
+     *
+     * @param isLogin 登录标志位
+     */
+    private void onLoginStateChanged(boolean isLogin) {
+        if (isLogin) {
+            if (mUserIconView != null) {
+                mUserIconView.setImageResource(R.drawable.icon_signin);
+            }
+            if (mUserNameText != null) {
+                mUserNameText.setText(mUserManager.getCurUser().getName());
+            }
+        } else {
+            if (mUserIconView != null) {
+                mUserIconView.setImageResource(R.drawable.icon_not_signin);
+            }
+            if (mUserNameText != null) {
+                mUserNameText.setText("未登录");
+            }
+        }
+    }
+
+    private void setDrawerListHeader(RecyclerView recyclerView) {
         View _header = LayoutInflater.from(this).inflate(R.layout.drawer_header, recyclerView, false);
         mUserIconView = (CircleImageView) _header.findViewById(R.id.civ_menu_user_icon);
+        mUserNameText = (TextView) _header.findViewById(R.id.tv_menu_user_name);
+        // 触发情形（2）
+        onLoginStateChanged(true);
         //设置用户头像
         mUserIconView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,7 +342,7 @@ public class MainActivityMD extends BaseActivity {
         mDrawerAdapter.setHeaderView(_header);
     }
 
-    public void closeDrawer() {
+    private void closeDrawer() {
         if (mDrawer != null && mCanCloseDrawer) {
             mCanCloseDrawer = false;
             mPreDrawerState = DRAWER_CLOSED;
@@ -285,16 +350,16 @@ public class MainActivityMD extends BaseActivity {
         }
     }
 
-    public void showSearchDialog() {
-        ArrayList<String> _searchContent = SharedPreferenceUtils.loadList(mContext, Utils.PRE_RECORDS, Utils.SEARCH_CONTENT);
-        View view = getLayoutInflater().inflate(R.layout.view_toolbar_search, null);
-        ImageView _imgToolBack = (ImageView) view.findViewById(R.id.img_tool_back);
-        final EditText _edtToolSearch = (EditText) view.findViewById(R.id.edt_tool_search);
-        ImageView _imgToolSearch = (ImageView) view.findViewById(R.id.img_tool_mic);
-        final ListView _listSearch = (ListView) view.findViewById(R.id.list_search);
-        final TextView txtEmpty = (TextView) view.findViewById(R.id.txt_empty);
-        Utils.setListViewHeightBasedOnChildren(_listSearch);
-        _edtToolSearch.setHint("你想要做什么");
+    private void showSearchDialog() {
+        ArrayList<String> _searchContent = SharedPreferenceUtils.loadList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT);
+        View view = getLayoutInflater().inflate(R.layout.toolbar_search, null);
+        ImageView _backIcon = (ImageView) view.findViewById(R.id.iv_tool_back);
+        ImageView _searchIcon = (ImageView) view.findViewById(R.id.iv_tool_search);
+        final EditText _searchView = (EditText) view.findViewById(R.id.et_tool_search);
+        final ListView _searchList = (ListView) view.findViewById(R.id.lv_search_list);
+        final TextView _notFoundText = (TextView) view.findViewById(R.id.tv_not_found);
+        Utils.setListViewHeightBasedOnChildren(_searchList);
+        _searchView.setHint("你想要做什么");
 
         mDialog = new Dialog(mContext, R.style.MaterialSearch);
         mDialog.setContentView(view);
@@ -305,28 +370,28 @@ public class MainActivityMD extends BaseActivity {
         mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);  // 搜索dialog一出来输入框就显示软键盘，去掉这句要点击输入框才出现
         _searchContent = (_searchContent != null && _searchContent.size() > 0) ? _searchContent : new ArrayList<String>();
         final SearchAdapter _searchAdapter = new SearchAdapter(mContext, _searchContent, false);
-        _listSearch.setVisibility(View.VISIBLE);
-        _listSearch.setAdapter(_searchAdapter);
-        _listSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        _searchList.setVisibility(View.VISIBLE);
+        _searchList.setAdapter(_searchAdapter);
+        _searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String _strInput = String.valueOf(adapterView.getItemAtPosition(position));
                 if (_strInput.equals("删除历史记录")) {
-                    SharedPreferenceUtils.deleteList(mContext, Utils.PRE_RECORDS);
-                    _listSearch.setVisibility(View.GONE);
+                    SharedPreferenceUtils.deleteList(mContext, Utils.SEARCH_HISTORY);
+                    _searchList.setVisibility(View.GONE);
                 } else {
-                    SharedPreferenceUtils.addList(mContext, Utils.PRE_RECORDS, Utils.SEARCH_CONTENT, _strInput);
-                    _edtToolSearch.setText(_strInput);
-                    _listSearch.setVisibility(View.GONE);
+                    SharedPreferenceUtils.addToList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT, _strInput);
+                    _searchView.setText(_strInput);
+                    _searchList.setVisibility(View.GONE);
                 }
             }
         });
-        _edtToolSearch.addTextChangedListener(new TextWatcher() {
+        _searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 String[] _fun = mContext.getResources().getStringArray(R.array.fun_array);
                 mThingList = new ArrayList<String>(Arrays.asList(_fun));
-                _listSearch.setVisibility(View.VISIBLE);
+                _searchList.setVisibility(View.VISIBLE);
                 _searchAdapter.updateList(mThingList, true);
             }
 
@@ -338,19 +403,19 @@ public class MainActivityMD extends BaseActivity {
                     for (int i = 0; i < mThingList.size(); i++) {
                         if (mThingList.get(i).toLowerCase().startsWith(s.toString().trim().toLowerCase())) {
                             filterList.add(mThingList.get(i));
-                            _listSearch.setVisibility(View.VISIBLE);
+                            _searchList.setVisibility(View.VISIBLE);
                             _searchAdapter.updateList(filterList, true);
                             isNodata = true;
                         }
                     }
                     if (!isNodata) {
-                        _listSearch.setVisibility(View.GONE);
-                        txtEmpty.setVisibility(View.VISIBLE);
-                        txtEmpty.setText("没有找到");
+                        _searchList.setVisibility(View.GONE);
+                        _notFoundText.setVisibility(View.VISIBLE);
+                        _notFoundText.setText("没有找到");
                     }
                 } else {
-                    _listSearch.setVisibility(View.GONE);
-                    txtEmpty.setVisibility(View.GONE);
+                    _searchList.setVisibility(View.GONE);
+                    _notFoundText.setVisibility(View.GONE);
                 }
             }
 
@@ -359,9 +424,10 @@ public class MainActivityMD extends BaseActivity {
             }
         });
 
-        _imgToolBack.setOnClickListener(new View.OnClickListener() {
+        _backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mInputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);  //点击按钮就隐藏软键盘，特么居然跟这里执行顺序有关系
                 if (mDialog != null) {
                     mDialog.dismiss();
                 }
@@ -369,17 +435,17 @@ public class MainActivityMD extends BaseActivity {
             }
         });
 
-        _imgToolSearch.setOnClickListener(new View.OnClickListener() {
+        _searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //可以实现搜索跳转对应Activity功能
 //                edtToolSearch.setText("");
-//                SharedPreferenceUtils.deleteList(MainActivity.this, Utils.PRE_RECORDS); //清除历史
-                String _strInput = String.valueOf(_edtToolSearch.getText());
+//                SharedPreferenceUtils.deleteList(MainActivity.this, Utils.SEARCH_HISTORY); //清除历史
+                String _strInput = String.valueOf(_searchView.getText());
                 if (!_strInput.equals("")) {
                     //输入框非空才跳转
                     if (mThingList.contains(_strInput)) {
-                        SharedPreferenceUtils.addList(mContext, Utils.PRE_RECORDS, Utils.SEARCH_CONTENT, _strInput);
+                        SharedPreferenceUtils.addToList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT, _strInput);
                     }
                     switch (_strInput) {
                         case "备忘":

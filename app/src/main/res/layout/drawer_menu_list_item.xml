@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_menu_item"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="63dp">
 
     <ImageView
         android:id="@+id/iv_menu_item"

@@ -56,6 +56,7 @@ public class DialogUtils {
                 builder.setPositiveButton(confrimStr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+//                        ((BaseActivity) context).getUserManager().close();
                         ((BaseActivity) context).exitApplication();
                     }
                 });

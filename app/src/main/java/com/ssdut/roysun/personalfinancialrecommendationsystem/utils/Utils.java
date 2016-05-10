@@ -11,10 +11,12 @@ import android.widget.ListView;
  */
 public class Utils {
 
-    public static final String PRE_RECORDS = "HISTORY_RECORD";
+    public static final String SEARCH_HISTORY = "HISTORY_RECORD";
     public static final String SEARCH_CONTENT = "SEARCH_CONTENT";
-
-    public static final int REQUEST_CODE = 1234;
+    // 登录界面“记住我功能
+    public static final String LOGIN_HISTORY = "LOGIN_HISTORY";
+    public static final String USERNAME_LAST_LOGIN = "USERNAME_LAST_LOGIN";
+    public static final String PASSWORD_LAST_LOGIN = "PASSWORD_LAST_LOGIN";
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();

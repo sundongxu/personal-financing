@@ -47,7 +47,8 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                 mResources.getString(R.string.drawer_item_1),
                 mResources.getString(R.string.drawer_item_2),
                 mResources.getString(R.string.drawer_item_3),
-                mResources.getString(R.string.drawer_item_4)};
+                mResources.getString(R.string.drawer_item_4),
+                mResources.getString(R.string.drawer_item_5)};
     }
 
     @Override
@@ -99,7 +100,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
             // 无header
             switch (pos) {
                 case 0:
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_1_main_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_0_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,7 +111,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     });
                     break;
                 case 1:
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_2_main_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_1_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -123,19 +124,25 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                 case 2:
                     // 点击的ripple效果
                     holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_4_main_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_2_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 3:
                     holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_3_main_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_3_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 4:
                     holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_5_main_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_4_colored));
+                    holder.mItemText.setVisibility(View.VISIBLE);
+                    holder.mBtnChange.setVisibility(View.GONE);
+                    break;
+                case 5:
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_5_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
             }

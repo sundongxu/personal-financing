@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_register_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <include layout="@layout/common_toolbar"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/civ_user_icon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/icon_not_signin"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:paddingTop="30dp">
+        android:paddingRight="40dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_user_icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/icon_signin"
+            app:border_color="@color/angelblue"
+            app:border_width="2dp"/>
 
         <LinearLayout
             android:id="@+id/ll_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:text="账号"/>
+            <ImageView
+                android:id="@+id/iv_username_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icon_username_hint"/>
 
-            <EditText
+            <com.iangclifton.android.floatlabel.FloatLabel
                 android:id="@+id/et_user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Username"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                app:floatLabelColor="@color/colorAccent"/>
 
         </LinearLayout>
 
@@ -50,22 +61,53 @@
             android:id="@+id/ll_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:text="密码"/>
+            <ImageView
+                android:id="@+id/iv_password_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icon_password_hint"/>
 
-            <EditText
+            <com.iangclifton.android.floatlabel.FloatLabel
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                app:floatLabelColor="@color/colorAccent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_password_retype"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_password_retype_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icon_password_hint"/>
+
+            <com.iangclifton.android.floatlabel.FloatLabel
+                android:id="@+id/et_password_retype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Re-type Password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                app:floatLabelColor="@color/colorAccent"/>
 
         </LinearLayout>
 
@@ -73,22 +115,25 @@
             android:id="@+id/ll_security_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_security_question"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:text="问题"/>
+            <ImageView
+                android:id="@+id/iv_security_question_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icon_security_question_hint"/>
 
-            <EditText
+            <com.iangclifton.android.floatlabel.FloatLabel
                 android:id="@+id/et_security_question"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Security Question"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                app:floatLabelColor="@color/colorAccent"/>
 
         </LinearLayout>
 
@@ -96,27 +141,30 @@
             android:id="@+id/ll_security_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_security_answer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:text="答案"/>
+            <ImageView
+                android:id="@+id/iv_security_answer_hint"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/icon_security_answer_hint"/>
 
-            <EditText
+            <com.iangclifton.android.floatlabel.FloatLabel
                 android:id="@+id/et_security_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="Security Answser"
                 android:singleLine="true"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                app:floatLabelColor="@color/colorAccent"/>
 
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/cb_remember_me"
+            android:id="@+id/cb_special_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -129,10 +177,12 @@
             android:layout_height="35dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/button_round_corner"
-            android:text="注    册"
-            android:textColor="@color/chrome_grey"
+            android:text="立     即     注     册"
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
     </LinearLayout>
 
 </LinearLayout>
+
+

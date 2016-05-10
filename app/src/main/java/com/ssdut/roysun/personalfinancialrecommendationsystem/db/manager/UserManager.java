@@ -13,38 +13,36 @@ import java.util.ArrayList;
 /**
  * Created by roysun on 16/4/30.
  * 用户管理
+ * 数据库关闭的时机
  */
 public class UserManager {
 
     public static final String TAG = "UserManager";
-
-    private boolean mIsSignIn;  //登录标志位
-    private boolean mIsSpecialAccount;  //管理员账户标志位
-    private User mCurUser;  //当前用户
-
-    private String DB_NAME = "user.db";  //数据库名称
     private static int DB_VERSION = 1;  //数据库版本
-
-    private SQLiteDatabase mSQLiteDB;
-    private UserSqliteHelper mDBHelper;
-
-    private Context mContext;
-
-//    public UserManager(Context context) {
+    //    public UserManager(Context context) {
 //        mDBHelper = new UserSqliteHelper(context, DB_NAME, null, DB_VERSION);
 //        mSQLiteDB = mDBHelper.getWritableDatabase();  //在获取helper之后就可获取数据库实例
 //    }
     //单例模式，饿汉模式，天生线程安全
     private static UserManager sUserManager;
+    private boolean mIsSignIn;  //登录标志位
+    private boolean mIsSpecialAccount;  //管理员账户标志位
+    private User mCurUser;  //当前用户
+    private String DB_NAME = "user.db";  //数据库名称
+    private SQLiteDatabase mSQLiteDB;
+    private UserSqliteHelper mDBHelper;
+    private Context mContext;
 
-    private UserManager(Context context){
+    private UserManager(Context context) {
         mDBHelper = new UserSqliteHelper(context, DB_NAME, null, DB_VERSION);
-        mSQLiteDB = mDBHelper.getWritableDatabase();
+        mSQLiteDB = mDBHelper.getWritableDatabase();  // 打开数据库
+        mContext = context;
+        mCurUser = null;
     }
 
     //静态工厂方法
     public synchronized static UserManager getInstance(Context context) {
-        if (sUserManager == null){
+        if (sUserManager == null) {
             sUserManager = new UserManager(context);
         }
         return sUserManager;
@@ -75,7 +73,6 @@ public class UserManager {
             cursor.moveToNext();
         }
         cursor.close();
-        close();
         return _userList;
     }
 
@@ -90,6 +87,27 @@ public class UserManager {
 //            return null;
 //        }
 //    }
+
+    public User getUserFromDB(String userName) {
+        User _user = new User();
+        boolean _isUserExist = false;
+        Cursor cursor = mSQLiteDB.query(UserSqliteHelper.USER, null, "NAME ='" + userName + "'", null, null, null, null);
+        _isUserExist = cursor.moveToFirst();
+        while (!cursor.isAfterLast() && (cursor.getString(1) != null)) {
+            _user.setId(cursor.getInt(0));
+            _user.setName(cursor.getString(1));
+            _user.setPassword(cursor.getString(2));
+            _user.setPic(cursor.getString(3));
+            _user.setCreateTime(cursor.getString(4));
+            _user.setUpdateTime(cursor.getString(5));
+            _user.setQuestion(cursor.getString(6));
+            _user.setAnswer(cursor.getString(7));
+            _user.setSpecial(cursor.getInt(8));
+            cursor.moveToNext();
+            cursor.close();
+        }
+        return _isUserExist ? _user : null;
+    }
 
     public User getCurUser() {
         return mCurUser;
@@ -107,6 +125,7 @@ public class UserManager {
     public void signOut() {
         mCurUser = null;
         mIsSignIn = false;
+        mIsSpecialAccount = false;
     }
 
     public boolean isSignIn() {
@@ -131,31 +150,28 @@ public class UserManager {
         values.put(User.ANSWER, user.getAnswer());
         values.put(User.IS_SPECIAL, user.isSpecial());
         Long _newRowId = mSQLiteDB.insert(UserSqliteHelper.USER, User.NAME, values);
-        close();
         return _newRowId;
     }
 
     public int deleteUser(int id) {
         //delete
         int _rowsAffectedByDelete = mSQLiteDB.delete(UserSqliteHelper.USER, "ID =" + id, null);
-        close();
         return _rowsAffectedByDelete;
     }
 
     public int updateUserInfo(User user, int id) {
         //update
-        mCurUser = user;
+//        mCurUser = user;
         ContentValues values = new ContentValues();
-        values.put(User.NAME, mCurUser.getName());
-        values.put(User.PASSWORD, mCurUser.getPassword());
-        values.put(User.PIC, mCurUser.getPic());
-        values.put(User.CREATE_TIME, mCurUser.getCreateTime());
-        values.put(User.UPDATE_TIME, mCurUser.getUpdateTime());
-        values.put(User.QUESTION, mCurUser.getQuestion());
-        values.put(User.ANSWER, mCurUser.getAnswer());
-        values.put(User.IS_SPECIAL, mCurUser.isSpecial());
+        values.put(User.NAME, user.getName());
+        values.put(User.PASSWORD, user.getPassword());
+        values.put(User.PIC, user.getPic());
+        values.put(User.CREATE_TIME, user.getCreateTime());
+        values.put(User.UPDATE_TIME, user.getUpdateTime());
+        values.put(User.QUESTION, user.getQuestion());
+        values.put(User.ANSWER, user.getAnswer());
+        values.put(User.IS_SPECIAL, user.isSpecial());
         int _rowsAffectedByUpdate = mSQLiteDB.update(UserSqliteHelper.USER, values, "ID ='" + id + "'", null);
-        close();
         return _rowsAffectedByUpdate;
     }
 
@@ -164,6 +180,7 @@ public class UserManager {
         boolean flag = false;
         Cursor cursor = mSQLiteDB.query(UserSqliteHelper.USER, null, "NAME ='" + userName + "'", null, null, null, null);
         flag = cursor.moveToFirst();
+        cursor.close();
         return flag;
     }
 
@@ -191,5 +208,4 @@ public class UserManager {
         cursor.close();
         return flag;
     }
-
 }
