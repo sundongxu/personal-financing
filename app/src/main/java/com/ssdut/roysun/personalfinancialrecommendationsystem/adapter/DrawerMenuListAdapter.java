@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.MD.adapter;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity.MainActivityMD;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MainActivity;
 
 /**
  * Created by roysun on 16/5/3.
@@ -31,8 +31,8 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
 
     private View mDrawerHeader;
 
-    private String[] mMenuItemNameList;
     private Context mContext;
+    private String[] mMenuItemNameList;
     private OnItemClickListener mListener;
     private Resources mResources;
 
@@ -96,7 +96,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
         // 无论NORMAL还是SPECIAL都可这样设置TextView的文案
         holder.mItemText.setText(mMenuItemNameList[pos]);
 
-        if (mContext instanceof MainActivityMD) {
+        if (mContext instanceof MainActivity) {
             // 无header
             switch (pos) {
                 case 0:
@@ -106,7 +106,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            ((MainActivityMD) mContext).updateBottomNavigationColor(isChecked);
+                            ((MainActivity) mContext).updateBottomNavigationColor(isChecked);
                         }
                     });
                     break;
@@ -117,7 +117,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                         @Override
                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            ((MainActivityMD) mContext).updateBottomNavigationItems(isChecked);
+                            ((MainActivity) mContext).updateBottomNavigationItems(isChecked);
                         }
                     });
                     break;
@@ -223,23 +223,23 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
 //
 //    @Override
 //    public View getView(final int position, View convertView, ViewGroup parent) {
-//        if (mContext instanceof MainActivityMD) {
+//        if (mContext instanceof MainActivity) {
 //            if (position == 0 || position == 1) {
 //                // 加载调整底部tab的Style、Num的两个SwitchCompat按钮布局
 //                convertView = LayoutInflater.from(mContext).inflate(R.layout.drawer_menu_list_item_0_1_main, null);
 //                SwitchCompat _btnChange = (SwitchCompat) convertView.findViewById(R.id.sc_menu_item);
 //                String _scText = position == 0 ? mMenuItemNameList.get(0) : mMenuItemNameList.get(1);
 //                _btnChange.setText(_scText);
-//                _btnChange.setChecked(((MainActivityMD) mContext).isBottomNavigationColored());
+//                _btnChange.setChecked(((MainActivity) mContext).isBottomNavigationColored());
 //                _btnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                    @Override
 //                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 //                        switch (position) {
 //                            case 0:
-//                                ((MainActivityMD) mContext).updateBottomNavigationColor(isChecked);
+//                                ((MainActivity) mContext).updateBottomNavigationColor(isChecked);
 //                                break;
 //                            case 1:
-//                                ((MainActivityMD) mContext).updateBottomNavigationItems(isChecked);
+//                                ((MainActivity) mContext).updateBottomNavigationItems(isChecked);
 //                                break;
 //                        }
 //                    }
@@ -280,7 +280,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
 //                                mContext.startActivity(new Intent(mContext, AppInfoActivity.class));
 //                                break;
 //                            case 4:
-//                                ((MainActivityMD) mContext).exitApplication();
+//                                ((MainActivity) mContext).exitApplication();
 //                                break;
 //                        }
 //                    }

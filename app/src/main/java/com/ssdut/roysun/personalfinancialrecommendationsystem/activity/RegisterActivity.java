@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -21,7 +21,6 @@ import android.widget.ListAdapter;
 
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.PicBaseActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.PicUtils;
@@ -149,7 +148,7 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
             }
         });
 
-        mSecurityAnswerView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mSecurityAnswerView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {

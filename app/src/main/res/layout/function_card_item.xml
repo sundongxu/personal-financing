@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_front"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/iv_item_bg_front"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/bg_tab_3_fun_1"/>
+
+            <ImageView
+                android:id="@+id/iv_item_fun_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/icon_tab_3_fun_1"/>
+
+            <TextView
+                android:id="@+id/tv_item_title_front"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="70dp"
+                android:layout_toEndOf="@+id/iv_item_fun_icon"
+                android:layout_toRightOf="@+id/iv_item_fun_icon"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="italic|bold"/>
+
+            <TextView
+                android:id="@+id/tv_item_description_front"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@+id/iv_item_fun_icon"
+                android:layout_toRightOf="@+id/iv_item_fun_icon"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="italic|bold"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <!--<android.support.v7.widget.CardView-->
+    <!--android:id="@+id/cv_item_front"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="200dp"-->
+    <!--android:layout_margin="8dp"-->
+    <!--app:cardBackgroundColor="@color/white">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/tv_item_title_front"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:padding="16dp"-->
+    <!--android:textSize="18sp"/>-->
+
+    <!--</android.support.v7.widget.CardView>-->
+
+
+</FrameLayout>

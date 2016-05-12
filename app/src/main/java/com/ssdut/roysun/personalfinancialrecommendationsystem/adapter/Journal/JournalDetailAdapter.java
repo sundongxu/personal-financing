@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalDetailActivity;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.JournalManager;
 
 import java.util.ArrayList;

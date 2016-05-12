@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity.MainActivityMD;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.BaseActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoAddActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.MemoListAdapter;
@@ -77,7 +77,7 @@ public class DialogUtils {
                 builder.setNeutralButton(cancelStr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, MainActivityMD.class);
+                        Intent intent = new Intent(context, MainActivity.class);
                         context.startActivity(intent);
                         ((BaseActivity) context).finish();  //必须finish掉不然只是把MainActivity顶到栈顶但是CalculationActivity还在栈中，从MainActivity中返回后还是会跳到本Activity
                     }

@@ -17,8 +17,8 @@ import android.widget.TextView;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.JournalManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.JournalSqliteHelper;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.JournalManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.JZPaintViewYuE;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.JZPaintViewZandS;
@@ -38,7 +38,6 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
     private TextView mExpenditureYear, mExpenditureMonth, mExpenditureDay;
     private TextView mBudgetMonth, mBudgetMonthLeft;  //支出界面的TextView
     private TextView mIncomeYear, mIncomeMonth, mIncomeDay;  //收入界面的TextView
-    private TextView mMarrquee;  //顶部滚动字幕
     private FrameLayout mExpenditureTabArea, mIncomeTabArea;  //顶部framelayout支出和收入
     private RelativeLayout mExpenditureStatsPic, mBudgetStatsPic, mIncomeStatsPic;  //绘图区域
     private Button mBtnAdd, mBtnDetail, mBtnSheet, mBtnBudget, mBtnSettings;  //底部环形按钮 添加， 明细，报表，预算，设置。
@@ -103,11 +102,6 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
         mMenu.setOnClickListener(this);
         mBtns = new Button[]{mBtnAdd, mBtnDetail, mBtnSheet, mBtnBudget, mBtnSettings};
         hideView();
-
-        mMarrquee = (TextView) findViewById(R.id.mq_scroll_text);
-        if (!ToolsMainActivity.isShow) {
-            mMarrquee.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override

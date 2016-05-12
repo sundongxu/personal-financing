@@ -12,7 +12,6 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity.RegisterActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 

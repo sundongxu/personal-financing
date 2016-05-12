@@ -22,8 +22,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.binder.TranslationBinder;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.TranslationService;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.service.binder.TranslationBinder;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.NetworkUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
@@ -44,7 +44,6 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
     private EditText mContentTranslated;  //翻译内容的编辑框
     private ProgressDialog mProgressDialog;  //搜索时的显示进度
     private LinearLayout mTranslationView;
-    private TextView mScrollText;
 
     private InputMethodManager mInputMethodManager = null;
 
@@ -73,11 +72,7 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
         mContentTranslated.getBackground().setAlpha(200);
         mTranslationView = (LinearLayout) this.findViewById(R.id.ll_translation);
         mTranslationView.getBackground().setAlpha(150);
-        mScrollText = (TextView) this.findViewById(R.id.mq_text_scroll);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        if (!ToolsMainActivity.isShow) {
-            mScrollText.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override

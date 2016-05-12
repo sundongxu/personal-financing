@@ -13,15 +13,19 @@ import android.widget.RelativeLayout;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalAddActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal.JournalCategoryAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.JournalCategoryAdapter;
 
 /**
  * Created by roysun on 16/3/12.
  * 类别对话框
  */
 public class DialogCategory extends Dialog implements View.OnClickListener {
+    //类别和类别子类标识
+    public static final int FLAG_CATEGORY = 3020;
+    String mFlagShow;  // 判断当前该列表是否已显示
+    Handler mHandler = new Handler();
     //类别列表和类别子类列表
     private ListView mCategoryList, mSubCategoryList;
     //顶部背景
@@ -30,8 +34,6 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
     private View mCategoryView;
     //类别列表适配器
     private JournalCategoryAdapter mJournalCategoryAdapter;
-    //类别和类别子类标识
-    public static final int FLAG_CATEGORY = 3020;
     //当前选择的选项，收入，支出，借贷
     private int mNowFlag = 0;
 
@@ -60,8 +62,31 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
     }
 
-    String mFlagShow;  // 判断当前该列表是否已显示
-    Handler mHandler = new Handler();
+    public void getTextandSend(View view) {
+        String string = (String) view.getTag();
+        //dialog退出动画
+        DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
+        Message msg = Message.obtain();
+        msg.what = JournalAddActivity.CATEGORY_MSG;
+        msg.obj = string;//发送当前选择给ToolsJiZhangAddActivity，让其界面作出相应改变
+        if (mContext instanceof JournalAddActivity) {
+            ((JournalAddActivity) mContext).mMsgHandler.sendMessage(msg);
+        }
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                if (mCategoryView.isShown()) {
+                    DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
+                    return false;
+                } else {
+                    this.cancel();
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, keyEvent);
+    }
 
     private class clickItem implements AdapterView.OnItemClickListener {
         @Override
@@ -100,31 +125,5 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             getTextandSend(view);
         }
-    }
-
-    public void getTextandSend(View view) {
-        String string = (String) view.getTag();
-        //dialog退出动画
-        DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
-        Message msg = Message.obtain();
-        msg.what = JournalAddActivity.CATEGORY_MSG;
-        msg.obj = string;//发送当前选择给ToolsJiZhangAddActivity，让其界面作出相应改变
-        if (mContext instanceof JournalAddActivity){
-            ((JournalAddActivity) mContext).mMsgHandler.sendMessage(msg);
-        }
-    }
-
-    public boolean onKeyDown(int keyCode, KeyEvent keyEvent) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK: {
-                if (mCategoryView.isShown()) {
-                    DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
-                    return false;
-                } else {
-                    this.cancel();
-                }
-            }
-        }
-        return super.onKeyDown(keyCode, keyEvent);
     }
 }

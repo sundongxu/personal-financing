@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/bg_4"
-              android:gravity="bottom"
-              android:orientation="vertical">
-
-
-    <com.ssdut.roysun.personalfinancialrecommendationsystem.service.Marrquee
-        android:id="@+id/mq_scroll_text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:autoLink="web|phone"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:text="@string/dialog_about"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_4"
+    android:gravity="bottom"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"

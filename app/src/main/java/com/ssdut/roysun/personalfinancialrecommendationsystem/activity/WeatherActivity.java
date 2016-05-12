@@ -35,8 +35,8 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.CityCode;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Weather;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.ImageLoader;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.binder.WeatherBinder;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.WeatherService;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.service.binder.WeatherBinder;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.NetworkUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
@@ -54,7 +54,11 @@ import java.util.HashMap;
 public class WeatherActivity extends BaseActivity implements View.OnClickListener, ServiceConnection {
 
     public static final String TAG = "WeatherActivity";
-
+    public static MessageHandler mMsgHandler;  //Handler用来后台更新界面
+    private static HashMap<String, String> sHashMap;
+    InputMethodManager mInputMethodManager = null;  //获取输入法管理器
+    //存储城市列表代码
+    ArrayList<CityCode> mCodeList = null;
     private WeatherBinder mBinder;
     private TextView mCity, mCondition, mTemperature, mWindSpeed, mTimeUpdate;  //TextView标题（城市名），当前天气状态，当前温度，当前风速，数据更新时间
     private ImageView mWeatherPic;  //当前天气图片
@@ -62,15 +66,10 @@ public class WeatherActivity extends BaseActivity implements View.OnClickListene
     private ListView mFurtureWeatherList;  //最近四天天气list
     private EditText mCityInput;  //搜索城市的编辑框
     private LinearLayout mWeatherNowArea, mWeatherArea;  //当前天气的内容的LinerLayout
-    public static MessageHandler mMsgHandler;  //Handler用来后台更新界面
     private WeatherListAdapter mWeatherListAdapter = null;  //天气列表适配器
     private ProgressDialog mProgressDialog;  //搜索时的显示进度
     private ArrayList<Weather> mWeatherList;  //最近天气list集合
     private ImageLoader mImageLoader = null;  //异步加载天气图片
-    InputMethodManager mInputMethodManager = null;  //获取输入法管理器
-    private static HashMap<String, String> sHashMap;
-    //存储城市列表代码
-    ArrayList<CityCode> mCodeList = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,10 +97,6 @@ public class WeatherActivity extends BaseActivity implements View.OnClickListene
         mWeatherArea.getBackground().setAlpha(200);
         mCityInput = (EditText) findViewById(R.id.et_city_input);
         mCityInput.getBackground().setAlpha(200);
-        TextView gg = (TextView) this.findViewById(R.id.mq_scroll_text);
-        if (!ToolsMainActivity.isShow) {
-            gg.setVisibility(View.INVISIBLE);
-        }
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 

@@ -6,9 +6,9 @@
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    android:background="?attr/colorPrimary"
     android:fitsSystemWindows="true"
-    app:theme="@style/ToolbarTheme"
     app:popupTheme="@style/ToolbarPopupTheme"
-    app:titleTextAppearance="@style/ToolbarTitle"
-    android:background="?attr/colorPrimary"/>
+    app:theme="@style/ToolbarTheme"
+    app:titleTextAppearance="@style/ToolbarTitle"/>
 

@@ -1,17 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/top" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fl_content"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <include layout="@layout/common_toolbar"/>
 
-    <include layout="@layout/bottom" />
+        <!-- DrawerLayout只可有两个子节点，第一个子节点为主界面布局，第二个则为抽屉布局 -->
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/dl_menu_side"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <FrameLayout
+                android:id="@+id/fl_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <!-- 抽屉左右由第2个子节点也就是抽屉菜单布局的gravtity属性决定，start->左，end->右 -->
+            <LinearLayout
+                android:layout_width="250dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@android:color/white"
+                android:orientation="vertical">
+                <!--<LinearLayout-->
+                <!--android:id="@+id/ll_drawer_header"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="130dp"-->
+                <!--android:background="?attr/colorPrimaryDark"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:id="@+id/civ_menu_user_icon"-->
+                <!--android:layout_width="56dp"-->
+                <!--android:layout_height="56dp"-->
+                <!--android:src="@drawable/icon_not_signin"-->
+                <!--app:border_color="@color/angelblue"-->
+                <!--app:border_width="2dp"/>-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/tv_menu_user_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:gravity="center"-->
+                <!--android:text="未登录"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+                <!--android:textSize="15sp"/>-->
+
+                <!--</LinearLayout>-->
+
+                <!--<ListView-->
+                <!--android:id="@+id/lv_drawer_menu_list"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"/>-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_drawer_menu_list"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"/>
+            </LinearLayout>
+        </android.support.v4.widget.DrawerLayout>
+
+    </LinearLayout>
+
+
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/ahbn_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+</android.support.design.widget.CoordinatorLayout>
+

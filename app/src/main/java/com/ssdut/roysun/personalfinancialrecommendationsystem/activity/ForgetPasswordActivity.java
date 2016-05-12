@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.MD.activity;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.BaseActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 

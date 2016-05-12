@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.JournalDetailAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal.JournalDetailAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
@@ -32,7 +32,7 @@ public class JournalDetailActivity extends BaseActivity implements View.OnClickL
     //类别  支出和收入
     public static final int INCOME_FLAG = 4010;
     public static final int EXPENDITURE_FLAG = 4020;
-
+    public MessageHandler mMsgHandler;
     private RelativeLayout mBackArea, mNextArea, mIncomeTabArea, mExpenditureTabArea;  //顶部时间的上月和下月,支出收入按钮
     private LinearLayout mSumArea, mDetailListArea;  //底部汇总界面,列表界面
     private ListView mDetailList;  //list列表
@@ -40,7 +40,6 @@ public class JournalDetailActivity extends BaseActivity implements View.OnClickL
     private int mYear, mMonth;  //当前年月
     private String mTimeNow;  //当前时间
     private int mFlag = 0;  //当前类别
-    public MessageHandler mMsgHandler;
     private JournalDetailAdapter mJournalDetailAdapter;  //适配器
 
     @Override
@@ -233,11 +232,6 @@ public class JournalDetailActivity extends BaseActivity implements View.OnClickL
         return super.onKeyDown(kCode, kEvent);
     }
 
-    public class MessageHandler extends Handler {
-        public void handleMessage(Message msg) {
-        }
-    }
-
     /**
      * 点击明细页面任意条目则进入该条目编辑页面，即JournalAddActivity，不过在intent中传递参数“update”
      *
@@ -261,6 +255,11 @@ public class JournalDetailActivity extends BaseActivity implements View.OnClickL
             _intent.putExtra("type", JournalAddActivity.INCOME);
             _intent.putExtra("id", _income.getId());
             startActivity(_intent);
+        }
+    }
+
+    public class MessageHandler extends Handler {
+        public void handleMessage(Message msg) {
         }
     }
 

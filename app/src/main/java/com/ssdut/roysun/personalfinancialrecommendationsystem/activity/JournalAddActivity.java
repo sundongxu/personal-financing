@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.JournalDetailAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal.JournalDetailAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.JournalItem;
@@ -53,7 +53,7 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
     public static final int CATEGORY_MSG = 1010, REMARK_MSG = 1020;
     // 当前选择的添加类别支出，收入，借贷
     public static final int EXPENDITURE = 2010, INCOME = 2020, CREDIT_DEBIT = 2030;
-
+    public MessageHandler mMsgHandler;
     private TextView mAmount, mCategory, mDate, mTime, mRemark;  // TextView金额，类别，时间，备注。
     private FrameLayout mExpenditureTab, mIncomeTab, mCreditDebitTab, mBtnSave, mBtnCancel, mBtnDelete;  // FrameLayout支出，收入，借贷，保存，取消。
     private LinearLayout mPicArea, mNumInputArea;  // LinearLayout图片，底部数字按钮
@@ -61,14 +61,16 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
     private Button mBtnNum_0, mBtnNum_1, mBtnNum_2, mBtnNum_3, mBtnNum_4, mBtnNum_5, mBtnNum_6, mBtnNum_7, mBtnNum_8, mBtnNum_9, mBtnPoint, mBtnNumDelete;  // 底部数字按钮
     private Button mBtnNum[] = new Button[]{mBtnNum_0, mBtnNum_1, mBtnNum_2, mBtnNum_3, mBtnNum_4, mBtnNum_5, mBtnNum_6, mBtnNum_7, mBtnNum_8, mBtnNum_9, mBtnPoint, mBtnNumDelete};  // 按钮集合
     private TextView mExpenditureTabName, mIncomeTabName, mCreditDebitTabName;  // 顶部支出 收入 借贷 文本，修改时需要改动文本内容
-
     private int mNowFlag = EXPENDITURE;  // 当前选择的类型
     private int mUpdateType, mUpdateId, mUpdateFlag;  // 更改的类型（支处 收入 借贷）
     private boolean isUpdate = false;  // 判断当前是初始创建还是二次更新
     private String mPicPath = "";// 文件路径
-
-    public MessageHandler mMsgHandler;
     private JournalManager mJournalDataHelper;  // 数据库操作
+    /*
+     * 如果是以修改的方式打开该界面
+     */
+    private Expenditure mExpenditure = new Expenditure();
+    private Income mIncome = new Income();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,12 +138,6 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
             mBtnNum[i].setOnClickListener(new NumberClickListener(mAmount, this));
         }
     }
-
-    /*
-     * 如果是以修改的方式打开该界面
-     */
-    private Expenditure mExpenditure = new Expenditure();
-    private Income mIncome = new Income();
 
     /**
      * intent含参数“update”(还含type、id等)，则为二次更新该新增账目页面，初始化该页面
@@ -444,6 +440,62 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         return null;
     }
 
+    public boolean onKeyDown(int kCode, KeyEvent kEvent) {
+        switch (kCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                if (mNumInputArea.isShown()) {
+                    DongHuaYanChi.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.jz_menu_down, 300);
+                    return false;
+                } else {
+                    finish();
+                }
+            }
+        }
+        return super.onKeyDown(kCode, kEvent);
+    }
+
+    /*
+     * 选择图片的回传处理
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        File _file;
+        Bitmap _bmp;
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PHOTO_FROM_CAMERA:// 获取拍摄的文件
+                    mPicPath = captureFile.getAbsolutePath();
+                    _file = new File(mPicPath);
+                    _bmp = PicUtils.decodeFileAndCompress(_file);
+                    mPic.setImageBitmap(_bmp);
+                    break;
+                case PHOTO_FROM_DATA:// 获取从图库选择的文件
+                    Uri uri = data.getData();
+                    String scheme = uri.getScheme();
+                    if (scheme.equalsIgnoreCase("file")) {
+                        mPicPath = uri.getPath();
+                        System.out.println(mPicPath);
+                        _file = new File(mPicPath);
+                        _bmp = PicUtils.decodeFileAndCompress(_file);
+                        mPic.setImageBitmap(_bmp);
+                    } else if (scheme.equalsIgnoreCase("content")) {
+                        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            mPicPath = cursor.getString(1);
+                            _file = new File(mPicPath);
+                            _bmp = PicUtils.decodeFileAndCompress(_file);
+                            mPic.setImageBitmap(_bmp);
+                        }
+                    }
+                    break;
+            }
+            // 存放照片的路径
+            String savePath = SDrw.SDPATH + "journal/imgcache/";
+            mPicPath = PicUtils.compressPic(mPicPath, savePath);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private class ItemClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -541,20 +593,6 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         }
     }
 
-    public boolean onKeyDown(int kCode, KeyEvent kEvent) {
-        switch (kCode) {
-            case KeyEvent.KEYCODE_BACK: {
-                if (mNumInputArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.jz_menu_down, 300);
-                    return false;
-                } else {
-                    finish();
-                }
-            }
-        }
-        return super.onKeyDown(kCode, kEvent);
-    }
-
     public class MessageHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -570,47 +608,5 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
                     break;
             }
         }
-    }
-
-    /*
-     * 选择图片的回传处理
-     */
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File _file;
-        Bitmap _bmp;
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case PHOTO_FROM_CAMERA:// 获取拍摄的文件
-                    mPicPath = captureFile.getAbsolutePath();
-                    _file = new File(mPicPath);
-                    _bmp = PicUtils.decodeFileAndCompress(_file);
-                    mPic.setImageBitmap(_bmp);
-                    break;
-                case PHOTO_FROM_DATA:// 获取从图库选择的文件
-                    Uri uri = data.getData();
-                    String scheme = uri.getScheme();
-                    if (scheme.equalsIgnoreCase("file")) {
-                        mPicPath = uri.getPath();
-                        System.out.println(mPicPath);
-                        _file = new File(mPicPath);
-                        _bmp = PicUtils.decodeFileAndCompress(_file);
-                        mPic.setImageBitmap(_bmp);
-                    } else if (scheme.equalsIgnoreCase("content")) {
-                        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-                        if (cursor != null) {
-                            cursor.moveToFirst();
-                            mPicPath = cursor.getString(1);
-                            _file = new File(mPicPath);
-                            _bmp = PicUtils.decodeFileAndCompress(_file);
-                            mPic.setImageBitmap(_bmp);
-                        }
-                    }
-                    break;
-            }
-            // 存放照片的路径
-            String savePath = SDrw.SDPATH + "journal/imgcache/";
-            mPicPath = PicUtils.compressPic(mPicPath, savePath);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }

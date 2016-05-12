@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -25,6 +25,7 @@ public class JournalCategoryAdapter extends BaseAdapter {
     private Context mContext;
     private int mFlag = 0;
     private String mSubItem = "";
+    private RelativeLayout addsub = null;
 
     public JournalCategoryAdapter(Context context, int flag, String subitem) {
         this.mFlag = flag;
@@ -94,8 +95,6 @@ public class JournalCategoryAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-
-    private RelativeLayout addsub = null;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

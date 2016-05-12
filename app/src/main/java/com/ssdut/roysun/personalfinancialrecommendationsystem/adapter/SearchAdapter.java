@@ -1,4 +1,4 @@
-package com.ssdut.roysun.personalfinancialrecommendationsystem.MD.adapter;
+package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -28,22 +28,17 @@ public class SearchAdapter extends BaseAdapter {
     private boolean mIsFilterList;
 
     public SearchAdapter(Context context, ArrayList<String> countries, boolean isFilterList) {
-        this.mContext = context;
-        this.mFunList = countries;
-        this.mIsFilterList = isFilterList;
+        mContext = context;
+        mFunList = countries;
+        mIsFilterList = isFilterList;
     }
 
 
     public void updateList(ArrayList<String> filterList, boolean isFilterList) {
-        this.mFunList = filterList;
-        this.mIsFilterList = isFilterList;
+        mFunList = filterList;
+        mIsFilterList = isFilterList;
         notifyDataSetChanged();
     }
-
-//    @Override
-//    public int getCount() {
-//        return mFunList.size();
-//    }
 
     @Override
     public int getCount() {
@@ -81,8 +76,8 @@ public class SearchAdapter extends BaseAdapter {
         if (v == null) {
             holder = new ViewHolder();
             mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = mLayoutInflater.inflate(R.layout.list_item_search, parent, false);
-            holder.txtCountry = (TextView) v.findViewById(R.id.txt_country);
+            v = mLayoutInflater.inflate(R.layout.search_list_item, parent, false);
+            holder.mFunctionText = (TextView) v.findViewById(R.id.txt_country);
             v.setTag(holder);
         } else {
             holder = (ViewHolder) v.getTag();
@@ -91,38 +86,26 @@ public class SearchAdapter extends BaseAdapter {
         Drawable searchDrawable, recentDrawable;
 
         if (position < mListSize - 1) {
-            holder.txtCountry.setText(mFunList.get(position));
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.mFunctionText.setText(mFunList.get(position));
             searchDrawable = mContext.getResources().getDrawable(R.mipmap.icon_search_grey, null);
             recentDrawable = mContext.getResources().getDrawable(R.mipmap.ic_backup_restore_grey600_24dp, null);
-//            }
-//            } else {
-//                searchDrawable = mContext.getResources().getDrawable(R.mipmap.icon_search_grey);
-//                recentDrawable = mContext.getResources().getDrawable(R.mipmap.ic_backup_restore_grey600_24dp);
-//            }
         } else {
-            holder.txtCountry.setText("删除历史记录");
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.mFunctionText.setText("删除历史记录");
             searchDrawable = mContext.getResources().getDrawable(R.mipmap.ic_close_grey600_24dp, null);
             recentDrawable = mContext.getResources().getDrawable(R.mipmap.ic_close_grey600_24dp, null);
-//            }
-//            } else {
-//                searchDrawable = mContext.getResources().getDrawable(R.mipmap.ic_close_grey600_24dp);
-//                recentDrawable = mContext.getResources().getDrawable(R.mipmap.ic_close_grey600_24dp);
-//            }
         }
 
 
         if (mIsFilterList) {
-            holder.txtCountry.setCompoundDrawablesWithIntrinsicBounds(searchDrawable, null, null, null);
+            holder.mFunctionText.setCompoundDrawablesWithIntrinsicBounds(searchDrawable, null, null, null);
         } else {
-            holder.txtCountry.setCompoundDrawablesWithIntrinsicBounds(recentDrawable, null, null, null);
+            holder.mFunctionText.setCompoundDrawablesWithIntrinsicBounds(recentDrawable, null, null, null);
         }
         return v;
     }
 }
 
 class ViewHolder {
-    TextView txtCountry;
+    TextView mFunctionText;
 }
 

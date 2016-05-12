@@ -1,6 +1,5 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,12 +21,12 @@ import android.widget.Toast;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.JournalSqliteHelper;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.DialogAbout;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.MemoSetPasswordDialog;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.DialogShuRuMiMa;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.MemoSetPasswordDialog;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DeviceInfoUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DeviceInfoUtils;
 
 import java.io.File;
 
@@ -35,7 +34,11 @@ import java.io.File;
  * Created by roysun on 16/3/12.
  * 图表主界面
  */
-public class ToolsMainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener, GestureDetector.OnGestureListener {
+public class ToolsMainActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener, GestureDetector.OnGestureListener {
+    //用来控制全局提醒
+    public static boolean isShow = true;
+    String noChange = "";
+    Handler handler = new Handler();
     //工具箱主界面  六个图标布局
     private LinearLayout jz_ll, bw_ll, js_ll, tq_ll, wz_ll, fy_ll, info_ll, icon_ll, top_bt;
     //底部上拉界面
@@ -54,8 +57,7 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
     private GestureDetector mGestureDetector;
     //主界面布局  用来监听滑动事件
     private FrameLayout mainTouch;
-    //用来控制全局提醒
-    public static boolean isShow = true;
+    private int click = 0, Min = 10;//划过的最小长度
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,8 +102,6 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
             isShow = false;
         }
     }
-
-    String noChange = "";
 
     public void initInfoTextView() {
         cpu = (TextView) this.findViewById(R.id.maintext_cpu);
@@ -316,7 +316,6 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
         }
     }
 
-
     @Override
     public boolean onLongClick(View v) {
         int id = v.getId();
@@ -404,8 +403,6 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
         builder.create().show();
     }
 
-    Handler handler = new Handler();
-
     public boolean onKeyDown(int kCode, KeyEvent kEvent) {
         switch (kCode) {
             case KeyEvent.KEYCODE_BACK://返回键
@@ -438,23 +435,6 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    //handler更新界面类
-    class MessageHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    String cur = ps.getMaxCpu(DeviceInfoUtils.CUR);
-                    cpuhz.setText(noChange + "  当前频率：" + changeCpuHZ(cur));
-                    break;
-                case -1:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-
-    }
-
     //下面是onTouchListener 和 OnGestureListener的实现方法  用来实现左右滑动
     @Override
     public boolean onDown(MotionEvent e) {
@@ -479,8 +459,6 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
     @Override
     public void onLongPress(MotionEvent e) {
     }
-
-    private int click = 0, Min = 10;//划过的最小长度
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -509,5 +487,22 @@ public class ToolsMainActivity extends Activity implements View.OnClickListener,
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return mGestureDetector.onTouchEvent(event);
+    }
+
+    //handler更新界面类
+    class MessageHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    String cur = ps.getMaxCpu(DeviceInfoUtils.CUR);
+                    cpuhz.setText(noChange + "  当前频率：" + changeCpuHZ(cur));
+                    break;
+                case -1:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+
     }
 }
