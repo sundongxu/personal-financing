@@ -1,6 +1,5 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,9 +16,7 @@ public class DeviceInfoActivity extends BaseActivity {
     public static String TAG = "DeviceInfoActivity";
 
     private Toolbar mToolbar;
-    private RecyclerView mInfoList;
-
-    private Context mContext;
+    private RecyclerView mDeviceInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +42,7 @@ public class DeviceInfoActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        mInfoList = (RecyclerView) findViewById(R.id.rv_device_info_list);
+        mDeviceInfoList = (RecyclerView) findViewById(R.id.rv_device_info_list);
     }
 
     @Override

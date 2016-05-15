@@ -33,7 +33,8 @@ import java.util.regex.Pattern;
 
 /**
  * Created by roysun on 16/3/12.
- * 股票查询页面，调用了新浪股票API，包含网络操作
+ * 股票查询页面，调用了新浪股票API
+ * 包含网络操作，HttpClient方式
  */
 public class StockActivity extends BaseActivity {
 
@@ -41,61 +42,15 @@ public class StockActivity extends BaseActivity {
 
     private static final String sBaseUrl = "http://hq.sinajs.cn/list=";
     private static final String sImageUrl = "http://image.sinajs.cn/newchart/min/n/";
-
+    List<String> mStockInfoList = new ArrayList<String>();
     private Button mBtnQuery;
     private EditText mStockCode;
     private ImageView mStockPic;
-
     private String mImageUrl;
     private Bitmap mBmp = null;
-
     //网络操作
     private HttpResponse mHttpResponse = null;
     private HttpEntity mHttpEntity = null;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK: {
-                DialogUtils.showExitDialog(this, ACTIVITY_STOCK);
-                return false;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stock);
-        initView();
-    }
-
-    @Override
-    protected void initView() {
-        super.initView();
-        mStockCode = (EditText) findViewById(R.id.et_stock_code);
-        mBtnQuery = (Button) findViewById(R.id.btn_stock_query);
-        mStockPic = (ImageView) findViewById(R.id.iv_stock_pic);
-
-        ((TextView) findViewById(R.id.tv_stock_query_hint)).setText(R.string.stockapp3);
-        mBtnQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String _stockCode = mStockCode.getText().toString();
-                String _url = sBaseUrl + _stockCode;
-                mImageUrl = sImageUrl + _stockCode + ".gif";
-
-                final HttpGet httpGet = new HttpGet(_url);  // 生成一个请求对象，Get方式（或Post）
-                final HttpClient httpClient = new DefaultHttpClient();  // 生成一个客户端
-                // 启动新线程，使用客户端发送请求，并接受网络Response数据
-                new StockResponseThread(httpClient, httpGet).start();
-            }
-        });
-    }
-
-    List<String> mStockInfoList = new ArrayList<String>();
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -149,6 +104,47 @@ public class StockActivity extends BaseActivity {
             }
         }
     };
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK: {
+                DialogUtils.showExitDialog(this, ACTIVITY_STOCK);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_stock);
+        initView();
+    }
+
+    @Override
+    protected void initView() {
+        super.initView();
+        mStockCode = (EditText) findViewById(R.id.et_stock_code);
+        mBtnQuery = (Button) findViewById(R.id.btn_stock_query);
+        mStockPic = (ImageView) findViewById(R.id.iv_stock_pic);
+
+        ((TextView) findViewById(R.id.tv_stock_query_hint)).setText(R.string.stockapp3);
+        mBtnQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String _stockCode = mStockCode.getText().toString();
+                String _url = sBaseUrl + _stockCode;
+                mImageUrl = sImageUrl + _stockCode + ".gif";
+
+                final HttpGet httpGet = new HttpGet(_url);  // 生成一个请求对象，Get方式（或Post）
+                final HttpClient httpClient = new DefaultHttpClient();  // 生成一个客户端
+                // 启动新线程，使用客户端发送请求，并接受网络Response数据
+                new StockResponseThread(httpClient, httpGet).start();
+            }
+        });
+    }
 
     /**
      * 新线程内部类，执行网络耗时操作

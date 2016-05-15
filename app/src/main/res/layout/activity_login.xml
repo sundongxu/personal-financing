@@ -76,8 +76,8 @@
 
                 <ImageView
                     android:id="@+id/iv_username_hint"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/icon_width_normal"
+                    android:layout_height="@dimen/icon_height_normal"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/icon_username_hint"/>

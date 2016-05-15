@@ -34,6 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by roysun on 16/4/29.
  * MD风格的登录界面
+ * 残留一个bug，注册多个用户时MainActivity可能会由于GC操作自动onDestroy退栈，原因：应该是内存不够，MainActivity界面需优化（图片过多过大），必现
  */
 
 public class RegisterActivity extends PicBaseActivity implements View.OnClickListener {
@@ -55,7 +56,6 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     private Button mBtnRegister;
 
     private String mPicPath;  // 文件路径
-    private Context mContext;
     private int mIsSpecialAccount;
 
 
@@ -179,6 +179,7 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -239,6 +240,7 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
                     _user.setUpdateTime(_updateTime);
                     _user.setQuestion(_securityQuestion);
                     _user.setAnswer(_securityAnswer);
+                    _user.setBalance(0.0);
                     _user.setSpecial(_isSpecial);
                     if (mUserManager.register(_user) != -1) {
                         ToastUtils.showMsg(mContext, "注册成功！");

@@ -1,9 +1,12 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.inputmethod.InputMethodManager;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.UserManager;
@@ -20,7 +23,7 @@ import java.util.Date;
 public class BaseActivity extends AppCompatActivity {
 
     //主页面ID
-    public static final int ACTIVITY_MAIN_MD = 8000;
+    public static final int ACTIVITY_MAIN = 8000;
 
     //Activity ID，命名规则：四位数从高到低依次为：
     //千位 -> 随意定义的首数字，此处为8
@@ -41,16 +44,19 @@ public class BaseActivity extends AppCompatActivity {
     //第三个Fragment中包含的Activitiy ID
     public static final int ACTIVITY_LOGIN = 8311;
     public static final int ACTIVITY_REGISTER = 8321;
-    public static final int ACTIVITY_USER_MAIN = 8331;
+    public static final int ACTIVITY_USER_INFO = 8331;
+    public static final int ACTIVITY_USER_MANAGEMENT = 8341;
     //第四个Fragment中包含的Activity ID
     public static final int ACTIVITY_MEMO_MAIN = 8411;
     public static final int ACTIVITY_MEMO_ADD = 8412;
     public static final int ACTIVITY_WEATHER = 8421;
     public static final int ACTIVITY_CAlCULATION = 8431;
     public static final int ACTIVITY_TRANSLATION = 8441;
-    protected Toolbar mToolbar;  // 通用toolbar，部分Activity为特殊toolbar（登录界面）
-    protected UserManager mUserManager;  // 所有Activity都需要继承
-    MyApplication mApplication;  //管理Activity
+    public Toolbar mToolbar;  // 通用toolbar，部分Activity为特殊toolbar（登录界面）
+    public UserManager mUserManager;  // 所有Activity都需要继承
+    public MyApplication mApplication;  //管理Activity
+    public Context mContext;
+    public InputMethodManager mInputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +68,12 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void initData() {
         mUserManager = UserManager.getInstance(getApplicationContext());
+        mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     protected void initView() {
+        // 执行在onCreate中且执行一次
+        Log.v("Activity onCreate", mContext + " 入栈！");
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
@@ -82,7 +91,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mApplication.finishActivity(this);
+        Log.v("Activity onDestroy", mContext + " 退栈！");
+//        mApplication.finishActivity(this);
     }
 
     /*

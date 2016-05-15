@@ -1,6 +1,5 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -41,8 +40,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private Button mBtnSignIn;  // 登录按钮
     private TextView mRegisterText;  // 点击注册
     private TextView mForgetPasswordText;  //点击验证密保问题，输入用户名、密码跳转到填写密保问题答案，验证成功后，跳转修改密码页面，修改成功后跳转登录界面
-
-    private Context mContext;
     private boolean mIsRememberMe;  // 是否记住当前登录账户，保存登录态 -> sharedPreferences
 
     @Override
@@ -201,6 +198,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case android.R.id.home:
 //                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
+                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -35,5 +35,7 @@
     <dimen name="bottom_navigation_small_padding_bottom">16dp</dimen>
 
     <dimen name="bottom_navigation_small_selected_width_difference">10dp</dimen>
+    <dimen name="icon_height_normal">30dp</dimen>
+    <dimen name="icon_width_normal">30dp</dimen>
 
 </resources>

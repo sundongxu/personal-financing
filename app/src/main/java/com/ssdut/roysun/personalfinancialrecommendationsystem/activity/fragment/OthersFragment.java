@@ -1,5 +1,6 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.CalculationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.TranslationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.WeatherActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FunctionCardListBaseAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.OthersListAdapter;
 
 /**
@@ -51,6 +57,25 @@ public class OthersFragment extends BaseFragment {
         mLayoutManager = new LinearLayoutManager(getActivity());  //线性布局
         mRecyclerView.setLayoutManager(mLayoutManager);
         OthersListAdapter adapter = new OthersListAdapter(mContext);
+        adapter.setOnCardClickListener(new FunctionCardListBaseAdapter.OnCardClickListener() {
+            @Override
+            public void onCardItemClick(int cardType) {
+                switch (cardType){
+                    case FunctionCardListBaseAdapter.CARD_MEMO:
+                        startActivity(new Intent(mContext, MemoMainActivity.class));
+                        break;
+                    case FunctionCardListBaseAdapter.CARD_CALCULATION:
+                        startActivity(new Intent(mContext, CalculationActivity.class));
+                        break;
+                    case FunctionCardListBaseAdapter.CARD_WEATHER:
+                        startActivity(new Intent(mContext, WeatherActivity.class));
+                        break;
+                    case FunctionCardListBaseAdapter.CARD_TRANSLATION:
+                        startActivity(new Intent(mContext, TranslationActivity.class));
+                        break;
+                }
+            }
+        });
         mRecyclerView.setAdapter(adapter);
     }
 

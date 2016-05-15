@@ -12,7 +12,7 @@ public class AppInfoActivity extends BaseActivity {
     public final String TAG = "AppInfoActivity";
 
     private Toolbar mToolbar;
-    private RecyclerView mInfoList;
+    private RecyclerView mAppInfoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class AppInfoActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        mContext = this;
     }
 
     @Override
@@ -36,8 +37,7 @@ public class AppInfoActivity extends BaseActivity {
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        mInfoList = (RecyclerView) findViewById(R.id.rv_app_info_list);
+        mAppInfoList = (RecyclerView) findViewById(R.id.rv_app_info_list);
     }
 
     @Override

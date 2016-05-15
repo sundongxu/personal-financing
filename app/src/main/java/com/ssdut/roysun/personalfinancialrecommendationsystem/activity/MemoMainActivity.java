@@ -3,6 +3,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +58,12 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initView() {
         super.initView();
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (mToolbar != null){
+            mToolbar.setTitle("备忘");
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mMenu = (LinearLayout) this.findViewById(R.id.ll_menu);
         mMenu.setVisibility(View.VISIBLE);  //初始不可见，在onMenuItemSelected方法触发后可见（即长按menu键）
         mMemoList = (ListView) this.findViewById(R.id.lv_memo);
@@ -197,6 +204,9 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
             case 300:
                 //设置密码
                 new MemoSetPasswordDialog(this);
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

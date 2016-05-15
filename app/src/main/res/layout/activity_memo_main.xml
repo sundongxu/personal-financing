@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bw_list_bg">
+
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +40,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/bw_mian_add_selector"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@string/app_name"/>
     </LinearLayout>
 
     <LinearLayout
@@ -62,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/jz_add_numbt_selector"
-                android:text="@string/memo_main_select_all" />
+                android:text="@string/memo_main_select_all"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -77,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/jz_add_numbt_selector"
-                android:text="@string/memo_main_delete" />
+                android:text="@string/memo_main_delete"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -92,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/jz_add_numbt_selector"
-                android:text="@string/memo_main_cancelselect" />
+                android:text="@string/memo_main_cancelselect"/>
         </RelativeLayout>
     </LinearLayout>
 

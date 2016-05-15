@@ -6,14 +6,15 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
  */
 public class User {
 
-    public static final String NAME = "NAME";
-    public static final String PASSWORD = "PASSWORD";
-    public static final String PIC = "PIC";
-    public static final String CREATE_TIME = "CREATE_TIME";
-    public static final String UPDATE_TIME = "UPDATE_TIME";
-    public static final String QUESTION = "QUESTION";
-    public static final String ANSWER = "ANSWER";
-    public static final String IS_SPECIAL = "IS_SPECIAL";
+    public static final String NAME = "NAME";  // 用户名
+    public static final String PASSWORD = "PASSWORD";  // 密码
+    public static final String PIC = "PIC";  // 用户头像
+    public static final String CREATE_TIME = "CREATE_TIME";  // 注册时间
+    public static final String UPDATE_TIME = "UPDATE_TIME";  // 更新时间
+    public static final String QUESTION = "QUESTION";  // 密保问题
+    public static final String ANSWER = "ANSWER";  // 密保答案
+    public static final String BALANCE = "BALANCE";  // 账户余额
+    public static final String IS_SPECIAL = "IS_SPECIAL";  // 管理员标志位
 
     private int id;
     private String name;
@@ -23,70 +24,79 @@ public class User {
     private String updateTime;
     private String question;
     private String answer;
+    private double balance;
     private int isSpecial;
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getId() {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPic() {
         return pic;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public String getCreateTime() {
         return createTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 
     public String getQuestion() {
         return question;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     public String getAnswer() {
         return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public void setSpecial(int special) {

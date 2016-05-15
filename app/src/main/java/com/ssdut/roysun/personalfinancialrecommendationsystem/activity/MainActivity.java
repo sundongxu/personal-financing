@@ -83,8 +83,6 @@ public class MainActivity extends BaseActivity {
 
     private Dialog mDialog;
     private ArrayList<String> mThingList;
-
-    private Context mContext;
     private InputMethodManager mInputMethodManager;
     private LinearLayoutManager mLayoutManager;
 
@@ -208,7 +206,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                DialogUtils.showExitDialog(this, BaseActivity.ACTIVITY_MAIN_MD);
+                DialogUtils.showExitDialog(this, BaseActivity.ACTIVITY_MAIN);
                 break;
             case R.id.action_search:
                 showSearchDialog();
@@ -272,7 +270,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void OnItemClick(View view, int position) {
                 switch (position) {
-                    case 3:
+                    case DrawerMenuListAdapter.ITEM_SIGN_OUT:
                         if (mUserManager.isSignIn()) {
                             mUserManager.signOut();
                             ToastUtils.showMsg(mContext, "用户已注销", Toast.LENGTH_SHORT);
@@ -280,14 +278,14 @@ public class MainActivity extends BaseActivity {
                             onLoginStateChanged(false);
                         }
                         break;
-                    case 4:
+                    case DrawerMenuListAdapter.ITEM_DEVICE_INFO:
                         startActivity(new Intent(mContext, DeviceInfoActivity.class));
                         break;
-                    case 5:
+                    case DrawerMenuListAdapter.ITEM_APP_INFO:
                         startActivity(new Intent(mContext, AppInfoActivity.class));
                         break;
-                    case 6:
-                        DialogUtils.showExitDialog(mContext, BaseActivity.ACTIVITY_MAIN_MD);
+                    case DrawerMenuListAdapter.ITEM_EXIT:
+                        DialogUtils.showExitDialog(mContext, BaseActivity.ACTIVITY_MAIN);
                         break;
                 }
             }
@@ -485,7 +483,7 @@ public class MainActivity extends BaseActivity {
                 } else if (mDrawer != null && mCanCloseDrawer) {
                     closeDrawer();
                 } else {
-                    DialogUtils.showExitDialog(this, ACTIVITY_MAIN_MD);
+                    DialogUtils.showExitDialog(this, ACTIVITY_MAIN);
                 }
                 break;
         }

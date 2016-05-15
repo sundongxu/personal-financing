@@ -39,7 +39,7 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
     public MessageHandler mMsgHandler;  //Handler用来后台更新界面
     private TranslationBinder mBinder;
 
-    private TextView mResult;  //TextView显示翻译内容
+    private TextView mResultText;  //TextView显示翻译内容
     private Button mBtnTranslate;  //按钮：翻译
     private EditText mContentTranslated;  //翻译内容的编辑框
     private ProgressDialog mProgressDialog;  //搜索时的显示进度
@@ -67,7 +67,7 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
         super.initView();
         mBtnTranslate = (Button) this.findViewById(R.id.btn_translate);
         mBtnTranslate.setOnClickListener(this);
-        mResult = (TextView) findViewById(R.id.tv_translation_result);
+        mResultText = (TextView) findViewById(R.id.tv_translation_result);
         mContentTranslated = (EditText) findViewById(R.id.et_content_translated);
         mContentTranslated.getBackground().setAlpha(200);
         mTranslationView = (LinearLayout) this.findViewById(R.id.ll_translation);
@@ -121,7 +121,7 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
         switch (item.getItemId()) {
             case 200:
                 mContentTranslated.setText("");
-                mResult.setText("");
+                mResultText.setText("");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -149,7 +149,7 @@ public class TranslationActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case NetworkUtils.ACCESS_SUCCESS:
                     Log.v(TAG, "msg.obj=" + msg.obj);
-                    mResult.setText((String) msg.obj);
+                    mResultText.setText((String) msg.obj);
                     unbindService(TranslationActivity.this);
                     break;
                 case NetworkUtils.ACCESS_FAIL:

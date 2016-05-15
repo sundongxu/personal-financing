@@ -1,10 +1,8 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,6 +10,7 @@ import android.widget.LinearLayout;
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 /**
@@ -37,8 +36,6 @@ public class ForgetPasswordActivity extends BaseActivity {
     private FloatLabel mPasswordView;
     private FloatLabel mPasswordRepeatView;
 
-    private Context mContext;
-    private InputMethodManager mInputMethodManager;
     private User mUser;  //  忘记密码的用户名
 
     @Override
@@ -53,7 +50,6 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         mContext = this;
-        mInputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -204,6 +200,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         //  不能和旧密码一样
         if (!mUser.getPassword().equals(password)) {
             mUser.setPassword(password);
+            mUser.setUpdateTime(TimeUtils.getYear() + "." + TimeUtils.getMonth() + "." + TimeUtils.getDay());
             if (mUserManager.updateUserInfo(mUser, mUser.getId()) == 1) {
                 //  之前就保证了去重逻辑，数据库中用户名唯一
                 ToastUtils.showMsg(this, "修改成功！");
@@ -221,6 +218,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                 break;
         }
         return super.onOptionsItemSelected(item);

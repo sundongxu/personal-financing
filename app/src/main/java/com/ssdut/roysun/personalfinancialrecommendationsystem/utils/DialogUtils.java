@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.BaseActivity;
@@ -13,6 +14,8 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainA
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.MemoListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.MemoContent;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
+
+import me.drakeet.materialdialog.MaterialDialog;
 
 /**
  * Created by roysun on 16/4/18.
@@ -30,7 +33,7 @@ public class DialogUtils {
             builder.setTitle(R.string.exit_confirm);
             confrimStr = context.getString(R.string.exit_app);
             switch (activityId) {
-                case BaseActivity.ACTIVITY_MAIN_MD:
+                case BaseActivity.ACTIVITY_MAIN:
                     cancelStr = context.getString(R.string.cancel);
                     break;
                 case BaseActivity.ACTIVITY_JOURNAL_MAIN:
@@ -52,7 +55,7 @@ public class DialogUtils {
                     cancelStr = context.getString(R.string.exit_memo);
                     break;
             }
-            if (activityId == BaseActivity.ACTIVITY_MAIN_MD) {
+            if (activityId == BaseActivity.ACTIVITY_MAIN) {
                 builder.setPositiveButton(confrimStr, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -155,6 +158,31 @@ public class DialogUtils {
             });
         }
         builder.create().show();
+    }
+
+    public static void showHintDialog(final Context context, String title, String message, String left, String right) {
+        final MaterialDialog _materialDialog = new MaterialDialog(context);
+        if (title != null && !title.equals("")) {
+            _materialDialog.setTitle(title);
+        }
+        _materialDialog.setMessage(message);
+        if (left != null && !left.equals("")) {
+            _materialDialog.setPositiveButton(left, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    _materialDialog.dismiss();
+                }
+            });
+        }
+        if (right != null && !right.equals("")) {
+            _materialDialog.setNegativeButton(right, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    _materialDialog.dismiss();
+                }
+            });
+        }
+        _materialDialog.setCanceledOnTouchOutside(true).show();
     }
 }
 

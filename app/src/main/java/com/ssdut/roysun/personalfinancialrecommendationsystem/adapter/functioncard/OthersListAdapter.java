@@ -1,13 +1,11 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.LoginActivity;
 
 /**
  * Created by roysun on 16/4/26.
@@ -18,15 +16,13 @@ public class OthersListAdapter extends FunctionCardListBaseAdapter {
 
     public static final String TAG = "FinanceListAdapter";
 
-    private Context mContext;
-
     public OthersListAdapter(Context context) {
         mContext = context;
         initCardList();
     }
 
     @Override
-    protected void initCardList() {
+    public void initCardList() {
         if (mCardTitleList != null) {
             mCardTitleList.clear();
             mCardTitleList.add("日 记 备 忘");
@@ -60,21 +56,39 @@ public class OthersListAdapter extends FunctionCardListBaseAdapter {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        switch (position) {
+            case 0:
+                mCardType = CARD_MEMO;
+                break;
+            case 1:
+                mCardType = CARD_CALCULATION;
+                break;
+            case 2:
+                mCardType = CARD_WEATHER;
+                break;
+            case 3:
+                mCardType = CARD_TRANSLATION;
+                break;
+        }
+        return mCardType;
+    }
+
+    @Override
     public int getItemCount() {
         return super.getItemCount();
     }
 
     @Override
-    public FunctionCardListBaseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FunctionCardListBaseAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.function_card_item, parent, false);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                view.getContext().startActivity(new Intent(v.getContext(), LoginActivity.class));
+                mListener.onCardItemClick(viewType);
             }
         });
-        FunctionCardListBaseAdapter.ViewHolder viewHolder = new FunctionCardListBaseAdapter.ViewHolder(view);
-        return viewHolder;
+        return new FunctionCardListBaseAdapter.ViewHolder(view);
     }
 
     @Override

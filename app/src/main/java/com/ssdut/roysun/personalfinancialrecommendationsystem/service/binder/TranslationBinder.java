@@ -22,6 +22,7 @@ import java.net.URLEncoder;
 /**
  * Created by roysun on 16/4/18.
  * Binder的子类，用于Service与Activity之间通信
+ * 包含网络操作，HttpURLConnection方式
  */
 public class TranslationBinder extends Binder {
 

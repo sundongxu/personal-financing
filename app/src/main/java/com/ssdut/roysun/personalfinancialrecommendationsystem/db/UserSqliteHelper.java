@@ -35,6 +35,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 User.UPDATE_TIME + " varchar," +
                 User.QUESTION + " varchar," +
                 User.ANSWER + " varchar," +
+                User.BALANCE + " REAL," +
                 User.IS_SPECIAL + " Integer" + ");");
 
         db.execSQL("INSERT INTO " +
@@ -46,6 +47,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 User.UPDATE_TIME + ", " +
                 User.QUESTION + ", " +
                 User.ANSWER + ", " +
+                User.BALANCE + ", " +
                 User.IS_SPECIAL + ")" +
                 " values" + "(" +
                 "'admin', " +
@@ -55,6 +57,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 "'2016.05.01', " +
                 "'你第一次坐飞机是去哪里？', " +
                 "'日本东京', " +
+                Double.valueOf("2222.22") + ", " +
                 1 + ");");
     }
 

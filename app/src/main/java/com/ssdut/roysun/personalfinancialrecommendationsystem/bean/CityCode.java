@@ -2,6 +2,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
 
 /**
  * Created by roysun on 16/3/12.
+ * 城市代码
  */
 public class CityCode {
     private String city = "";//城市

@@ -29,6 +29,11 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
     public static final int TYPE_NORMAL = 2;  // 前面两个可点击视图，显示ImageView + TextView + SwitchCompat三个控件
     public static final int TYPE_SPECIAL = 3;  // 后面三个可点击视图，显示ImageView + TextView两个控件
 
+    public static final int ITEM_SIGN_OUT = 3;
+    public static final int ITEM_DEVICE_INFO = 4;
+    public static final int ITEM_APP_INFO = 5;
+    public static final int ITEM_EXIT = 6;
+
     private View mDrawerHeader;
 
     private Context mContext;
@@ -100,7 +105,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
             // 无header
             switch (pos) {
                 case 0:
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_0_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_0));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -111,7 +116,7 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     });
                     break;
                 case 1:
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_1_colored));
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_1));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -123,26 +128,26 @@ public class DrawerMenuListAdapter extends RecyclerView.Adapter<DrawerMenuListAd
                     break;
                 case 2:
                     // 点击的ripple效果
-                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.item_click_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_2_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 3:
-                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.item_click_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_3_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 4:
-                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.item_click_ripple);
                     holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_4_colored));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
                     break;
                 case 5:
-                    holder.mMenuItemArea.setBackgroundResource(R.drawable.drawer_item_ripple);
-                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_5_colored));
+                    holder.mMenuItemArea.setBackgroundResource(R.drawable.item_click_ripple);
+                    holder.mItemPic.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.icon_drawer_item_5));
                     holder.mItemText.setVisibility(View.VISIBLE);
                     holder.mBtnChange.setVisibility(View.GONE);
             }

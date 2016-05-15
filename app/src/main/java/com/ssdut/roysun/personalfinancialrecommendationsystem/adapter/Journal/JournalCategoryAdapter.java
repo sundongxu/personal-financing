@@ -27,18 +27,18 @@ public class JournalCategoryAdapter extends BaseAdapter {
     private String mSubItem = "";
     private RelativeLayout addsub = null;
 
-    public JournalCategoryAdapter(Context context, int flag, String subitem) {
+    public JournalCategoryAdapter(Context context, int flag, String subItem) {
         this.mFlag = flag;
         this.mContext = context;
         //根据传入的参数获取相应的集合
         if (flag == JournalAddActivity.EXPENDITURE) {
-            getCategoryList(JournalItem.expense_category);
+            getCategoryList(JournalItem.sExpenseCategory);
         } else if (flag == JournalAddActivity.INCOME) {
-            getCategoryList(JournalItem.income_category);
+            getCategoryList(JournalItem.sIncomeCategory);
         } else if (flag == JournalAddActivity.CREDIT_DEBIT) {
-            getCategoryList(JournalItem.credit_debit_category);
+            getCategoryList(JournalItem.sCreditDebitCategory);
         } else if (flag == DialogCategory.FLAG_CATEGORY) {
-            getSubCategoryList(subitem);
+            getSubCategoryList(subItem);
         }
     }
 
@@ -59,21 +59,21 @@ public class JournalCategoryAdapter extends BaseAdapter {
         mCategoryList = new ArrayList<String>();
         String strs[] = null;
         if (subitem.equals("餐饮")) {
-            strs = JournalItem.meal;
+            strs = JournalItem.sMeal;
         } else if (subitem.equals("交通")) {
-            strs = JournalItem.traffic;
+            strs = JournalItem.sTraffic;
         } else if (subitem.equals("购物")) {
-            strs = JournalItem.shopping;
+            strs = JournalItem.sShopping;
         } else if (subitem.equals("娱乐")) {
-            strs = JournalItem.entertainment;
+            strs = JournalItem.sEntertainment;
         } else if (subitem.equals("医教")) {
-            strs = JournalItem.meditation_education;
+            strs = JournalItem.sMeditationEducation;
         } else if (subitem.equals("居家")) {
-            strs = JournalItem.daily_expense;
+            strs = JournalItem.sDailyExpense;
         } else if (subitem.equals("投资")) {
-            strs = JournalItem.investment;
+            strs = JournalItem.sInvestment;
         } else if (subitem.equals("人情")) {
-            strs = JournalItem.favor_contact;
+            strs = JournalItem.sFavorContact;
         }
         this.mSubItem = subitem;
         for (String str : strs) {

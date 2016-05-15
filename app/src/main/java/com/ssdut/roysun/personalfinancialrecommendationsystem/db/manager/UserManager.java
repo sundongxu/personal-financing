@@ -68,7 +68,8 @@ public class UserManager {
             _user.setUpdateTime(cursor.getString(5));
             _user.setQuestion(cursor.getString(6));
             _user.setAnswer(cursor.getString(7));
-            _user.setSpecial(cursor.getInt(8));
+            _user.setBalance(cursor.getDouble(8));
+            _user.setSpecial(cursor.getInt(9));
             _userList.add(_user);
             cursor.moveToNext();
         }
@@ -102,7 +103,8 @@ public class UserManager {
             _user.setUpdateTime(cursor.getString(5));
             _user.setQuestion(cursor.getString(6));
             _user.setAnswer(cursor.getString(7));
-            _user.setSpecial(cursor.getInt(8));
+            _user.setBalance(cursor.getDouble(8));
+            _user.setSpecial(cursor.getInt(9));
             cursor.moveToNext();
             cursor.close();
         }
@@ -148,6 +150,7 @@ public class UserManager {
         values.put(User.UPDATE_TIME, user.getUpdateTime());
         values.put(User.QUESTION, user.getQuestion());
         values.put(User.ANSWER, user.getAnswer());
+        values.put(User.BALANCE, user.getBalance());
         values.put(User.IS_SPECIAL, user.isSpecial());
         Long _newRowId = mSQLiteDB.insert(UserSqliteHelper.USER, User.NAME, values);
         return _newRowId;
@@ -170,6 +173,7 @@ public class UserManager {
         values.put(User.UPDATE_TIME, user.getUpdateTime());
         values.put(User.QUESTION, user.getQuestion());
         values.put(User.ANSWER, user.getAnswer());
+        values.put(User.BALANCE, user.getBalance());
         values.put(User.IS_SPECIAL, user.isSpecial());
         int _rowsAffectedByUpdate = mSQLiteDB.update(UserSqliteHelper.USER, values, "ID ='" + id + "'", null);
         return _rowsAffectedByUpdate;
@@ -203,7 +207,8 @@ public class UserManager {
             mCurUser.setUpdateTime(cursor.getString(5));
             mCurUser.setQuestion(cursor.getString(6));
             mCurUser.setAnswer(cursor.getString(7));
-            mCurUser.setSpecial(cursor.getInt(8));
+            mCurUser.setBalance(cursor.getDouble(8));
+            mCurUser.setSpecial(cursor.getInt(9));
         }
         cursor.close();
         return flag;
