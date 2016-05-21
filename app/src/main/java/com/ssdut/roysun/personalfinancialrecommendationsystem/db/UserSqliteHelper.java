@@ -13,7 +13,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
 public class UserSqliteHelper extends SQLiteOpenHelper {
 
     public static final String TAG = "UserSqliteHelper";
-    public static final String USER = "USER";
+    public static final String USER = "USER_NAME";  // 表名
 
     private Context mContext;
 

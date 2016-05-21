@@ -140,7 +140,7 @@ public class ForgetPasswordActivity extends BaseActivity {
                         _securityQuestion = getSecurityQuestion(_userName);
                         if (!_securityQuestion.equals("")) {
                             mSecurityQuestionView.setText(_securityQuestion);
-                            mSecurityQuestionView.getEditText().setEnabled(false);
+                            mSecurityQuestionView.getEditText().setEnabled(false);  // 让EditText永远无法获得焦点
                             mSecurityQuestionView.getEditText().setFocusable(false);
                             mUserNameView.getEditText().setFocusable(false);
                             mUserNameView.getEditText().setEnabled(false);

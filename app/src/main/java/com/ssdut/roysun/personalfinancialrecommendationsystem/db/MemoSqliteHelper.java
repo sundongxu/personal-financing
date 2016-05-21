@@ -20,36 +20,6 @@ public class MemoSqliteHelper extends SQLiteOpenHelper {
         super(context, name, factory, version);
     }
 
-    //getWritableDatabase()之后调用该方法，生成表结构
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS " +
-                MEMO + "(" + "ID" + " integer primary key," +
-                MemoContent.YEAR + " Integer," +
-                MemoContent.MONTH + " Integer," +
-                MemoContent.WEEK + " Integer," +
-                MemoContent.DAY + " Integer," +
-                MemoContent.TIME + " varchar," +
-                MemoContent.CONTENT + " varchar," +
-                MemoContent.PIC + " varchar," +
-                MemoContent.COLOR + " Integer," +
-                MemoContent.SIZE + " REAL" + ");");
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + MEMO);
-        onCreate(db);
-    }
-
-    public void updateColumn(SQLiteDatabase db, String oldColumn, String newColumn, String typeColumn) {
-        try {
-            db.execSQL("ALTER TABLE " + MEMO + " CHANGE " + oldColumn + " " + newColumn + " " + typeColumn);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /*
      * 存储月预算
      * */
@@ -70,5 +40,35 @@ public class MemoSqliteHelper extends SQLiteOpenHelper {
         SharedPreferences preference = context.getSharedPreferences(filename, Context.MODE_PRIVATE);
         int num = preference.getInt(name, 0);
         return num;
+    }
+
+    //getWritableDatabase()之后调用该方法，生成表结构
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " +
+                MEMO + "(" + "ID" + " integer primary key," +
+                MemoContent.YEAR + " Integer," +
+                MemoContent.MONTH + " Integer," +
+                MemoContent.WEEK + " Integer," +
+                MemoContent.DAY + " Integer," +
+                MemoContent.TIME + " varchar," +
+                MemoContent.CONTENT + " varchar," +
+                MemoContent.PIC + " varchar," +
+                MemoContent.BG_COLOR + " Integer," +
+                MemoContent.TEXT_SIZE + " REAL" + ");");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS" + MEMO);
+        onCreate(db);
+    }
+
+    public void updateColumn(SQLiteDatabase db, String oldColumn, String newColumn, String typeColumn) {
+        try {
+            db.execSQL("ALTER TABLE " + MEMO + " CHANGE " + oldColumn + " " + newColumn + " " + typeColumn);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

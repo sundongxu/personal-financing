@@ -17,10 +17,8 @@ import java.util.ArrayList;
 public class MemoManager {
 
     public static final String TAG = "MemoManager";
-
-    private String DB_NAME = "memoContent.db";  //数据库名称
     private static int DB_VERSION = 1;  //数据库版本
-
+    private String DB_NAME = "memoContent.db";  //数据库名称
     private SQLiteDatabase mSQLiteDB;
     private MemoSqliteHelper mDBHelper;
 
@@ -84,8 +82,8 @@ public class MemoManager {
         values.put(MemoContent.TIME, memoContent.getTime());
         values.put(MemoContent.CONTENT, memoContent.getContent());
         values.put(MemoContent.PIC, memoContent.getPic());
-        values.put(MemoContent.COLOR, memoContent.getColor());
-        values.put(MemoContent.SIZE, memoContent.getSize());
+        values.put(MemoContent.BG_COLOR, memoContent.getColor());
+        values.put(MemoContent.TEXT_SIZE, memoContent.getSize());
         int _rowsAffectedByUpdate = mSQLiteDB.update(MemoSqliteHelper.MEMO, values, "ID ='" + id + "'", null);
         close();
         return _rowsAffectedByUpdate;
@@ -103,8 +101,8 @@ public class MemoManager {
         values.put(MemoContent.TIME, memoContent.getTime());
         values.put(MemoContent.CONTENT, memoContent.getContent());
         values.put(MemoContent.PIC, memoContent.getPic());
-        values.put(MemoContent.COLOR, memoContent.getColor());
-        values.put(MemoContent.SIZE, memoContent.getSize());
+        values.put(MemoContent.BG_COLOR, memoContent.getColor());
+        values.put(MemoContent.TEXT_SIZE, memoContent.getSize());
         Long _newRowId = mSQLiteDB.insert(MemoSqliteHelper.MEMO, MemoContent.YEAR, values);
         close();
         return _newRowId;

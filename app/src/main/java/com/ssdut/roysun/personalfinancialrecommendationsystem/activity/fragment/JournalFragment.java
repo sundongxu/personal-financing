@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.BudgetActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.ForumWebActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalSettingActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalSheetActivity;
@@ -65,7 +66,8 @@ public class JournalFragment extends BaseFragment {
                         startActivity(new Intent(mContext, JournalSheetActivity.class));
                         break;
                     case FunctionCardListBaseAdapter.CARD_CONSUMATION:
-                        startActivity(new Intent(mContext, JournalMainActivity.class));
+//                        startActivity(new Intent(mContext, JournalMainActivity.class));
+                        startActivity(new Intent(mContext, ForumWebActivity.class));
                         break;
                     case FunctionCardListBaseAdapter.CARD_SETTINGS:
                         startActivity(new Intent(mContext, JournalSettingActivity.class));

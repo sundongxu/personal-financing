@@ -10,10 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SharedPreferenceUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
@@ -33,8 +33,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private ImageView mTopBGView;  // 顶部背景图
     private ImageView mUserNameIcon;
     private ImageView mPasswordIcon;
-    private FloatLabel mUserNameView;  // 登录名
-    private FloatLabel mPasswordView;  // 密码
+    //    private FloatLabel mUserNameView;  // 登录名
+    private EditText mUserNameView;  // 登录名
+    //    private FloatLabel mPasswordView;  // 密码
+    private EditText mPasswordView;  // 密码
     private FloatingActionButton mFabLogin;
     private CheckBox mRememberMeBox;  // 记住我勾选框
     private Button mBtnSignIn;  // 登录按钮
@@ -73,11 +75,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         mUserNameIcon = (ImageView) findViewById(R.id.iv_username_hint);
         mPasswordIcon = (ImageView) findViewById(R.id.iv_password_hint);
-        mUserNameView = (FloatLabel) findViewById(R.id.et_user_name);
-        mPasswordView = (FloatLabel) findViewById(R.id.et_password);
-        mUserNameView.getEditText().setTextColor(R.color.black);
-        mPasswordView.getEditText().setTextColor(R.color.black);
-        mUserNameView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//        mUserNameView = (FloatLabel) findViewById(R.id.et_user_name);
+        mUserNameView = (EditText) findViewById(R.id.et_user_name);
+//        mPasswordView = (FloatLabel) findViewById(R.id.et_password);
+        mPasswordView = (EditText) findViewById(R.id.et_password);
+//        mUserNameView.getEditText().setTextColor(R.color.black);
+//        mPasswordView.getEditText().setTextColor(R.color.black);
+//        mUserNameView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mUserNameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -89,7 +94,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         });
-        mPasswordView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//        mPasswordView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mPasswordView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -123,12 +129,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_sign_in:
@@ -136,8 +136,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     // 已经登录过，请先注销
                     ToastUtils.showMsg(mContext, "你已登录过，请先注销！");
                 } else {
-                    String _userName = mUserNameView.getEditText().getText().toString();
-                    String _password = mPasswordView.getEditText().getText().toString();
+//                    String _userName = mUserNameView.getEditText().getText().toString();
+                    String _userName = mUserNameView.getText().toString();
+//                    String _password = mPasswordView.getEditText().getText().toString();
+                    String _password = mPasswordView.getText().toString();
                     if (_userName.equals("") || _password.equals("")) {
                         if (_userName.equals("") && _password.equals("")) {
                             ToastUtils.showMsg(mContext, "用户名和密码输入不能为空！");
@@ -181,9 +183,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void rememberUser() {
         if (mIsRememberMe) {
             SharedPreferenceUtils.addToList(mContext,
-                    Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN, mUserNameView.getEditText().getText().toString());
+//                    Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN, mUserNameView.getEditText().getText().toString());
+                    Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN, mUserNameView.getText().toString());
             SharedPreferenceUtils.addToList(mContext,
-                    Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN, mPasswordView.getEditText().getText().toString());
+//                    Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN, mPasswordView.getEditText().getText().toString());
+                    Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN, mPasswordView.getText().toString());
+
         }
     }
 

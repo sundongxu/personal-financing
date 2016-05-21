@@ -2,41 +2,86 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
 
 /**
  * Created by roysun on 16/3/12.
+ * 股票
  */
 public class Stock {
-    private String code;  // 股票代码
-    private String name;  // 股票名称
-    private String time;  // 价格时间
-    private String price; // 最新价格
-    private String YDP;   // 收盘价格
-    private String TDP;   // 开盘价格
-    private String ZDP;   // 涨跌额：
-    private String LP;    // 最低价格
-    private String HP;    // 最高价格
-    private String ZDF;   // 涨跌幅
-    private String CJL;   // 成交数量
-    private String JE;    // 成交额
-    private String BP;    // 竞买价
-    private String SP;    // 竞卖价
-    private String WB;    // 委比
-    private String buy1;  // 买一
-    private String buy2;  // 买二
-    private String buy3;  // 买三
-    private String buy4;  // 买四
-    private String buy5;  // 买五
-    private String sell1; // 卖一
-    private String sell2; // 卖二
-    private String sell3; // 卖三
-    private String sell4; // 卖四
-    private String sell5; // 卖五
-    private Stock stock;
 
-    public Stock getStock() {
-        return this.stock;
+    //为了支持购买模拟投资功能，还可以增加以下三个字段
+    public static final String BUYER_NAME = "BUYER_NAME";  // 买家用户名
+    public static final String BUY_NUMBER = "BUY_NUMBER";  // 买家买了多少股
+    public static final String WATCHER_NAME = "WATCHER_NAME"; // 关注本股用户名
+
+    public static final String USER_NAME = "USER_NAME";  // 关注本股用户名
+    public static final String CODE = "CODE";  // 股票代码
+    public static final String INCREASE_PERSENTAGE = "INCREASE_PERSENTAGE";  // 涨跌百分比
+    public static final String INCREASE_AMOUNT = "INCREASE_AMOUNT";  // 涨跌额
+
+    public static final String NAME = "NAME";  // 股票名称
+
+    public static final String TODAY_START_PRICE = "TODAY_START_PRICE";  // 今日开盘价
+    public static final String YESTERDAY_END_PRICE = "YESTERDAY_END_PRICE";  // 昨日收盘价
+    public static final String NOW_PRICE = "NOW_PRICE";  // 当前价格
+    public static final String TODAY_MAX_PRICE = "TODAY_MAX_PRICE";  // 今日最高价
+    public static final String TODAY_MIN_PRICE = "TODAY_MIN_PRICE";  // 今日最低价
+    public static final String COMPETITIVE_PRICE = "COMPETITIVE_PRICE";  // 竞买价
+    public static final String RESERVE_PRICE = "RESERVE_PRICE"; // 竞卖价
+    public static final String DEAL_NUMBER = "DEAL_NUMBER";  // 成交量
+    public static final String DEAL_PRICE = "DEAL_PRICE";  // 成交价
+
+    public static final String BUY_ONE = "BUY_ONE", BUY_ONE_PRICE = "BUY_ONE_PRICE";
+    public static final String BUY_TWO = "BUY_TWO", BUY_TWO_PRICE = "BUY_TWO_PRICE";
+    public static final String BUY_THREE = "BUY_THREE", BUY_THREE_PRICE = "BUY_THREE_PRICE";
+    public static final String BUY_FOUR = "BUY_FOUR", BUY_FOUR_PRICE = "BUY_FOUR_PRICE";
+    public static final String BUY_FIVE = "BUY_FIVE", BUY_FIVE_PRICE = "BUY_FIVE_PRICE";
+
+    public static final String SELL_ONE = "SELL_ONE", SELL_ONE_PRICE = "SELL_ONE_PRICE";
+    public static final String SELL_TWO = "SELL_TWO", SELL_TWO_PRICE = "SELL_TWO_PRICE";
+    public static final String SELL_THREE = "SELL_THREE", SELL_THREE_PRICE = "SELL_THREE_PRICE";
+    public static final String SELL_FOUR = "SELL_FOUR", SELL_FOUR_PRICE = "SELL_FOUR_PRICE";
+    public static final String SELL_FIVE = "SELL_FIVE", SELL_FIVE_PRICE = "SELL_FIVE_PRICE";
+
+    public static final String DATE = "DATE";
+    public static final String TIME = "TIME";
+
+    // 预留模拟数据，6-12-24-72天的历史价格
+    private int id;
+    private String userName;
+    private String code;
+    private double increasePersentage;
+    private double increaseAmount;
+    private String name;
+    private double todayStartPrice;
+    private double yesterdayEndPrice;
+    private double nowPrice;
+    private double todayMaxPrice;
+    private double todayMinPrice;
+    private double competitivePrice;
+    private double reservePrice;
+    private int dealNumber;
+    private double dealPrice;
+
+    private int buyOne, buyTwo, buyThree, buyFour, buyFive;
+    private double buyOnePrice, buyTwoPrice, buyThreePrice, buyFourPrice, buyFivePrice;
+    private int sellOne, sellTwo, sellThree, sellFour, sellFive;
+    private double sellOnePrice, sellTwoPrice, sellThreePrice, sellFourPrice, sellFivePrice;
+
+    private String date;
+    private String time;
+
+    public int getId() {
+        return id;
     }
 
-    public void setStock(Stock stockBean) {
-        this.stock = stockBean;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getCode() {
@@ -47,12 +92,268 @@ public class Stock {
         this.code = code;
     }
 
+    public double getIncreasePersentage() {
+        return increasePersentage;
+    }
+
+    public void setIncreasePersentage(double increasePersentage) {
+        this.increasePersentage = increasePersentage;
+    }
+
+    public double getIncreaseAmount() {
+        return increaseAmount;
+    }
+
+    public void setIncreaseAmount(double increaseAmount) {
+        this.increaseAmount = increaseAmount;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getTodayStartPrice() {
+        return todayStartPrice;
+    }
+
+    public void setTodayStartPrice(double todayStartPrice) {
+        this.todayStartPrice = todayStartPrice;
+    }
+
+    public double getYesterdayEndPrice() {
+        return yesterdayEndPrice;
+    }
+
+    public void setYesterdayEndPrice(double yesterdayEndPrice) {
+        this.yesterdayEndPrice = yesterdayEndPrice;
+    }
+
+    public double getNowPrice() {
+        return nowPrice;
+    }
+
+    public void setNowPrice(double nowPrice) {
+        this.nowPrice = nowPrice;
+    }
+
+    public double getTodayMaxPrice() {
+        return todayMaxPrice;
+    }
+
+    public void setTodayMaxPrice(double todayMaxPrice) {
+        this.todayMaxPrice = todayMaxPrice;
+    }
+
+    public double getTodayMinPrice() {
+        return todayMinPrice;
+    }
+
+    public void setTodayMinPrice(double todayMinPrice) {
+        this.todayMinPrice = todayMinPrice;
+    }
+
+    public double getCompetitivePrice() {
+        return competitivePrice;
+    }
+
+    public void setCompetitivePrice(double competitivePrice) {
+        this.competitivePrice = competitivePrice;
+    }
+
+    public double getReservePrice() {
+        return reservePrice;
+    }
+
+    public void setReservePrice(double reservePrice) {
+        this.reservePrice = reservePrice;
+    }
+
+    public int getDealNumber() {
+        return dealNumber;
+    }
+
+    public void setDealNumber(int dealNumber) {
+        this.dealNumber = dealNumber;
+    }
+
+    public double getDealPrice() {
+        return dealPrice;
+    }
+
+    public void setDealPrice(double dealPrice) {
+        this.dealPrice = dealPrice;
+    }
+
+    public int getBuyOne() {
+        return buyOne;
+    }
+
+    public void setBuyOne(int buyOne) {
+        this.buyOne = buyOne;
+    }
+
+    public int getBuyTwo() {
+        return buyTwo;
+    }
+
+    public void setBuyTwo(int buyTwo) {
+        this.buyTwo = buyTwo;
+    }
+
+    public int getBuyThree() {
+        return buyThree;
+    }
+
+    public void setBuyThree(int buyThree) {
+        this.buyThree = buyThree;
+    }
+
+    public int getBuyFour() {
+        return buyFour;
+    }
+
+    public void setBuyFour(int buyFour) {
+        this.buyFour = buyFour;
+    }
+
+    public int getBuyFive() {
+        return buyFive;
+    }
+
+    public void setBuyFive(int buyFive) {
+        this.buyFive = buyFive;
+    }
+
+    public double getBuyOnePrice() {
+        return buyOnePrice;
+    }
+
+    public void setBuyOnePrice(double buyOnePrice) {
+        this.buyOnePrice = buyOnePrice;
+    }
+
+    public double getBuyTwoPrice() {
+        return buyTwoPrice;
+    }
+
+    public void setBuyTwoPrice(double buyTwoPrice) {
+        this.buyTwoPrice = buyTwoPrice;
+    }
+
+    public double getBuyThreePrice() {
+        return buyThreePrice;
+    }
+
+    public void setBuyThreePrice(double buyThreePrice) {
+        this.buyThreePrice = buyThreePrice;
+    }
+
+    public double getBuyFourPrice() {
+        return buyFourPrice;
+    }
+
+    public void setBuyFourPrice(double buyFourPrice) {
+        this.buyFourPrice = buyFourPrice;
+    }
+
+    public double getBuyFivePrice() {
+        return buyFivePrice;
+    }
+
+    public void setBuyFivePrice(double buyFivePrice) {
+        this.buyFivePrice = buyFivePrice;
+    }
+
+    public int getSellOne() {
+        return sellOne;
+    }
+
+    public void setSellOne(int sellOne) {
+        this.sellOne = sellOne;
+    }
+
+    public int getSellTwo() {
+        return sellTwo;
+    }
+
+    public void setSellTwo(int sellTwo) {
+        this.sellTwo = sellTwo;
+    }
+
+    public int getSellThree() {
+        return sellThree;
+    }
+
+    public void setSellThree(int sellThree) {
+        this.sellThree = sellThree;
+    }
+
+    public int getSellFour() {
+        return sellFour;
+    }
+
+    public void setSellFour(int sellFour) {
+        this.sellFour = sellFour;
+    }
+
+    public int getSellFive() {
+        return sellFive;
+    }
+
+    public void setSellFive(int sellFive) {
+        this.sellFive = sellFive;
+    }
+
+    public double getSellOnePrice() {
+        return sellOnePrice;
+    }
+
+    public void setSellOnePrice(double sellOnePrice) {
+        this.sellOnePrice = sellOnePrice;
+    }
+
+    public double getSellTwoPrice() {
+        return sellTwoPrice;
+    }
+
+    public void setSellTwoPrice(double sellTwoPrice) {
+        this.sellTwoPrice = sellTwoPrice;
+    }
+
+    public double getSellThreePrice() {
+        return sellThreePrice;
+    }
+
+    public void setSellThreePrice(double sellThreePrice) {
+        this.sellThreePrice = sellThreePrice;
+    }
+
+    public double getSellFourPrice() {
+        return sellFourPrice;
+    }
+
+    public void setSellFourPrice(double sellFourPrice) {
+        this.sellFourPrice = sellFourPrice;
+    }
+
+    public double getSellFivePrice() {
+        return sellFivePrice;
+    }
+
+    public void setSellFivePrice(double sellFivePrice) {
+        this.sellFivePrice = sellFivePrice;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime() {
@@ -62,181 +363,4 @@ public class Stock {
     public void setTime(String time) {
         this.time = time;
     }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    public String getYDP() {
-        return YDP;
-    }
-
-    public void setYDP(String YDP) {
-        this.YDP = YDP;
-    }
-
-    public String getTDP() {
-        return TDP;
-    }
-
-    public void setTDP(String TDP) {
-        this.TDP = TDP;
-    }
-
-    public String getZDP() {
-        return ZDP;
-    }
-
-    public void setZDP(String ZDP) {
-        this.ZDP = ZDP;
-    }
-
-    public String getLP() {
-        return LP;
-    }
-
-    public void setLP(String LP) {
-        this.LP = LP;
-    }
-
-    public String getHP() {
-        return HP;
-    }
-
-    public void setHP(String HP) {
-        this.HP = HP;
-    }
-
-    public String getZDF() {
-        return ZDF;
-    }
-
-    public void setZDF(String ZDF) {
-        this.ZDF = ZDF;
-    }
-
-    public String getCJL() {
-        return CJL;
-    }
-
-    public void setCJL(String CJL) {
-        this.CJL = CJL;
-    }
-
-    public String getJE() {
-        return JE;
-    }
-
-    public void setJE(String JE) {
-        this.JE = JE;
-    }
-
-    public String getBP() {
-        return BP;
-    }
-
-    public void setBP(String BP) {
-        this.BP = BP;
-    }
-
-    public String getSP() {
-        return SP;
-    }
-
-    public void setSP(String SP) {
-        this.SP = SP;
-    }
-
-    public String getWB() {
-        return WB;
-    }
-
-    public void setWB(String WB) {
-        this.WB = WB;
-    }
-
-    public String getBuy1() {
-        return buy1;
-    }
-
-    public void setBuy1(String buy1) {
-        this.buy1 = buy1;
-    }
-
-    public String getBuy2() {
-        return buy2;
-    }
-
-    public void setBuy2(String buy2) {
-        this.buy2 = buy2;
-    }
-
-    public String getBuy3() {
-        return buy3;
-    }
-
-    public void setBuy3(String buy3) {
-        this.buy3 = buy3;
-    }
-
-    public String getBuy4() {
-        return buy4;
-    }
-
-    public void setBuy4(String buy4) {
-        this.buy4 = buy4;
-    }
-
-    public String getBuy5() {
-        return buy5;
-    }
-
-    public void setBuy5(String buy5) {
-        this.buy5 = buy5;
-    }
-
-    public String getSell1() {
-        return sell1;
-    }
-
-    public void setSell1(String sell1) {
-        this.sell1 = sell1;
-    }
-
-    public String getSell2() {
-        return sell2;
-    }
-
-    public void setSell2(String sell2) {
-        this.sell2 = sell2;
-    }
-
-    public String getSell3() {
-        return sell3;
-    }
-
-    public void setSell3(String sell3) {
-        this.sell3 = sell3;
-    }
-
-    public String getSell4() {
-        return sell4;
-    }
-
-    public void setSell4(String sell4) {
-        this.sell4 = sell4;
-    }
-
-    public String getSell5() {
-        return sell5;
-    }
-
-    public void setSell5(String sell5) {
-        this.sell5 = sell5;
-    }
-
 }

@@ -2,6 +2,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
 
 /**
  * Created by roysun on 16/3/12.
+ * 备忘条目
  */
 public class MemoContent {
     public static final String YEAR = "YEAR";
@@ -11,8 +12,8 @@ public class MemoContent {
     public static final String TIME = "TIME";
     public static final String CONTENT = "CONTENT";
     public static final String PIC = "PIC";
-    public static final String COLOR = "COLOR";
-    public static final String SIZE = "SIZE";
+    public static final String BG_COLOR = "BG_COLOR";
+    public static final String TEXT_SIZE = "TEXT_SIZE";
 
     private int id;  //条目id
     private int year;  //记事年

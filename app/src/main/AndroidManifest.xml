@@ -36,7 +36,7 @@
     <!-- 允许应用读取低级别的系统日志文件 -->
     <uses-permission android:name="android.permission.READ_LOGS"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- To auto-complete the email text field in the login form with the userName's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_PROFILE"/>
 
@@ -166,6 +166,7 @@
             android:launchMode="singleInstance"
             android:theme="@style/MyAppTheme"
             android:windowSoftInputMode="adjustPan|stateHidden">
+
             <!-- 设置windowSoftInputMode属性为以上值，可防止软键盘弹出时把整个布局全顶上去（比如把bottombar顶上去） -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -222,6 +223,20 @@
         <activity
             android:name=".activity.UserManagementActivity"
             android:label="账户管理"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.ForumWebActivity"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.StockMainActivity"
+            android:label="股票主界面"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.StockDetailActivity"
+            android:label="股票详情"
             android:theme="@style/MyAppTheme">
         </activity>
     </application>

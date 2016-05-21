@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_drawer_header"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:background="@drawable/icon_drawer_header_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_menu_user_icon"
+        android:layout_width="70dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/icon_not_signin"
+        app:border_color="@color/angelblue"
+        app:border_width="2dp"/>
+
+    <TextView
+        android:id="@+id/tv_menu_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="未登录"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="15sp"/>
+
+</LinearLayout>

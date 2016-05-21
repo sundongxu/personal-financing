@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/ll_index"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_index_shanghai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_index_shanghai_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="上证指数"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_shanghai"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2819.42"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_shanghai_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+0.42%, -11.91"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_index_shenzhen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_index_shenzhen_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="深圳成指"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_shenzhen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9800.63"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_shenzhen_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" +1.09%, +105.85"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_index_second_board"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_index_second_board_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="创业板指"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_second_board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2061.89"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tv_index_second_board_delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+2.05%, +41.41"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="250dp"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_stock_code"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="请输入股票代码"
+                android:textColor="@color/black"
+                android:textSize="15sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_add_stock"
+            style="?android:textAppearanceSmall"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/button_round_corner"
+            android:text="添  加"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="股票名称"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="现价"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="涨跌幅"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:gravity="center"
+            android:text="涨跌额"
+            android:textColor="@color/black"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_stock_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

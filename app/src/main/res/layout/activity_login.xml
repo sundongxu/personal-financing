@@ -82,14 +82,27 @@
                     android:layout_marginTop="20dp"
                     android:src="@drawable/icon_username_hint"/>
 
-                <com.iangclifton.android.floatlabel.FloatLabel
-                    android:id="@+id/et_user_name"
+                <!--<com.iangclifton.android.floatlabel.FloatLabel-->
+                <!--android:id="@+id/et_user_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Username"-->
+                <!--android:singleLine="true"-->
+                <!--android:textColor="@color/black"-->
+                <!--app:floatLabelColor="@color/colorAccent"/>-->
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Username"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    app:floatLabelColor="@color/colorAccent"/>
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Username"
+                        android:singleLine="true"
+                        android:textColor="@color/black"/>
+
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -108,15 +121,28 @@
                     android:layout_marginTop="20dp"
                     android:src="@drawable/icon_password_hint"/>
 
-                <com.iangclifton.android.floatlabel.FloatLabel
-                    android:id="@+id/et_password"
+                <!--<com.iangclifton.android.floatlabel.FloatLabel-->
+                <!--android:id="@+id/et_password"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Password"-->
+                <!--android:inputType="textPassword"-->
+                <!--android:singleLine="true"-->
+                <!--android:textColor="@color/black"-->
+                <!--app:floatLabelColor="@color/colorAccent"/>-->
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    app:floatLabelColor="@color/colorAccent"/>
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:singleLine="true"
+                        android:textColor="@color/black"/>
+
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
