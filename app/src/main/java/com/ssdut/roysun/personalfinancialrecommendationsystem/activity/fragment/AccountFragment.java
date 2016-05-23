@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +26,16 @@ public class AccountFragment extends BaseFragment {
     public static final String TAG = "AccountFragment";
 
     public static AccountFragment newInstance() {
-        AccountFragment fragment = new AccountFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
+        return new AccountFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        if (mContext instanceof MainActivity) {
+//            mPreScrollY = ((MainActivity) mContext).getPreScrollYList()[TAB_ACCOUNT];
+        }
     }
 
     @Nullable
@@ -92,16 +93,20 @@ public class AccountFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.smoothScrollBy(0, mPreScrollY);
     }
 
     @Override
     public void refresh() {
         super.refresh();
-        mRecyclerView.smoothScrollToPosition(0);
+//        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
     public void onPause() {
+//        mCallback.notifyPreScrollY(getScrolledDistance());
+        mPreScrollY = getScrolledDistance();
+        Log.v(TAG, "滑动量为" + mPreScrollY);
         super.onPause();
     }
 

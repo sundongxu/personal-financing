@@ -47,7 +47,7 @@ import java.util.TreeMap;
 public class StockMainActivity extends BaseActivity implements OnStartDragListener {
 
     public static final String TAG = "StockMainActivity";
-    public static final String URL_BASE_INFO = "http://hq.sinajs.cn/list=";
+    public static final String URL_BASE_SINA = "http://hq.sinajs.cn/list=";
 
     private final String INDEX_SHANGHAI = "sh000001";
     private final String INDEX_SHENZHEN = "sz399001";
@@ -211,7 +211,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
     public void querySinaStocks(String codeList) {
         Log.v(TAG, "refreshStocks invoked! 要查询的股票代码串为：" + codeList);
         RequestQueue _queue = Volley.newRequestQueue(this);
-        String _url = URL_BASE_INFO + codeList;
+        String _url = URL_BASE_SINA + codeList;
         StringRequest _request = new StringRequest(Request.Method.GET, _url,
                 new Response.Listener<String>() {
                     @Override

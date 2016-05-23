@@ -47,11 +47,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ImageView
-        android:id="@+id/iv_stock_info"
-        android:layout_width="match_parent"
-        android:layout_height="345dp"
-        android:visibility="gone"/>
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_stock_info"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="345dp"-->
+    <!--android:visibility="gone"/>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_stock_info_list"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
         android:clickable="true"
-        android:src="@drawable/ic_done_white_24dp"
+        android:src="@drawable/icon_stock_buy"
         app:layout_anchor="@id/al_stock_detail_appbar"
         app:layout_anchorGravity="bottom|right|end"
         app:rippleColor="@color/purple"/>

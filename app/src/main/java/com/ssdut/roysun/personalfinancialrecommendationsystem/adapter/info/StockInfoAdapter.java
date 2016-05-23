@@ -93,7 +93,7 @@ public class StockInfoAdapter extends InfoListBaseAdapter {
         int _textColor = mContext.getResources().getColor(R.color.black);
         if (mInfoValueList.get(3).contains("+") && (position == 2 || position == 3 || position == 4)) {
             _textColor = mContext.getResources().getColor(R.color.red);
-        } else if (mInfoValueList.get(3).contains("+") && (position == 2 || position == 3 || position == 4)) {
+        } else if (mInfoValueList.get(3).contains("-") && (position == 2 || position == 3 || position == 4)) {
             _textColor = mContext.getResources().getColor(R.color.green);
         }
         holder.mItemTitleText.setText(mInfoTitleList.get(position));

@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,6 +45,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.DrawerMenu
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.SearchAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.component.DividerItemDecoration;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SharedPreferenceUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
@@ -74,6 +77,7 @@ public class MainActivity extends BaseActivity {
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private boolean mCanCloseDrawer;  // 只要抽屉开始滑动了就可以返回键关闭
     private int mPreDrawerState;
+    private int[] mPreScrollYList;
 
     // 侧边Drawer
     private CircleImageView mUserIconView;  // 导航头像
@@ -90,6 +94,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initToolBar();
         initData();
         initView();
     }
@@ -110,9 +115,9 @@ public class MainActivity extends BaseActivity {
             mUserManager.signIn(_userNameLastLogin, _passwordLastLogin);
             if (mUserManager.isSignIn()) {
                 if (mUserManager.isSpecialAccount() == 1) {
-                    ToastUtils.showMsg(mContext, "管理员" + _userNameLastLogin + " 登录成功！");
+                    Snackbar.make(mToolbar, "管理员" + _userNameLastLogin + "登录成功！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 } else {
-                    ToastUtils.showMsg(mContext, _userNameLastLogin + " 登录成功！");
+                    Snackbar.make(mToolbar, "用户" + _userNameLastLogin + "登录成功！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 }
             } else {
                 //登录失败
@@ -123,12 +128,12 @@ public class MainActivity extends BaseActivity {
                 }
             }
         }
+        mPreScrollYList = new int[4];
     }
 
     @Override
     protected void initView() {
-        super.initView();
-        initToolBar();
+//        super.initView();
         initDrawer();
         mBottomNavigation = (AHBottomNavigation) findViewById(R.id.ahbn_bottom_bar);
         AHBottomNavigationItem item1 = new AHBottomNavigationItem(R.string.tab_1, R.drawable.icon_bottom_tab_1, R.color.color_tab_1);
@@ -145,7 +150,7 @@ public class MainActivity extends BaseActivity {
         mBottomNavigation.setNotificationBackgroundColor(Color.parseColor("#F63D2B"));
         mBottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(int position, boolean wasSelected) {
+            public void onTabSelected(final int position, boolean wasSelected) {
                 if (!wasSelected) {
                     Log.v(TAG, "position=" + position);
                     switch (position) {
@@ -166,12 +171,24 @@ public class MainActivity extends BaseActivity {
                             .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
                             .replace(R.id.fl_container, mCurrentFragment)
                             .commit();
+                    mCurrentFragment.setSaveScrollYCallback(new BaseFragment.SaveScrollYCallback() {
+                        @Override
+                        public void notifyPreScrollY(int preScrollY) {
+                            mPreScrollYList[position] = preScrollY;
+                        }
+                    });
                 } else if (position > 0) {
                     mCurrentFragment.refresh();
                 }
             }
         });
         mCurrentFragment = JournalFragment.newInstance();  //初始化显示第一个tab
+        mCurrentFragment.setSaveScrollYCallback(new BaseFragment.SaveScrollYCallback() {
+            @Override
+            public void notifyPreScrollY(int preScrollY) {
+                mPreScrollYList[BaseFragment.TAB_JOURNAL] = preScrollY;
+            }
+        });
         mFragmentManager.beginTransaction()
                 .replace(R.id.fl_container, mCurrentFragment)
                 .commit();
@@ -228,6 +245,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initToolBar() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             mToolbar.setTitle("随心记");
             setSupportActionBar(mToolbar);
@@ -514,5 +532,9 @@ public class MainActivity extends BaseActivity {
 
     public int getBottomNavigationItemCount() {
         return mBottomNavigation.getItemsCount();
+    }
+
+    public int[] getPreScrollYList() {
+        return mPreScrollYList;
     }
 }

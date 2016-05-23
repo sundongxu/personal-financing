@@ -146,7 +146,7 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Stoc
         public StockItemViewHolder(View v) {
             super(v);
             mItemArea = (LinearLayout) v.findViewById(R.id.ll_stock_item);
-            mNameText = (TextView) v.findViewById(R.id.tv_stock_name);
+            mNameText = (TextView) v.findViewById(R.id.tv_stock_watched_name);
             mNowPriceText = (TextView) v.findViewById(R.id.tv_stock_now_price);
             mIncreasePercentageText = (TextView) v.findViewById(R.id.tv_stock_increase_percentage);
             mIncreaseAmountText = (TextView) v.findViewById(R.id.tv_stock_increase_amount);

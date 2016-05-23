@@ -33,5 +33,7 @@ dependencies {
     compile 'com.iangclifton.android:floatlabel:1.0.4'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.github.ksoichiro:android-observablescrollview:1.6.0'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.pnikosis:materialish-progress:1.7'
     compile project(':ahbottomnavigation')
 }

@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.CalculationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.TranslationActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.WeatherActivity;
@@ -28,17 +30,16 @@ public class OthersFragment extends BaseFragment {
     public static final String TAG = "OthersFragment";
 
     public static OthersFragment newInstance() {
-        //传入参数index表明下标，这里下标为3(0、1、2、3)
-        OthersFragment fragment = new OthersFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
+        return new OthersFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        if (mContext instanceof MainActivity) {
+//            mPreScrollY = ((MainActivity) mContext).getPreScrollYList()[TAB_OTHERS];
+        }
     }
 
     @Nullable
@@ -60,7 +61,7 @@ public class OthersFragment extends BaseFragment {
         adapter.setOnCardClickListener(new FunctionCardListBaseAdapter.OnCardClickListener() {
             @Override
             public void onCardItemClick(int cardType) {
-                switch (cardType){
+                switch (cardType) {
                     case FunctionCardListBaseAdapter.CARD_MEMO:
                         startActivity(new Intent(mContext, MemoMainActivity.class));
                         break;
@@ -77,16 +78,20 @@ public class OthersFragment extends BaseFragment {
             }
         });
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.smoothScrollBy(0, mPreScrollY);
     }
 
     @Override
     public void refresh() {
         super.refresh();
-        mRecyclerView.smoothScrollToPosition(0);
+//        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
     public void onPause() {
+//        mCallback.notifyPreScrollY(getScrolledDistance());
+        mPreScrollY = getScrolledDistance();
+        Log.v(TAG, "滑动量为" + mPreScrollY);
         super.onPause();
     }
 

@@ -27,9 +27,9 @@ public class SearchAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private boolean mIsFilterList;
 
-    public SearchAdapter(Context context, ArrayList<String> countries, boolean isFilterList) {
+    public SearchAdapter(Context context, ArrayList<String> functionList, boolean isFilterList) {
         mContext = context;
-        mFunList = countries;
+        mFunList = functionList;
         mIsFilterList = isFilterList;
     }
 

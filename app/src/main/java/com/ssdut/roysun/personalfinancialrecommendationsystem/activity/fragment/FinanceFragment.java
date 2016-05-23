@@ -5,15 +5,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.FinanceRecommendationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FinanceListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FunctionCardListBaseAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 
 public class FinanceFragment extends BaseFragment {
@@ -21,16 +25,16 @@ public class FinanceFragment extends BaseFragment {
     public static final String TAG = "FinanceFragment";
 
     public static FinanceFragment newInstance() {
-        FinanceFragment fragment = new FinanceFragment();
-        Bundle b = new Bundle();
-        fragment.setArguments(b);
-        return fragment;
+        return new FinanceFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getActivity();
+        if (mContext instanceof MainActivity) {
+//            mPreScrollY = ((MainActivity) mContext).getPreScrollYList()[TAB_FINANCE];
+        }
     }
 
     @Nullable
@@ -63,22 +67,33 @@ public class FinanceFragment extends BaseFragment {
                         startActivity(new Intent(mContext, StockActivity.class));
                         break;
                     case FunctionCardListBaseAdapter.CARD_RECOMMENDATION:
-                        startActivity(new Intent(mContext, StockActivity.class));
+                        if (mContext instanceof MainActivity) {
+                            if (((MainActivity) mContext).getUserManager().isSignIn()) {
+                                startActivity(new Intent(mContext, FinanceRecommendationActivity.class));
+                            } else {
+                                ToastUtils.showMsg(mContext, "你还未登录！");
+                            }
+                        }
                         break;
                 }
             }
         });
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.smoothScrollBy(0, mPreScrollY);
+//        mRecyclerView.scrollBy(0,mPreScrollY);
     }
 
     @Override
     public void refresh() {
         super.refresh();
-        mRecyclerView.smoothScrollToPosition(0);
+//        mRecyclerView.smoothScrollToPosition(50);
     }
 
     @Override
     public void onPause() {
+//        mCallback.notifyPreScrollY(getScrolledDistance());
+        mPreScrollY = getScrolledDistance();
+        Log.v(TAG, "滑动量为" + mPreScrollY);
         super.onPause();
     }
 }

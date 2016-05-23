@@ -239,6 +239,22 @@
             android:label="股票详情"
             android:theme="@style/MyAppTheme">
         </activity>
+        <activity
+            android:name=".activity.FinanceRecommendationActivity"
+            android:label="理财建议"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.StockProductListActivity"
+            android:label="自选列表"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.RecommendationResultActivity"
+            android:label="推荐结果"
+            android:theme="@style/MyAppTheme"
+            >
+        </activity>
     </application>
 
 </manifest>

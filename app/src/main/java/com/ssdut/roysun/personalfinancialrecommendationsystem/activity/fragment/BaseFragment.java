@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,9 @@ public class BaseFragment extends Fragment {
     public static final int TAB_OTHERS = 3;
 
     public RecyclerView mRecyclerView;
-    public RecyclerView.LayoutManager mLayoutManager;
+    public LinearLayoutManager mLayoutManager;
+    public int mPreScrollY;
+    public SaveScrollYCallback mCallback;
     public Context mContext;
 
     @Override
@@ -48,5 +51,21 @@ public class BaseFragment extends Fragment {
 
     public void refresh() {
 
+    }
+
+    public int getScrolledDistance() {
+        View _firstVisibleItem = mRecyclerView.getChildAt(0);
+        int _iFirstItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+        int _iItemHeight = _firstVisibleItem.getHeight();
+        int _firstItemBottom = mLayoutManager.getDecoratedBottom(_firstVisibleItem);
+        return (_iFirstItemPosition + 1) * _iItemHeight - _firstItemBottom;
+    }
+
+    public void setSaveScrollYCallback(SaveScrollYCallback callback) {
+        mCallback = callback;
+    }
+
+    public interface SaveScrollYCallback {
+        void notifyPreScrollY(int preScrollY);
     }
 }

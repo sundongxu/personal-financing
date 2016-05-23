@@ -1,0 +1,62 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fl_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_bg_header_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/example"/>
+
+    <View
+        android:id="@+id/list_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"/>
+
+    <com.github.ksoichiro.android.observablescrollview.ObservableListView
+        android:id="@+id/ol_stock_recommendation_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <include layout="@layout/common_toolbar"/>
+
+    <!--<ImageView-->
+    <!--android:id="@+id/iv_shade"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:alpha="0.9"-->
+    <!--android:background="@drawable/bg_stock_detail_grey_temp"-->
+    <!--android:clickable="true"/>-->
+
+    <RelativeLayout
+        android:id="@+id/rl_loading_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/progress_wheel"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            wheel:matProg_barColor="#5588FF"
+            wheel:matProg_progressIndeterminate="true"/>
+
+        <TextView
+            android:id="@+id/tv_loading_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/progress_wheel"
+            android:layout_centerHorizontal="true"
+            android:text="   正在生成推荐结果..."
+            android:textSize="15sp"/>
+
+    </RelativeLayout>
+
+</FrameLayout>
