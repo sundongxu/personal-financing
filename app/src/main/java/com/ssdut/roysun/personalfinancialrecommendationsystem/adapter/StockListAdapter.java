@@ -61,8 +61,7 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Stoc
         int _textColor = mContext.getResources().getColor(R.color.black);
         holder.mNameText.setText(mStockList.get(position).getName());
         holder.mNameText.setTextColor(_textColor);
-        holder.mNowPriceText.setText(String.format("%.2f", mStockList.get(position).getNowPrice()));
-        holder.mNowPriceText.setTextColor(_textColor);
+
         double _increaseAmount = mStockList.get(position).getIncreaseAmount();
         double _increasePercentage = mStockList.get(position).getIncreasePersentage();
         String _increaseAmountText = String.format("%.2f", _increaseAmount);
@@ -77,6 +76,8 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Stoc
             _increasePerText = "-" + _increasePerText;
             _increaseAmountText = "-" + _increaseAmountText;
         }
+        holder.mNowPriceText.setText(String.format("%.2f", mStockList.get(position).getNowPrice()));
+        holder.mNowPriceText.setTextColor(_increaseTextColor);
         holder.mIncreasePercentageText.setText(_increasePerText);
         holder.mIncreasePercentageText.setTextColor(_increaseTextColor);
         holder.mIncreaseAmountText.setText(_increaseAmountText);

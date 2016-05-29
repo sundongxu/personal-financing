@@ -226,7 +226,7 @@
             android:theme="@style/MyAppTheme">
         </activity>
         <activity
-            android:name=".activity.ForumWebActivity"
+            android:name=".activity.ConsumationWebActivity"
             android:theme="@style/MyAppTheme">
         </activity>
         <activity
@@ -252,8 +252,17 @@
         <activity
             android:name=".activity.RecommendationResultActivity"
             android:label="推荐结果"
-            android:theme="@style/MyAppTheme"
-            >
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.StockTradeActivity"
+            android:label="股票交易"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.InvestmentSimulationActivity"
+            android:label="模拟投资"
+            android:theme="@style/MyAppTheme">
         </activity>
     </application>
 

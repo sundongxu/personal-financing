@@ -67,29 +67,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!--<TextView-->
-                <!--android:id="@+id/tv_user_name"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingRight="20dp"-->
-                <!--android:text="用户名"/>-->
-
                 <ImageView
-                    android:id="@+id/iv_username_hint"
+                    android:id="@+id/iv_user_name_hint"
                     android:layout_width="@dimen/icon_width_normal"
                     android:layout_height="@dimen/icon_height_normal"
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/icon_username_hint"/>
 
-                <!--<com.iangclifton.android.floatlabel.FloatLabel-->
-                <!--android:id="@+id/et_user_name"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="Username"-->
-                <!--android:singleLine="true"-->
-                <!--android:textColor="@color/black"-->
-                <!--app:floatLabelColor="@color/colorAccent"/>-->
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -121,15 +106,6 @@
                     android:layout_marginTop="20dp"
                     android:src="@drawable/icon_password_hint"/>
 
-                <!--<com.iangclifton.android.floatlabel.FloatLabel-->
-                <!--android:id="@+id/et_password"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:hint="Password"-->
-                <!--android:inputType="textPassword"-->
-                <!--android:singleLine="true"-->
-                <!--android:textColor="@color/black"-->
-                <!--app:floatLabelColor="@color/colorAccent"/>-->
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -191,16 +167,6 @@
                     android:textColor="@drawable/text_register_forget_selector"/>
 
             </RelativeLayout>
-
-            <!-- 底部主题图片，缺一张app主题图 -->
-            <ImageView
-                android:id="@+id/iv_signin_bottom_bg"
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="100dp"
-                android:src="@drawable/bg_signin_bottom"/>
 
         </LinearLayout>
 

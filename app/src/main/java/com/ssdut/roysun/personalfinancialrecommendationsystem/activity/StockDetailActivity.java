@@ -1,7 +1,9 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +20,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.info.StockInfoAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Stock;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.component.DividerItemDecoration;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.StockManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -49,6 +53,8 @@ public class StockDetailActivity extends BaseActivity {
     //    private String mStockPicUrl;
     private ArrayList<String> mStockInfoValueList;
     private Timer mTimer;
+    private StockManager mStockManager;
+    private Stock mStock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,8 @@ public class StockDetailActivity extends BaseActivity {
 //        mStockPicUrl = URL_BASE_PIC + mCode + ".gif";
         Log.v(TAG, "查询的股票详情代码为" + mCode);
         mStockInfoValueList = new ArrayList<>();  // 随时和股票信息列表同步的值List
+        mStockManager = StockManager.getInstance(this);
+        mStock = mStockManager.getWatchedStockFromDB(mCode, mUserManager.getCurUser().getName());
     }
 
     @Override
@@ -116,7 +124,7 @@ public class StockDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // 购买股票 / 请求K线图
-                buy();
+                buy(mCode);
 //                RequestQueue _queue = Volley.newRequestQueue(mContext);
 //                final LruCache<String, Bitmap> _lruCache = new LruCache<String, Bitmap>(20);
 //                ImageLoader.ImageCache _imageCache = new ImageLoader.ImageCache() {
@@ -139,7 +147,11 @@ public class StockDetailActivity extends BaseActivity {
 //                mHeaderPic.setAlpha(0);  // 完全透明
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // 每隔10s更新，newTimerTask
         mTimer = new Timer("RefreshStock");  // 启动自动刷新自选股列表的定时器
         mTimer.schedule(new TimerTask() {
@@ -148,12 +160,29 @@ public class StockDetailActivity extends BaseActivity {
                 refreshStock();  // 相当于多线程
             }
         }, 0, 10000);
+//        获取Stock表完整条目
+//        ArrayList<Stock> _list = mStockManager.getStockListFromDB("");
+//        Log.v(TAG, "Stock表条目总数为：" + String.valueOf(_list.size()));
+//        for (Stock _stock : _list) {
+//            Log.v(TAG, "Stock表条目位置（1）：" + "\n"
+//                    + "股票名称：" + _stock.getName() + "\n"
+//                    + "代码：" + _stock.getCode() + "\n"
+//                    + "关注用户名：" + _stock.getWatcherName() + "\n"
+//                    + "持有数量：" + _stock.getBuyNum() + "\n");
+//        }
+//        Log.v(TAG, "条目 StockManager:" + mStockManager);
     }
 
-
     // 弹出购买多少股，根据购买股数和当前价格计算总价，然后和买家账户余额比较，余额足够则购买
-    public void buy() {
-
+    public void buy(String code) {
+        // 登录才可跳转
+        if (mUserManager.isSignIn()) {
+            Intent _intent = new Intent(this, StockTradeActivity.class);
+            _intent.putExtra("CODE", mCode);
+            startActivity(_intent);
+        } else {
+            Snackbar.make(mToolbar, "请先登录！", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     public void refreshStock() {
@@ -184,7 +213,6 @@ public class StockDetailActivity extends BaseActivity {
     }
 
     public void updateStockInfoListView(String response) {
-
         // 回来一大串字符，这里进行解析
         mStockInfoValueList.clear();
         if (response == null || response.equals("")) {
@@ -213,6 +241,14 @@ public class StockDetailActivity extends BaseActivity {
         double _dYesterdayPrice = Double.valueOf(values[2]);
         double _dIncreaseAmount = _dNowPrice - _dYesterdayPrice;
         double _dIncreasePercentage = _dIncreaseAmount / _dYesterdayPrice * 100;
+
+        if (mStock != null) {
+            // 实际8个属性，1个是主键id不用更改，另4个分别为股票代码、名称、关注用户名和持有股数也都不用更改
+            mStock.setNowPrice(_dNowPrice);
+            mStock.setIncreaseAmount(_dIncreaseAmount);
+            mStock.setIncreasePersentage(_dIncreasePercentage);
+            saveStockInfoToDB(mStock);
+        }
 
         String _strNowPrice = String.format("%.3f", _dNowPrice);
         String _strIncreaseAmount = String.format("%.3f", _dIncreaseAmount);
@@ -267,6 +303,20 @@ public class StockDetailActivity extends BaseActivity {
         mAdapter.notifyDataSetChanged();
     }
 
+    public void saveStockInfoToDB(Stock stock) {
+        // 数据库存储操作，需要去重，先保证三大股指不会被加入到数据库
+        // 只是修改改
+        // 当前用户已关注该股
+        // 更新操作
+        int _stockIdToUpdate = mStockManager.getWatchedStockFromDB(stock.getCode(), stock.getWatcherName()).getId();  // 充足mStockList的时候没有存储其Id
+        int _iRowsAffected = mStockManager.updateStockInfo(stock, _stockIdToUpdate, false);
+        if (_iRowsAffected == 1) {
+//            ToastUtils.showMsg(mContext, "数据库条目更新成功！股票名称为" + _stock.getName());
+        } else {
+//            ToastUtils.showMsg(mContext, "数据库条目无须更新！股票名称为" + _stock.getName());
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -289,6 +339,13 @@ public class StockDetailActivity extends BaseActivity {
 //            return super.onKeyDown(keyCode, event);
 //        }
 //    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTimer.cancel();
+    }
 
     @Override
     protected void onDestroy() {

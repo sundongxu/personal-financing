@@ -1,5 +1,6 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -7,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -63,7 +65,7 @@ public class RecommendationResultActivity extends BaseActivity implements Observ
         mContext = this;
         mParallaxImageHeight = ViewUtils.dip2px(this, 200);
         mStockManager = StockManager.getInstance(this);
-        mStockList = mStockManager.getStockListFromDB("USER_NAME='" + mUserManager.getCurUser().getName() + "'");
+        mStockList = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'");
 
         mHandler = new Handler() {
             @Override
@@ -97,6 +99,16 @@ public class RecommendationResultActivity extends BaseActivity implements Observ
         mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.holo_blue_bright)));
         mHeaderPic = (ImageView) findViewById(R.id.iv_bg_header_result_list);
         mResultList = (ObservableListView) findViewById(R.id.ol_stock_recommendation_result_list);
+        mResultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // 这里因为ListView有一个HeaderView，所以条目点击相应位置position从1开始
+                // 跳转到详情页
+                Intent _intent = new Intent(mContext, StockDetailActivity.class);
+                _intent.putExtra("CODE_SELECTED", mStockList.get(position - 1).getCode());
+                startActivity(_intent);
+            }
+        });
         mResultList.setScrollViewCallbacks(this);
         View paddingView = new View(this);
         AbsListView.LayoutParams lp =

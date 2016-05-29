@@ -15,7 +15,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.fragment.
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForumWebActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class ConsumationWebActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -25,7 +25,7 @@ public class ForumWebActivity extends BaseActivity implements ViewPager.OnPageCh
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum_web);
+        setContentView(R.layout.activity_consumation_web);
         initData();
         initView();
     }

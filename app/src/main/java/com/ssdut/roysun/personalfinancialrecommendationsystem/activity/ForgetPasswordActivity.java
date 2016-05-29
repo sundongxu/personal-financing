@@ -66,7 +66,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         mPasswordArea = (LinearLayout) findViewById(R.id.ll_password_reset);
         mPasswordRepeatArea = (LinearLayout) findViewById(R.id.ll_password_reset_confirm);
 
-        mUserNameIcon = (ImageView) findViewById(R.id.iv_username_hint);
+        mUserNameIcon = (ImageView) findViewById(R.id.iv_user_name_hint);
         mSecurityAnswerIcon = (ImageView) findViewById(R.id.iv_security_answer_hint);
         mPasswordIcon = (ImageView) findViewById(R.id.iv_password_reset_hint);
         mPasswordRepeatIcon = (ImageView) findViewById(R.id.iv_password_reset_confirm_hint);

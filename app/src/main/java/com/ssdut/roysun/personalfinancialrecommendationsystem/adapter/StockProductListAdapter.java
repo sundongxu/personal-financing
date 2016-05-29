@@ -99,7 +99,7 @@ public class StockProductListAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         // 从当前List中删除
-                        if (mStockManager.deleteStock(mStockList.get(position).getId()) == 1) {
+                        if (mStockManager.deleteStockFromWatchList(mStockList.get(position).getId()) == 1) {
                             Snackbar.make(mIcon, "自选股删除成功！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         } else {
                             Snackbar.make(mIcon, "自选股删除失败！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();

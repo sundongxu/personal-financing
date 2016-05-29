@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.iangclifton.android.floatlabel.FloatLabel;
@@ -80,6 +81,7 @@ public class InfoListBaseAdapter extends RecyclerView.Adapter<InfoListBaseAdapte
 
     public class InfoItemViewHolder extends RecyclerView.ViewHolder implements OnItemTouchHelperMovedListener {
         // 用户信息条目内容
+        public RelativeLayout mItemArea;
         public ImageView mItemIcon;
         public TextView mItemTitleText;
         public TextView mItemValueText;
@@ -88,6 +90,7 @@ public class InfoListBaseAdapter extends RecyclerView.Adapter<InfoListBaseAdapte
 
         public InfoItemViewHolder(View v) {
             super(v);
+            mItemArea = (RelativeLayout) v.findViewById(R.id.rl_info_item);
             mItemIcon = (ImageView) v.findViewById(R.id.iv_info_icon);
             mItemTitleText = (TextView) v.findViewById(R.id.tv_info_title);
             mItemValueText = (TextView) v.findViewById(R.id.tv_info_value);

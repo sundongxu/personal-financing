@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.FinanceRecommendationActivity;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.InvestmentSimulationActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockMainActivity;
@@ -61,7 +62,13 @@ public class FinanceFragment extends BaseFragment {
                         startActivity(new Intent(mContext, StockMainActivity.class));
                         break;
                     case FunctionCardListBaseAdapter.CARD_INVESTMENT:
-                        startActivity(new Intent(mContext, StockActivity.class));
+                        if (mContext instanceof MainActivity) {
+                            if (((MainActivity) mContext).getUserManager().isSignIn()) {
+                                startActivity(new Intent(mContext, InvestmentSimulationActivity.class));
+                            } else {
+                                ToastUtils.showMsg(mContext, "清先登录！");
+                            }
+                        }
                         break;
                     case FunctionCardListBaseAdapter.CARD_FORUM:
                         startActivity(new Intent(mContext, StockActivity.class));
@@ -71,7 +78,7 @@ public class FinanceFragment extends BaseFragment {
                             if (((MainActivity) mContext).getUserManager().isSignIn()) {
                                 startActivity(new Intent(mContext, FinanceRecommendationActivity.class));
                             } else {
-                                ToastUtils.showMsg(mContext, "你还未登录！");
+                                ToastUtils.showMsg(mContext, "请先登录！");
                             }
                         }
                         break;

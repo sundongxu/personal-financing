@@ -31,7 +31,7 @@ public class StockProductListActivity extends BaseActivity implements Observable
     public static final String TAG = "StockProductListActivity";
 
     private ImageView mHeaderPic;
-    private ObservableListView mMyList;
+    private ObservableListView mWatchedList;
     private View mListBackgroundView;
     private StockProductListAdapter mAdapter;
     private int mParallaxImageHeight;
@@ -53,7 +53,7 @@ public class StockProductListActivity extends BaseActivity implements Observable
         mContext = this;
         mParallaxImageHeight = ViewUtils.dip2px(this, 200);
         mStockManager = StockManager.getInstance(this);
-        mStockList = mStockManager.getStockListFromDB("USER_NAME='" + mUserManager.getCurUser().getName() + "'");
+        mStockList = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'");
     }
 
     @Override
@@ -66,27 +66,20 @@ public class StockProductListActivity extends BaseActivity implements Observable
         }
         mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.holo_blue_bright)));
         mHeaderPic = (ImageView) findViewById(R.id.iv_bg_header_mylist);
-        mMyList = (ObservableListView) findViewById(R.id.ol_stock_recommendation_result_list);
-        mMyList.setScrollViewCallbacks(this);
+        mWatchedList = (ObservableListView) findViewById(R.id.ol_stock_recommendation_result_list);
+        mWatchedList.setScrollViewCallbacks(this);
         View paddingView = new View(this);
         AbsListView.LayoutParams lp =
                 new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, mParallaxImageHeight);
         paddingView.setLayoutParams(lp);
         paddingView.setClickable(true);
-        mMyList.addHeaderView(paddingView);
+        mWatchedList.addHeaderView(paddingView);
         mAdapter = new StockProductListAdapter(this, mStockList, mStockManager);
-        mMyList.setAdapter(mAdapter);
-        mMyList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mWatchedList.setAdapter(mAdapter);
+        mWatchedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 这里因为ListView有一个HeaderView，所以条目点击相应位置position从1开始
-//                Snackbar.make(mToolbar, "你选择了" + mStockList.get(position - 1).getName(), Snackbar.LENGTH_LONG).setAction(R.string.buy, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        // buy(); -> 跳转到购买页面
-//                    }
-//                }).show();
-
                 // 跳转到详情页
                 Intent _intent = new Intent(mContext, StockDetailActivity.class);
                 _intent.putExtra("CODE_SELECTED", mStockList.get(position - 1).getCode());
@@ -110,7 +103,7 @@ public class StockProductListActivity extends BaseActivity implements Observable
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        onScrollChanged(mMyList.getCurrentScrollY(), false, false);
+        onScrollChanged(mWatchedList.getCurrentScrollY(), false, false);
     }
 
     @Override

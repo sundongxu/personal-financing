@@ -7,20 +7,19 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
 public class Stock {
 
     //为了支持购买模拟投资功能，还可以增加以下三个字段
-    public static final String BUYER_NAME = "BUYER_NAME";  // 买家用户名
-    public static final String BUY_NUMBER = "BUY_NUMBER";  // 买家买了多少股
-    public static final String WATCHER_NAME = "WATCHER_NAME"; // 关注本股用户名
 
-    public static final String USER_NAME = "USER_NAME";  // 关注本股用户名
-    public static final String CODE = "CODE";  // 股票代码
-    public static final String INCREASE_PERSENTAGE = "INCREASE_PERSENTAGE";  // 涨跌百分比
-    public static final String INCREASE_AMOUNT = "INCREASE_AMOUNT";  // 涨跌额
+    public static final String WATCHER_NAME = "WATCHER_NAME"; // 关注本股用户名
+//    public static final String BUYER_NAME = "BUYER_NAME";  // 买家用户名
+    public static final String BUY_NUMBER = "BUY_NUMBER";  // 买家买了多少股
 
     public static final String NAME = "NAME";  // 股票名称
+    public static final String CODE = "CODE";  // 股票代码
+    public static final String NOW_PRICE = "NOW_PRICE";  // 当前价格
+    public static final String INCREASE_AMOUNT = "INCREASE_AMOUNT";  // 涨跌额
+    public static final String INCREASE_PERSENTAGE = "INCREASE_PERSENTAGE";  // 涨跌百分比
 
     public static final String TODAY_START_PRICE = "TODAY_START_PRICE";  // 今日开盘价
     public static final String YESTERDAY_END_PRICE = "YESTERDAY_END_PRICE";  // 昨日收盘价
-    public static final String NOW_PRICE = "NOW_PRICE";  // 当前价格
     public static final String TODAY_MAX_PRICE = "TODAY_MAX_PRICE";  // 今日最高价
     public static final String TODAY_MIN_PRICE = "TODAY_MIN_PRICE";  // 今日最低价
     public static final String COMPETITIVE_PRICE = "COMPETITIVE_PRICE";  // 竞买价
@@ -45,14 +44,17 @@ public class Stock {
 
     // 预留模拟数据，6-12-24-72天的历史价格
     private int id;
-    private String userName;
+    private String watcherName;
+//    private String buyerName;
+    private int buyNum;
     private String code;
+    private String name;
+    private double nowPrice;
     private double increasePersentage;
     private double increaseAmount;
-    private String name;
+
     private double todayStartPrice;
     private double yesterdayEndPrice;
-    private double nowPrice;
     private double todayMaxPrice;
     private double todayMinPrice;
     private double competitivePrice;
@@ -76,12 +78,28 @@ public class Stock {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getWatcherName() {
+        return watcherName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setWatcherName(String watcherName) {
+        this.watcherName = watcherName;
+    }
+
+//    public String getBuyerName() {
+//        return buyerName;
+//    }
+//
+//    public void setBuyerName(String buyerName) {
+//        this.buyerName = buyerName;
+//    }
+
+    public int getBuyNum() {
+        return buyNum;
+    }
+
+    public void setBuyNum(int buyNum) {
+        this.buyNum = buyNum;
     }
 
     public String getCode() {

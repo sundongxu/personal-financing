@@ -86,7 +86,7 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
         mUserIconView = (CircleImageView) findViewById(R.id.civ_user_icon);
         mUserIconView.setOnClickListener(this);
 
-        mUserNameIcon = (ImageView) findViewById(R.id.iv_username_hint);
+        mUserNameIcon = (ImageView) findViewById(R.id.iv_user_name_hint);
         mPasswordIcon = (ImageView) findViewById(R.id.iv_password_hint);
         mPasswordRepeatIcon = (ImageView) findViewById(R.id.iv_password_retype_hint);
         mSecurityQuestionIcon = (ImageView) findViewById(R.id.iv_security_question_hint);

@@ -88,7 +88,7 @@ public class FinanceRecommendationActivity extends BaseActivity {
         mCurUserNameText = (TextView) findViewById(R.id.tv_user_now);
         mCurUserNameText.setText("当前用户：" + mUserManager.getCurUser().getName());
         mWatchedNumText = (TextView) findViewById(R.id.tv_stock_num);
-        int _iWatchedNum = mStockManager.getStockListFromDB("USER_NAME='" + mUserManager.getCurUser().getName() + "'").size();
+        int _iWatchedNum = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'").size();
         mWatchedNumText.setText("关注股数：" + String.valueOf(_iWatchedNum));
         mMainIndexText = (TextView) findViewById(R.id.tv_index);
         mMainIndexText.setText("参考指标：乖离率");

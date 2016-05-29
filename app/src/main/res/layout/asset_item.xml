@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_asset_item"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/item_click_ripple"
+    android:clickable="true"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <ImageView
+        android:id="@+id/iv_asset_icon"
+        android:layout_width="@dimen/icon_width_normal"
+        android:layout_height="@dimen/icon_height_normal"
+        android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="50dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_asset_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@drawable/text_info_item_selector"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_asset_own_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textSize="15sp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_asset_total_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="140dp"
+        android:layout_toRightOf="@+id/iv_asset_icon"
+        android:textSize="18sp"/>
+
+</RelativeLayout>

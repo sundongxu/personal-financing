@@ -26,7 +26,8 @@ public class StockSqliteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " +
                 STOCK + "(" + "ID" + " integer primary key," +
-                Stock.USER_NAME + " varchar," +
+                Stock.WATCHER_NAME + " varchar," +
+                Stock.BUY_NUMBER + " integer," +
                 Stock.CODE + " varchar," +
                 Stock.NAME + " varchar," +
                 Stock.NOW_PRICE + " REAL," +
@@ -35,7 +36,8 @@ public class StockSqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("INSERT INTO " +
                 STOCK + "(" +
-                Stock.USER_NAME + ", " +
+                Stock.WATCHER_NAME + ", " +
+                Stock.BUY_NUMBER + ", " +
                 Stock.CODE + ", " +
                 Stock.NAME + ", " +
                 Stock.NOW_PRICE + ", " +
@@ -43,6 +45,7 @@ public class StockSqliteHelper extends SQLiteOpenHelper {
                 Stock.INCREASE_AMOUNT + ")" +
                 " values" + "(" +
                 "'admin', " +
+                "'2000', " +
                 "'sz002185', " +
                 "'华天科技', " +
                 "'13.06', " +

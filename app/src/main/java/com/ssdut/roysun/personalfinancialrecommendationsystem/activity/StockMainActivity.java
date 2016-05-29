@@ -1,6 +1,7 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,14 +27,15 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.callback.ItemTouch
 import com.ssdut.roysun.personalfinancialrecommendationsystem.component.DividerItemDecoration;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.StockManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnStartDragListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeMap;
 
 /**
  * Created by roysun on 16/5/18.
@@ -42,7 +44,8 @@ import java.util.TreeMap;
  * 未登录态测试成功
  * 登录态总是提示没有admin这一列妈蛋 -> selection参数格式不对（sql语句格式问题），已解决
  * 不断restartActivity会出现多线程bug
- * Timer Cancel问题
+ * Timer Cancel问题 onPause onDestroy都得cancel！！！
+ * 新bug：自选股列表能否动态更新
  */
 public class StockMainActivity extends BaseActivity implements OnStartDragListener {
 
@@ -62,14 +65,16 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
     private EditText mStockCodeView;  // 股票代码输入框
     private Button mBtnAdd;  // 股票添加按钮
 
-    private RecyclerView mMyStockList;
+    private RecyclerView mWatchList;
     private StockListAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private ItemTouchHelper mItemTouchHelper;
 
     private StockManager mStockManager;
     private ArrayList<Stock> mStockList;  // 当前用户自选股列表，未登录则为空
-    private HashSet<String> mStockCodeSet;  // 股票代码集合
+    //    private HashSet<String> mStockCodeSet;
+    private LinkedList<String> mStockCodeList;  // 待轮询的股票代码集合，初始包含三大股指
+    private boolean mIsWatch;  // 关注标志位
 
     private Timer mTimer;
 
@@ -90,26 +95,27 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
         if (mUserManager.isSignIn()) {
             // 登录判断
             // 有可能取到size=0但list不为空的情况，即用户没有自选股的时候
-            mStockList = mStockManager.getStockListFromDB("USER_NAME='" + mUserManager.getCurUser().getName() + "'"); // 这个bug找了好久啊！！！sql语句外面一定要再套一层‘’
+            mStockList = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'"); // 这个bug找了好久啊！！！sql语句外面一定要再套一层‘’
         } else {
             // 未登录
             mStockList = new ArrayList<>();
         }
-        // 初始化股票代码集合
+        // 初始化股票代码查询集合
         if (mStockList != null && mStockList.size() == 0) {
-            mStockCodeSet = new HashSet<>();
-            mStockCodeSet.add(INDEX_SHANGHAI);
-            mStockCodeSet.add(INDEX_SHENZHEN);
-            mStockCodeSet.add(INDEX_SECOND_BOARD);
+            mStockCodeList = new LinkedList<>();
+            mStockCodeList.add(INDEX_SHANGHAI);
+            mStockCodeList.add(INDEX_SHENZHEN);
+            mStockCodeList.add(INDEX_SECOND_BOARD);
         } else {
-            mStockCodeSet = new HashSet<>();
-            mStockCodeSet.add(INDEX_SHANGHAI);
-            mStockCodeSet.add(INDEX_SHENZHEN);
-            mStockCodeSet.add(INDEX_SECOND_BOARD);
+            mStockCodeList = new LinkedList<>();
+            mStockCodeList.add(INDEX_SHANGHAI);
+            mStockCodeList.add(INDEX_SHENZHEN);
+            mStockCodeList.add(INDEX_SECOND_BOARD);
             for (Stock _stock : mStockList) {
-                mStockCodeSet.add(_stock.getCode());
+                mStockCodeList.add(_stock.getCode());
             }
         }
+        mIsWatch = false;
     }
 
     @Override
@@ -132,36 +138,40 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
         mBtnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 点击添加 addStockToMyList
+                // 点击添加 addStockToWatchList
                 // 300267、002185、600519、000019、600237、、、、、、、、、、、、、、、、、
-                addStockToMyList(mStockCodeView.getText().toString());
+                addStockToWatchList(mStockCodeView.getText().toString());
             }
         });
 
-        mMyStockList = (RecyclerView) findViewById(R.id.rv_stock_list);
-        mMyStockList.setHasFixedSize(true);
+        mWatchList = (RecyclerView) findViewById(R.id.rv_stock_list);
+        mWatchList.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mMyStockList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
-        mMyStockList.setItemAnimator(new DefaultItemAnimator());
-        mMyStockList.setLayoutManager(mLayoutManager);
+        mWatchList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mWatchList.setItemAnimator(new DefaultItemAnimator());
+        mWatchList.setLayoutManager(mLayoutManager);
         mAdapter = new StockListAdapter(mContext, this, mStockList);
         mAdapter.setStockRemovedListener(new StockListAdapter.OnStockRemovedListener() {
             @Override
             public void onStockRemoved(Stock stock) {
                 // 删除某自选股的回调，通知不在请求该股票数据
-                mStockCodeSet.remove(stock.getCode());
+                mStockCodeList.remove(stock.getCode());
                 mStockList.remove(stock);
-                saveStockInfoToDB(null, stock, true);
+                saveStockInfoToDB(null, stock);
             }
         });
-        mMyStockList.setAdapter(mAdapter);
+        mWatchList.setAdapter(mAdapter);
 
         ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mMyStockList);
+        mItemTouchHelper.attachToRecyclerView(mWatchList);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);  // 防止软键盘自动弹出
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         mTimer = new Timer("RefreshStocks");  // 启动自动刷新自选股列表的定时器
         mTimer.schedule(new TimerTask() {
             @Override
@@ -177,7 +187,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
     沪市 在上海上市的股票 指数代码 000001
     个股以60开头   国内股票主板
     */
-    private void addStockToMyList(String stockCode) {
+    private void addStockToWatchList(String stockCode) {
         // 添加股票：（1）添加到自选股列表（2）存储到数据库
         if (stockCode.length() != 6) {
             ToastUtils.showMsg(this, "股票代码至少6位！");
@@ -191,8 +201,9 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
             ToastUtils.showMsg(this, "股票代码不存在！");
             return;
         }
-        if (!mStockCodeSet.contains(stockCode)) {
-            mStockCodeSet.add(stockCode);
+        if (!mStockCodeList.contains(stockCode)) {
+            mIsWatch = true;
+            mStockCodeList.add(stockCode);
             refreshStocks();  //-> 通知页面重绘
         } else {
             ToastUtils.showMsg(this, "你已关注该股！");
@@ -200,12 +211,12 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
     }
 
     public void refreshStocks() {
-        String _codeList = "";
-        for (String _code : mStockCodeSet) {
-            _codeList += _code;
-            _codeList += ",";
+        String _codeListToQuery = "";
+        for (String _code : mStockCodeList) {
+            _codeListToQuery += _code;
+            _codeListToQuery += ",";
         }
-        querySinaStocks(_codeList);
+        querySinaStocks(_codeListToQuery);
     }
 
     public void querySinaStocks(String codeList) {
@@ -229,17 +240,19 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
         _queue.add(_request);
     }
 
-    public void updateStockListView(TreeMap<String, Stock> stockMap) {
-        // 解析这传过来的乱七八糟的String类型的response(1)
-        // 存储股票信息到数据库(2)
-        // stockMap 存储了所有股票的信息键值对 key:股票代码，value:股票对象(3)
+    public void updateStockListView(LinkedHashMap<String, Stock> stockMap) {
+        // （1）解析这传过来的乱七八糟的String类型的response
+        // （2）存储股票信息到数据库
+        // （3）stockMap 存储了所有股票的信息键值对 key:股票代码，value:股票对象
+        if (mStockList != null) {
+            mStockList.clear();  // 每次刷新都要清空原有股票信息，无论是添加自选股的强制刷新还是每隔10s的自动刷新
+        }
         Collection<Stock> _stocks = stockMap.values();
-        saveStockInfoToDB(_stocks, null, false);  // 存储股票信息到数据库
+        saveStockInfoToDB(_stocks, null);  // 存储股票信息到数据库
         for (Stock _stock : _stocks) {
             if (_stock.getCode().equals(INDEX_SHANGHAI)
                     || _stock.getCode().equals(INDEX_SHENZHEN)
                     || _stock.getCode().equals(INDEX_SECOND_BOARD)) {
-
                 String _strIndex = String.format("%.2f", _stock.getNowPrice());
                 String _strIndexDelta = String.format("%.2f", _stock.getIncreasePersentage()) + "%, "
                         + String.format("%.2f", _stock.getIncreaseAmount());
@@ -271,34 +284,52 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
                 }
                 continue;  // 结束本轮For循环，跳至下一轮循环
             }
-            // 判重，mStockList去重！非三大股指才可以加入自选股
-            if (mStockCodeSet.size() == mStockList.size() + 4) {
-                // 这个判重条件明显不够！！！
-                boolean isExistInMyList = false;
-                for (Stock _stockExisted : mStockList) {
-                    // 遍历自选股列表，判断是不是已关注该股
-                    if (_stock.getCode().equals(_stockExisted.getCode())) {
-                        isExistInMyList = true;
-                    }
-                }
-                if (!isExistInMyList) {
-                    mStockList.add(_stock);
-                    mAdapter.updateStockList(mStockList);
-                    mAdapter.notifyDataSetChanged();
-                    Log.v(TAG, "股票" + _stock.getName() + "添加到我的自选股成功！");
-                }
-            }
+            mStockList.add(_stock);  // 重新添加股票信息
+//            if (mIsWatch) {
+//                // 关注新股操作，判重已经addToWatchList中做了
+//                mIsWatch = false;  // 关注操作标志位复位
+//                mStockList.add(_stock);
+//                mAdapter.updateStockList(mStockList);
+//                mAdapter.notifyDataSetChanged();
+//                Snackbar.make(mToolbar, "股票" + _stock.getName() + "添加到我的自选股成功！",
+//                        Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+//            } else {
+//                // 自动刷新操作
+//                mAdapter.updateStockList(mStockList);
+//                mAdapter.notifyDataSetChanged();
+//                Snackbar.make(mToolbar, "股票" + _stock.getName() + "自动刷新成功！",
+//                        Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+//            }
+        }
+        // 最后再去通知Adapter更新股票列表信息
+        mAdapter.updateStockList(mStockList);
+        mAdapter.notifyDataSetChanged();
+        if (mIsWatch) {
+            mIsWatch = false;
+            Snackbar.make(mToolbar, "添加到自选股成功！",
+                    Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+        } else {
+//            Snackbar.make(mToolbar, "自动刷新自选股列表成功！",
+//                    Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
         }
     }
 
-    public TreeMap<String, Stock> sinaResponseToStocks(String response) {
+    /**
+     * 将响应回包解析为股票代码对应股票的map集合 TreeMap<stockCode, Stock>
+     *
+     * @param response 回包字符串
+     * @return 股票代码对应股票的map集合
+     */
+    public LinkedHashMap<String, Stock> sinaResponseToStocks(String response) {
         if (response == null || response.equals("")) {
             return null;
         }
         response = response.replaceAll("\n", "");
         String[] _stocks = response.split(";");  // 以";"为分隔符，不同股票
 
-        TreeMap<String, Stock> _stockMap = new TreeMap<>();
+//        TreeMap<String, Stock> _stockMap = new TreeMap<>();
+        LinkedHashMap<String, Stock> _stockMap = new LinkedHashMap<>();
+
         for (String _stock : _stocks) {
             String[] _leftRight = _stock.split("=");
             if (_leftRight.length < 2) {
@@ -317,33 +348,46 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
 
             Stock _stockNow = new Stock();
             String[] values = _right.split(",");  // 每一个字符串都是一个数据
-            _stockNow.setCode(_left.split("_")[2]);
+            _stockNow.setCode(_left.split("_")[2]);  // ① 设置股票代码
             String _stockNowCode = _stockNow.getCode();
             if (_stockNowCode.equals(INDEX_SHANGHAI) || _stockNowCode.equals(INDEX_SHENZHEN) || _stockNowCode.equals(INDEX_SECOND_BOARD)) {
-                _stockNow.setUserName("");
+                _stockNow.setWatcherName("");
+                _stockNow.setBuyNum(0);
             } else {
-                _stockNow.setUserName(mUserManager.getCurUser().getName());
+                // 非三大股指，必须有关注者为当前用户
+                _stockNow.setWatcherName(mUserManager.getCurUser().getName());  // ② 设置股票关注者用户名
+                _stockNow.setBuyNum(0);  // ③ 设置当前用户持有股数
             }
-            _stockNow.setName(values[0]);
-            _stockNow.setNowPrice(Double.valueOf(values[3]));
+            _stockNow.setName(values[0]);  // ④ 设置股票名称
+            _stockNow.setNowPrice(Double.valueOf(values[3]));  // ⑤ 设置股票当前价格
 
             // 计算 涨跌额 -> 计算涨跌幅
             double _dYesterdayPrice = Double.valueOf(values[2]);
             double _dIncreaseAmount = _stockNow.getNowPrice() - _dYesterdayPrice;
             double _dIncreasePercentage = _dIncreaseAmount / _dYesterdayPrice * 100;
-            _stockNow.setIncreasePersentage(_dIncreasePercentage);
-            _stockNow.setIncreaseAmount(_dIncreaseAmount);
+            _stockNow.setIncreasePersentage(_dIncreasePercentage);  // ⑥ 设置股票涨跌幅
+            _stockNow.setIncreaseAmount(_dIncreaseAmount);  // ⑦ 设置股票涨跌额
+            // id就不用设置了，直接在saveToDB中取出对应条目的id
 
-            _stockMap.put(_stockNow.getCode(), _stockNow);
+            _stockMap.put(_stockNow.getCode(), _stockNow);  // 存入当前解析的某只股票回包信息
         }
         return _stockMap;
     }
 
-    public void saveStockInfoToDB(Collection<Stock> stocks, Stock stockToDelete, boolean isDelete) {
+    /**
+     * 股票信息的数据库操作，两种调用情形：
+     * （1）添加/修改，点击添加按钮/自动刷新时触发
+     * （2）删除，侧滑自选股列表条目时触发
+     *
+     * @param stocks        请求得到的最新股票信息集合
+     * @param stockToDelete 待删除的股票，如果不是删除操作，值传null
+     */
+    public void saveStockInfoToDB(Collection<Stock> stocks, Stock stockToDelete) {
         // 数据库存储操作，需要去重，先保证三大股指不会被加入到数据库
-        if (isDelete && stockToDelete != null) {
+        if (stockToDelete != null) {
             // 删除操作，只是删
-            if (mStockManager.deleteStock(stockToDelete.getId()) > 0) {
+            int _stockIdToDelete = mStockManager.getWatchedStockFromDB(stockToDelete.getCode(), stockToDelete.getWatcherName()).getId();  // 重组mStockList的时候没有存储其id
+            if (mStockManager.deleteStockFromWatchList(_stockIdToDelete) == 1) {
                 ToastUtils.showMsg(mContext, "删除数据库股票信息成功！股票名称为" + stockToDelete.getName());
             } else {
                 ToastUtils.showMsg(mContext, "删除数据库股票信息失败！股票名称为" + stockToDelete.getName());
@@ -351,24 +395,26 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
         } else {
             // 非删除操作，包括增、改
             for (Stock _stock : stocks) {
-                if (!_stock.getUserName().equals("")) {
-                    // 用户名为空时是三大股指
-                    if (!mStockManager.isStockExists(_stock, _stock.getUserName())) {
+                if (!_stock.getWatcherName().equals("")) {
+                    // 关注者不为空时为个股，在数据库中
+                    if (!mStockManager.isExistInWatchList(_stock)) {
                         // 当前用户没有关注该股
                         // 添加操作
-                        if (mStockManager.addStock(_stock) != -1) {
-                            ToastUtils.showMsg(mContext, "添加到数据库成功！股票名称为" + _stock.getName());
+                        if (mStockManager.watchStock(_stock) != -1) {
+                            ToastUtils.showMsg(mContext, "添加数据库股票信息成功！股票名称为" + _stock.getName());
                         } else {
                             //数据库insert操作出错
-                            ToastUtils.showMsg(mContext, "添加到数据库失败！");
+                            ToastUtils.showMsg(mContext, "添加到数据库股票信息失败！股票名称为" + _stock.getName());
                         }
                     } else {
+                        // 当前用户已关注该股
                         // 更新操作
-                        int _iRowsAffected = mStockManager.updateStock(_stock, _stock.getId());
+                        int _stockIdToUpdate = mStockManager.getWatchedStockFromDB(_stock.getCode(), _stock.getWatcherName()).getId();  // 充足mStockList的时候没有存储其Id
+                        int _iRowsAffected = mStockManager.updateStockInfo(_stock, _stockIdToUpdate, false);
                         if (_iRowsAffected == 1) {
-                            Log.v(TAG, "更新成功！股票名称为" + _stock.getName());
+//                            ToastUtils.showMsg(mContext, "数据库条目更新成功！股票名称为"+_stock.getName());
                         } else {
-                            Log.v(TAG, "无须更新！股票名称为" + _stock.getName() + ", 受影响的条目数目为" + _iRowsAffected);
+//                            ToastUtils.showMsg(mContext, "数据库条目无须更新！股票名称为" + _stock.getName());
                         }
                     }
                 }
@@ -390,6 +436,13 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
                 break;
         }
         return true;
+    }
+
+    // 坑爹的Timer，果然是个隐患，跳转到后面的页面onPause了以后要cancel掉！！！不然会导致后续页面数据库更新操作出每次被这里的更新操作覆盖！！！
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mTimer.cancel();
     }
 
     @Override

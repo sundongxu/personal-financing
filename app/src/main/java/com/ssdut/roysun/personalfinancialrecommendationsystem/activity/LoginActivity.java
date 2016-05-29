@@ -73,7 +73,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             //根据时间决定显示白天还是夜晚的顶部背景图
             mTopBGView.setImageResource(R.drawable.bg_signin_night);
         }
-        mUserNameIcon = (ImageView) findViewById(R.id.iv_username_hint);
+        mUserNameIcon = (ImageView) findViewById(R.id.iv_user_name_hint);
         mPasswordIcon = (ImageView) findViewById(R.id.iv_password_hint);
 //        mUserNameView = (FloatLabel) findViewById(R.id.et_user_name);
         mUserNameView = (EditText) findViewById(R.id.et_user_name);
