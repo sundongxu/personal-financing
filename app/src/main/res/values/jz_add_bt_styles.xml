@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="jz_add_button_style" >
-    <item name="android:background">@drawable/jz_add_numbt_selector</item>
-    <item name="android:textColor">#ffffff</item>
-    <item name="android:textSize">13dp</item>
+
+    <style name="journal_add_button_style">
+        <item name="android:background">@drawable/journal_add_number_selector</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">15dp</item>
     </style>
 </resources>

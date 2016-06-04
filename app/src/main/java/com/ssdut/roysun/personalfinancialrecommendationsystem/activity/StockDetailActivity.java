@@ -39,18 +39,14 @@ import java.util.TimerTask;
 public class StockDetailActivity extends BaseActivity {
 
     public static final String TAG = "StockDetailActivity";
-    public static final String URL_BASE_PIC = "http://image.sinajs.cn/newchart/min/n/";
 
     private Toolbar mToolbar;
     private FloatingActionButton mFabBuy;
     private RecyclerView mStockInfoList;
     private LinearLayoutManager mLayoutManager;
     private StockInfoAdapter mAdapter;
-//    private ImageView mHeaderPic;
-//    private ImageView mStockPic;
 
     private String mCode;
-    //    private String mStockPicUrl;
     private ArrayList<String> mStockInfoValueList;
     private Timer mTimer;
     private StockManager mStockManager;
@@ -69,7 +65,6 @@ public class StockDetailActivity extends BaseActivity {
         super.initData();
         mContext = this;
         mCode = getIntent().getStringExtra("CODE_SELECTED");
-//        mStockPicUrl = URL_BASE_PIC + mCode + ".gif";
         Log.v(TAG, "查询的股票详情代码为" + mCode);
         mStockInfoValueList = new ArrayList<>();  // 随时和股票信息列表同步的值List
         mStockManager = StockManager.getInstance(this);
@@ -96,55 +91,12 @@ public class StockDetailActivity extends BaseActivity {
         mAdapter = new StockInfoAdapter(this);
         mStockInfoList.setAdapter(mAdapter);
 
-//        mStockInfoList.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_MOVE) {
-////                    Log.v(TAG, "mFab的当前Y坐标=" + mFabBuy.getY() + "px" + " = " + ViewUtils.px2dip(mContext, mFabBuy.getY()) + "dp");
-////                    Log.v(TAG, "mFab的高度=" + mFabBuy.getHeight() + "px" + " = " + ViewUtils.px2dip(mContext, mFabBuy.getHeight()) + "dp");
-////                    Log.v(TAG, "toolbar高度=" + mToolbar.getHeight() + "px" + " = " + ViewUtils.px2dip(mContext, mToolbar.getHeight()) + "dp");
-//                    // 保证只有FAB在初始位置才可以点击请求K线图
-//                    if (mFabBuy.getY() == 786.0) {
-//                        mFabBuy.setClickable(true);
-//                    } else {
-//                        mFabBuy.setClickable(false);
-//                    }
-//                    mStockPic.setVisibility(View.GONE);
-//                    mHeaderPic.setAlpha(255);  // 完全不透明，数字越小表示越透明
-//                }
-//                return false;
-//            }
-//        });
-
-//        mStockPic = (ImageView) findViewById(R.id.iv_stock_info);
-//        mHeaderPic = (ImageView) findViewById(R.id.iv_stock_detail_header_bg);
-
         mFabBuy = (FloatingActionButton) findViewById(R.id.fab_buy);
         mFabBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 购买股票 / 请求K线图
                 buy(mCode);
-//                RequestQueue _queue = Volley.newRequestQueue(mContext);
-//                final LruCache<String, Bitmap> _lruCache = new LruCache<String, Bitmap>(20);
-//                ImageLoader.ImageCache _imageCache = new ImageLoader.ImageCache() {
-//                    @Override
-//                    public Bitmap getBitmap(String key) {
-//                        return _lruCache.get(key);
-//                    }
-//
-//                    @Override
-//                    public void putBitmap(String key, Bitmap value) {
-//                        _lruCache.put(key, value);
-//                    }
-//                };
-//
-//                ImageLoader _imageLoader = new ImageLoader(_queue, _imageCache);
-//                ImageLoader.ImageListener _imageListener = _imageLoader.getImageListener(mStockPic, R.drawable.bg_stock_detail_header, R.drawable.bg_stock_detail_header);
-//                _imageLoader.get(mStockPicUrl, _imageListener);
-//                mStockPic.setVisibility(View.VISIBLE);
-////                mHeaderPic.setImageResource(R.drawable.bg_stock_detail_blue_temp);
-//                mHeaderPic.setAlpha(0);  // 完全透明
             }
         });
     }

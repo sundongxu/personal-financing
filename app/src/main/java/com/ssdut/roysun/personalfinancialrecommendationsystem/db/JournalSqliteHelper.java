@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 
 /**
  * Created by roysun on 16/3/12.
@@ -28,6 +28,25 @@ public class JournalSqliteHelper extends SQLiteOpenHelper {
         this.mContext = context;
     }
 
+    /*
+     * 存储月预算或者加密密码，sharedPreferences的使用
+     * */
+    public static void saveBudget(Context context, String fileName, String itemName, int n) {
+        SharedPreferences preference = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preference.edit();  // 获取编辑器
+        editor.putInt(itemName, n);   // 数据暂时存放在内存中
+        editor.commit();  // 提交修改，将内存中的数据保存至xawx.xml文件中
+    }
+
+    /*
+     * 读取Preference参数
+     */
+    public static int readPreferenceFile(Context context, String fileName, String itemName) {
+        SharedPreferences preference = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
+        int num = preference.getInt(itemName, 0);  //默认值为0，即sharedPreferences文件中没有itemName对应的键值对时，取值为0
+        return num;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         saveBudget(mContext, BUDGET_MONTH, BUDGET_MONTH, 3000);
@@ -35,6 +54,7 @@ public class JournalSqliteHelper extends SQLiteOpenHelper {
         saveBudget(mContext, ISHIDDEN, ISHIDDEN, 1);
         db.execSQL("CREATE TABLE IF NOT EXISTS " +
                 EXPENDITURE + "(" + "ID" + " integer primary key," +
+                Expenditure.USER_NAME + " varchar," +
                 Expenditure.CATEGORY + " varchar," +
                 Expenditure.SUB_CATEGORY + " varchar," +
                 Expenditure.YEAR + " Integer," +
@@ -48,6 +68,7 @@ public class JournalSqliteHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " +
                 INCOME + "(" + "ID" + " integer primary key," +
+                Income.USER_NAME + " varchar," +
                 Income.CATEGORY + " varchar," +
                 Income.YEAR + " Integer," +
                 Income.MONTH + " Integer," +
@@ -63,34 +84,5 @@ public class JournalSqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS" + EXPENDITURE);
         db.execSQL("DROP TABLE IF EXISTS" + INCOME);
         onCreate(db);
-    }
-
-    public void updateColumn(SQLiteDatabase db, String oldColumn, String newColumn, String typeColumn) {
-        try {
-            db.execSQL("ALTER TABLE " + EXPENDITURE + " CHANGE " + oldColumn + " " + newColumn + " " + typeColumn);
-            db.execSQL("ALTER TABLE " + INCOME + " CHANGE " + oldColumn + " " + newColumn + " " + typeColumn);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /*
-     * 存储月预算或者加密密码，sharedPreferences的使用
-     * */
-    public static void saveBudget(Context context, String fileName, String itemName, int n) {
-        SharedPreferences _preference = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor _editor = _preference.edit();  // 获取编辑器
-        _editor.putInt(itemName, n);   // 数据暂时存放在内存中
-        _editor.commit();  // 提交修改，将内存中的数据保存至xawx.xml文件中
-    }
-
-
-    /*
-     * 读取Preference参数
-     */
-    public static int readPreferenceFile(Context context, String fileName, String itemName) {
-        SharedPreferences _preference = context.getSharedPreferences(fileName, Context.MODE_PRIVATE);
-        int _num = _preference.getInt(itemName, 0);  //默认值为0，即sharedPreferences文件中没有itemName对应的键值对时，取值为0
-        return _num;
     }
 }

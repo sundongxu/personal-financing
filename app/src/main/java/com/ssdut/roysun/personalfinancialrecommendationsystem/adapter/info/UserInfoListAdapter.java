@@ -79,7 +79,7 @@ public class UserInfoListAdapter extends InfoListBaseAdapter {
                     asterisk = asterisk + "*";
                 }
                 mInfoValueList.add(asterisk);
-                mInfoValueList.add(String.valueOf(_curUser.getBalance()));
+                mInfoValueList.add(String.format("%.2f", _curUser.getBalance()));
                 mInfoValueList.add(_curUser.getQuestion());
                 mInfoValueList.add(_curUser.getCreateTime());
                 mInfoValueList.add(_curUser.getUpdateTime());

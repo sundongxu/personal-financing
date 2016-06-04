@@ -8,6 +8,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
  */
 public class Expenditure {
 
+    public static final String USER_NAME = "USER_NAME";
     public static final String CATEGORY = "CATEGORY";
     public static final String SUB_CATEGORY = "SUB_CATEGORY";
     public static final String YEAR = "YEAR";
@@ -19,28 +20,18 @@ public class Expenditure {
     public static final String REMARK = "REMARK";
     public static final String PIC = "PIC";
 
-    // 支出条目ID
     private int id;
-    // 在那方面支出
-    private String category = "";
-    //项目的子项目
-    private String subCategory = "";
-    // 支出年份
+    private String userName;
+    private String category;
+    private String subCategory;
     private int year = TimeUtils.getYear();
-    // 支出月份
     private int month = TimeUtils.getMonth();
-    // 支出星期（一月中的某一周）
     private int week = TimeUtils.getWeekOfYear();
-    // 支出天
     private int day = TimeUtils.getDay();
-    // 支出时间
     private String time = TimeUtils.getHour() + ":" + TimeUtils.getMinute();
-    // 支出数量
     private double amount = 0;
-    // 支出备注
-    private String remark = "";
-    //照片位置
-    private String pic = "";
+    private String remark;
+    private String pic;
 
     public int getId() {
         return id;
@@ -48,6 +39,14 @@ public class Expenditure {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getCategory() {

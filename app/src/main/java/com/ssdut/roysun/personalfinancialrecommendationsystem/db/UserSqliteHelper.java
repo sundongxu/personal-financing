@@ -36,6 +36,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 User.QUESTION + " varchar," +
                 User.ANSWER + " varchar," +
                 User.BALANCE + " REAL," +
+                User.BUDGET + " Integer," +
                 User.IS_SPECIAL + " Integer" + ");");
 
         db.execSQL("INSERT INTO " +
@@ -48,6 +49,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 User.QUESTION + ", " +
                 User.ANSWER + ", " +
                 User.BALANCE + ", " +
+                User.BUDGET + ", " +
                 User.IS_SPECIAL + ")" +
                 " values" + "(" +
                 "'admin', " +
@@ -58,6 +60,7 @@ public class UserSqliteHelper extends SQLiteOpenHelper {
                 "'你第一次坐飞机是去哪里？', " +
                 "'日本东京', " +
                 Double.valueOf("2222.22") + ", " +
+                0 + ", " +
                 1 + ");");
     }
 

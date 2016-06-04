@@ -3,6 +3,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity.fragment
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.Translati
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.WeatherActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FunctionCardListBaseAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.OthersListAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 
 /**
  * Created by roysun on 16/4/26.
@@ -51,7 +53,7 @@ public class OthersFragment extends BaseFragment {
     }
 
     @Override
-    public void initCardList(View view) {
+    public void initCardList(final View view) {
         super.initCardList(view);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_others_list);
         mRecyclerView.setHasFixedSize(true);
@@ -63,7 +65,13 @@ public class OthersFragment extends BaseFragment {
             public void onCardItemClick(int cardType) {
                 switch (cardType) {
                     case FunctionCardListBaseAdapter.CARD_MEMO:
-                        startActivity(new Intent(mContext, MemoMainActivity.class));
+                        if (mContext instanceof MainActivity) {
+                            if (((MainActivity) mContext).getUserManager().isSignIn()) {
+                                startActivity(new Intent(mContext, MemoMainActivity.class));
+                            } else {
+                                Snackbar.make(view, R.string.login_first, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+                            }
+                        }
                         break;
                     case FunctionCardListBaseAdapter.CARD_CALCULATION:
                         startActivity(new Intent(mContext, CalculationActivity.class));

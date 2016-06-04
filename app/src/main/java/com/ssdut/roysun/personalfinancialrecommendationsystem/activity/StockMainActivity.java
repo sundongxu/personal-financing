@@ -77,6 +77,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
     private boolean mIsWatch;  // 关注标志位
 
     private Timer mTimer;
+    private RequestQueue mQueue;  // 全局请求队列对象，避免创建多个请求对象浪费资源
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +117,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
             }
         }
         mIsWatch = false;
+        mQueue = Volley.newRequestQueue(this);
     }
 
     @Override
@@ -221,7 +223,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
 
     public void querySinaStocks(String codeList) {
         Log.v(TAG, "refreshStocks invoked! 要查询的股票代码串为：" + codeList);
-        RequestQueue _queue = Volley.newRequestQueue(this);
+//        RequestQueue _queue = Volley.newRequestQueue(this);
         String _url = URL_BASE_SINA + codeList;
         StringRequest _request = new StringRequest(Request.Method.GET, _url,
                 new Response.Listener<String>() {
@@ -229,6 +231,7 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
                     public void onResponse(String response) {
                         Log.v(TAG, "onResponse invoked! 请求成功！");
                         updateStockListView(sinaResponseToStocks(response));
+                        mQueue.cancelAll(0);
                     }
                 },
                 new Response.ErrorListener() {
@@ -237,7 +240,8 @@ public class StockMainActivity extends BaseActivity implements OnStartDragListen
                         ToastUtils.showMsg(mContext, "请求失败！");
                     }
                 });
-        _queue.add(_request);
+        _request.setTag(0);
+        mQueue.add(_request);
     }
 
     public void updateStockListView(LinkedHashMap<String, Stock> stockMap) {

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="70dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_watched_icon"
+        android:layout_width="@dimen/icon_width_normal"
+        android:layout_height="@dimen/icon_height_normal"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/icon_stock_click_selector"/>
+
+    <TextView
+        android:id="@+id/tv_watched_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="40dp"
+        android:text="sz002185"
+        android:textColor="@drawable/text_info_item_selector"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:id="@+id/tv_watched_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="40dp"
+        android:text="华天科技"
+        android:textColor="@drawable/text_info_item_selector"
+        android:textSize="20sp"/>
+
+</LinearLayout>

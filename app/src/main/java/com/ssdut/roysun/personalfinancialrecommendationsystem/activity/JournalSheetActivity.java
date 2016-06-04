@@ -3,11 +3,11 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.JournalItem;
@@ -36,7 +36,7 @@ public class JournalSheetActivity extends BaseActivity {
     public static final int EXPENDITURE_DETAIL = 2222;
     public static final int INCOME_DETAIL = 3333;
 
-    private JournalManager mJournalDataHelper;
+    private JournalManager mJournalManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,149 +48,137 @@ public class JournalSheetActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        mJournalDataHelper = new JournalManager(this);
+        mContext = this;
+        mJournalManager = JournalManager.getInstance(this);
     }
 
-    /*
-         * 设置走线图
-         * */
+    // 设置走线图
     public View setView(int flag) {
-        String[] _titles = null;  //收支条目 大类
-        int[] _colors = null;
-        PointStyle[] _styles = null;
+        String[] titles = null;  // 收支条目 大类
+        int[] colors = null;
+        PointStyle[] styles = null;
         List<double[]> values = null;
-        String _title = "";
+        String title = "";
         switch (flag) {
             case EXPENDITURE_INCOME:
-                _titles = new String[]{"月收入", "月支出"};
-                _colors = new int[]{Color.WHITE, Color.GREEN};
-                _styles = new PointStyle[]{PointStyle.CIRCLE, PointStyle.DIAMOND};
+                titles = new String[]{"月收入", "月支出"};
+                colors = new int[]{Color.WHITE, Color.GREEN};
+                styles = new PointStyle[]{PointStyle.CIRCLE, PointStyle.DIAMOND};
                 values = new ArrayList<double[]>();
-                values.add(getIncomeThisYear(""));
-                values.add(getExpenditureThisYear(""));
-                _title = "月收入和支出走势图";
+                values.add(getIncomeThisYearMonth(""));
+                values.add(getExpenditureThisYearMonth(""));
+                title = "月收入和支出走势图";
                 break;
             case EXPENDITURE_DETAIL:
-                _titles = new String[]{JournalItem.MEAL, JournalItem.TRAFFIC, JournalItem.SHOPPING, JournalItem.ENTERTAINMENT, JournalItem.MEDITATION_EDUCATION, JournalItem.DAILY_EXPENSE, JournalItem.INVESTMENT, JournalItem.FAVOR_CONTACT, JournalItem.LEND, JournalItem.PAYMENT};
-                _colors = new int[]{Color.WHITE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.DKGRAY, Color.MAGENTA, Color.RED, Color.BLUE, Color.LTGRAY, Color.GRAY};
-                _styles = new PointStyle[]{PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND};
+                titles = new String[]{JournalItem.MEAL, JournalItem.TRAFFIC, JournalItem.SHOPPING, JournalItem.ENTERTAINMENT, JournalItem.MEDITATION_EDUCATION, JournalItem.DAILY_EXPENSE, JournalItem.INVESTMENT, JournalItem.FAVOR_CONTACT, JournalItem.LENDING, JournalItem.PAYMENT};
+                colors = new int[]{Color.WHITE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.DKGRAY, Color.MAGENTA, Color.RED, Color.BLUE, Color.LTGRAY, Color.GRAY};
+                styles = new PointStyle[]{PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND, PointStyle.DIAMOND};
                 values = new ArrayList<double[]>();
-                String _selectionMeal = " and " + Expenditure.CATEGORY + " = '" + JournalItem.MEAL + "'";
-                values.add(getExpenditureThisYear(_selectionMeal));
-                String _selectTraffic = " and " + Expenditure.CATEGORY + " = '" + JournalItem.TRAFFIC + "'";
-                values.add(getExpenditureThisYear(_selectTraffic));
-                String _selectionShopping = " and " + Expenditure.CATEGORY + " = '" + JournalItem.SHOPPING + "'";
-                values.add(getExpenditureThisYear(_selectionShopping));
-                String _selectionEntertainment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.ENTERTAINMENT + "'";
-                values.add(getExpenditureThisYear(_selectionEntertainment));
-                String _selectionMeditationEducation = " and " + Expenditure.CATEGORY + " = '" + JournalItem.MEDITATION_EDUCATION + "'";
-                values.add(getExpenditureThisYear(_selectionMeditationEducation));
-                String _selectionDailyExpense = " and " + Expenditure.CATEGORY + " = '" + JournalItem.DAILY_EXPENSE + "'";
-                values.add(getExpenditureThisYear(_selectionDailyExpense));
-                String _selectionInvestment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.INVESTMENT + "'";
-                values.add(getExpenditureThisYear(_selectionInvestment));
-                String _selectionFavorContact = " and " + Expenditure.CATEGORY + " = '" + JournalItem.FAVOR_CONTACT + "'";
-                values.add(getExpenditureThisYear(_selectionFavorContact));
-                String _selectionLend = " and " + Expenditure.CATEGORY + " = '" + JournalItem.LEND + "'";
-                values.add(getExpenditureThisYear(_selectionLend));
-                String _selectionPayment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.PAYMENT + "'";
-                values.add(getExpenditureThisYear(_selectionPayment));
-                _title = "支出走势图";
+                String selectionMeal = " and " + Expenditure.CATEGORY + " = '" + JournalItem.MEAL + "'";
+                values.add(getExpenditureThisYearMonth(selectionMeal));
+                String selectTraffic = " and " + Expenditure.CATEGORY + " = '" + JournalItem.TRAFFIC + "'";
+                values.add(getExpenditureThisYearMonth(selectTraffic));
+                String selectionShopping = " and " + Expenditure.CATEGORY + " = '" + JournalItem.SHOPPING + "'";
+                values.add(getExpenditureThisYearMonth(selectionShopping));
+                String selectionEntertainment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.ENTERTAINMENT + "'";
+                values.add(getExpenditureThisYearMonth(selectionEntertainment));
+                String selectionMeditationEducation = " and " + Expenditure.CATEGORY + " = '" + JournalItem.MEDITATION_EDUCATION + "'";
+                values.add(getExpenditureThisYearMonth(selectionMeditationEducation));
+                String selectionDailyExpense = " and " + Expenditure.CATEGORY + " = '" + JournalItem.DAILY_EXPENSE + "'";
+                values.add(getExpenditureThisYearMonth(selectionDailyExpense));
+                String selectionInvestment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.INVESTMENT + "'";
+                values.add(getExpenditureThisYearMonth(selectionInvestment));
+                String selectionFavorContact = " and " + Expenditure.CATEGORY + " = '" + JournalItem.FAVOR_CONTACT + "'";
+                values.add(getExpenditureThisYearMonth(selectionFavorContact));
+                String selectionLend = " and " + Expenditure.CATEGORY + " = '" + JournalItem.LENDING + "'";
+                values.add(getExpenditureThisYearMonth(selectionLend));
+                String selectionPayment = " and " + Expenditure.CATEGORY + " = '" + JournalItem.PAYMENT + "'";
+                values.add(getExpenditureThisYearMonth(selectionPayment));
+                title = "支出走势图";
                 break;
             case INCOME_DETAIL:
-                _titles = new String[]{JournalItem.SALARY, JournalItem.STOCK, JournalItem.BONUS, JournalItem.INTERESTS, JournalItem.DIVIDEND, JournalItem.SUBSIDY, JournalItem.REIMBURSEMENT, JournalItem.OTHERS, JournalItem.BORROW, JournalItem.RECEIVEMENT};
-                _colors = new int[]{Color.WHITE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.DKGRAY, Color.MAGENTA, Color.RED, Color.BLUE, Color.LTGRAY, Color.GRAY};
-                _styles = new PointStyle[]{PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE};
+                titles = new String[]{JournalItem.SALARY, JournalItem.STOCK, JournalItem.BONUS, JournalItem.INTERESTS, JournalItem.DIVIDEND, JournalItem.SUBSIDY, JournalItem.REIMBURSEMENT, JournalItem.OTHERS, JournalItem.BORROWING, JournalItem.RECEIVEMENT};
+                colors = new int[]{Color.WHITE, Color.GREEN, Color.CYAN, Color.YELLOW, Color.DKGRAY, Color.MAGENTA, Color.RED, Color.BLUE, Color.LTGRAY, Color.GRAY};
+                styles = new PointStyle[]{PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE, PointStyle.CIRCLE};
                 values = new ArrayList<double[]>();
-                String _selectionSalary = " and " + Income.CATEGORY + " = '" + JournalItem.SALARY + "'";
-                values.add(getIncomeThisYear(_selectionSalary));
-                String _selectionStock = " and " + Income.CATEGORY + " = '" + JournalItem.STOCK + "'";
-                values.add(getIncomeThisYear(_selectionStock));
-                String _selectionBonus = " and " + Income.CATEGORY + " = '" + JournalItem.BONUS + "'";
-                values.add(getIncomeThisYear(_selectionBonus));
-                String _selectionInterests = " and " + Income.CATEGORY + " = '" + JournalItem.INTERESTS + "'";
-                values.add(getIncomeThisYear(_selectionInterests));
-                String _selectionDividend = " and " + Income.CATEGORY + " = '" + JournalItem.DIVIDEND + "'";
-                values.add(getIncomeThisYear(_selectionDividend));
-                String _selectionSubsidy = " and " + Income.CATEGORY + " = '" + JournalItem.SUBSIDY + "'";
-                values.add(getIncomeThisYear(_selectionSubsidy));
-                String _selectionReimbursement = " and " + Income.CATEGORY + " = '" + JournalItem.REIMBURSEMENT + "'";
-                values.add(getIncomeThisYear(_selectionReimbursement));
-                String _selectionOthers = " and " + Income.CATEGORY + " = '" + JournalItem.OTHERS + "'";
-                values.add(getIncomeThisYear(_selectionOthers));
-                String _selectionBorrow = " and " + Income.CATEGORY + " = '" + JournalItem.BORROW + "'";
-                values.add(getIncomeThisYear(_selectionBorrow));
-                String _selectionReceivement = " and " + Income.CATEGORY + " = '" + JournalItem.RECEIVEMENT + "'";
-                values.add(getIncomeThisYear(_selectionReceivement));
-                _title = "收入走势图";
+                String selectionSalary = " and " + Income.CATEGORY + " = '" + JournalItem.SALARY + "'";
+                values.add(getIncomeThisYearMonth(selectionSalary));
+                String selectionStock = " and " + Income.CATEGORY + " = '" + JournalItem.STOCK + "'";
+                values.add(getIncomeThisYearMonth(selectionStock));
+                String selectionBonus = " and " + Income.CATEGORY + " = '" + JournalItem.BONUS + "'";
+                values.add(getIncomeThisYearMonth(selectionBonus));
+                String selectionInterests = " and " + Income.CATEGORY + " = '" + JournalItem.INTERESTS + "'";
+                values.add(getIncomeThisYearMonth(selectionInterests));
+                String selectionDividend = " and " + Income.CATEGORY + " = '" + JournalItem.DIVIDEND + "'";
+                values.add(getIncomeThisYearMonth(selectionDividend));
+                String selectionSubsidy = " and " + Income.CATEGORY + " = '" + JournalItem.SUBSIDY + "'";
+                values.add(getIncomeThisYearMonth(selectionSubsidy));
+                String selectionReimbursement = " and " + Income.CATEGORY + " = '" + JournalItem.REIMBURSEMENT + "'";
+                values.add(getIncomeThisYearMonth(selectionReimbursement));
+                String selectionOthers = " and " + Income.CATEGORY + " = '" + JournalItem.OTHERS + "'";
+                values.add(getIncomeThisYearMonth(selectionOthers));
+                String selectionBorrow = " and " + Income.CATEGORY + " = '" + JournalItem.BORROWING + "'";
+                values.add(getIncomeThisYearMonth(selectionBorrow));
+                String selectionReceivement = " and " + Income.CATEGORY + " = '" + JournalItem.RECEIVEMENT + "'";
+                values.add(getIncomeThisYearMonth(selectionReceivement));
+                title = "收入走势图";
                 break;
         }
-        List<double[]> _list = new ArrayList<double[]>();
-        for (int i = 0; i < _titles.length; i++) {
-            _list.add(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+        List<double[]> list = new ArrayList<double[]>();
+        for (int i = 0; i < titles.length; i++) {
+            list.add(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         }
 
-        XYMultipleSeriesRenderer _renderer = buildRenderer(_colors, _styles);
-        int length = _renderer.getSeriesRendererCount();
+        XYMultipleSeriesRenderer renderer = buildRenderer(colors, styles);
+        int length = renderer.getSeriesRendererCount();
         for (int i = 0; i < length; i++) {
-            ((XYSeriesRenderer) _renderer.getSeriesRendererAt(i)).setFillPoints(true);
+            ((XYSeriesRenderer) renderer.getSeriesRendererAt(i)).setFillPoints(true);
         }
-        setChartSettings(_renderer, _title, "月份", "金额", 1, 12, 0, 10000, Color.LTGRAY, Color.LTGRAY);
-        _renderer.setXLabels(12);
-        _renderer.setYLabels(10);
-        _renderer.setShowGrid(true);
-        _renderer.setXLabelsAlign(Paint.Align.RIGHT);
-        _renderer.setYLabelsAlign(Paint.Align.RIGHT);
-        _renderer.setZoomButtonsVisible(true);
-        _renderer.setPanLimits(new double[]{0, 12, 0, 10000});
-        _renderer.setZoomLimits(new double[]{0, 12, 0, 10000});
-        View view = ChartFactory.getLineChartView(this, buildDataset(_titles, _list, values), _renderer);
+        setChartSettings(renderer, title, "月份", "金额", 1, 12, 0, 10000, Color.LTGRAY, Color.LTGRAY);
+        renderer.setXLabels(12);
+        renderer.setYLabels(10);
+        renderer.setShowGrid(true);
+        renderer.setXLabelsAlign(Paint.Align.RIGHT);
+        renderer.setYLabelsAlign(Paint.Align.RIGHT);
+        renderer.setZoomButtonsVisible(true);
+        renderer.setPanLimits(new double[]{0, 12, 0, 10000});
+        renderer.setZoomLimits(new double[]{0, 12, 0, 10000});
+        View view = ChartFactory.getLineChartView(this, buildDataset(titles, list, values), renderer);
         view.setBackgroundColor(Color.BLACK);
         return view;
     }
 
-    /*
-     * 从数据库中获得当年每月的支出信息
-     * */
-    public double[] getExpenditureThisYear(String selection) {
-        double _d[] = new double[12];
-        ArrayList<Expenditure> _expenditureThisYearList;
+    // 获取年、月支出数据
+    public double[] getExpenditureThisYearMonth(String selection) {
+        double d[] = new double[12];
+        ArrayList<Expenditure> expenditureThisYearList;
         for (int i = 1; i <= 12; i++) {
-            double _expenditureSum = 0;
-            String _selectionExpenditure = Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + i + selection;
-            _expenditureThisYearList = mJournalDataHelper.getExpenditureListFromDB(_selectionExpenditure);
-            for (Expenditure _expenditure : _expenditureThisYearList) {
-                _expenditureSum += _expenditure.getAmount();
+            double expenditureSum = 0;
+            String selectionExpenditure = Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + i + selection;
+            expenditureThisYearList = mJournalManager.getExpenditureListFromDB(selectionExpenditure);
+            for (Expenditure expenditure : expenditureThisYearList) {
+                expenditureSum += expenditure.getAmount();
             }
-            _d[i - 1] = _expenditureSum;
+            d[i - 1] = expenditureSum;
         }
-        return _d;
+        return d;
     }
 
-    /*
-     * 从数据库中获得当年每月的收入信息
-     * */
-    public double[] getIncomeThisYear(String selection) {
-        double _d[] = new double[12];
-        ArrayList<Income> _incomeThisYearList;
+    // 获取年、月收入数据
+    public double[] getIncomeThisYearMonth(String selection) {
+        double d[] = new double[12];
+        ArrayList<Income> incomeThisYearList;
         for (int i = 1; i <= 12; i++) {
-            double _incomeSum = 0;
-            String _selectionIncome = Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + i + selection;
-            _incomeThisYearList = mJournalDataHelper.getIncomeListFromDB(_selectionIncome);
-            for (Income _income : _incomeThisYearList) {
-                _incomeSum += _income.getAmount();
+            double incomeSum = 0;
+            String selectionIncome = Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + i + selection;
+            incomeThisYearList = mJournalManager.getIncomeListFromDB(selectionIncome);
+            for (Income income : incomeThisYearList) {
+                incomeSum += income.getAmount();
             }
-            _d[i - 1] = _incomeSum;
+            d[i - 1] = incomeSum;
         }
-        return _d;
+        return d;
     }
-
-    @Override
-    protected void onResume() {
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-        super.onResume();
-    }
-
 
     private XYMultipleSeriesRenderer buildRenderer(int[] colors, PointStyle[] styles) {
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
@@ -269,5 +257,14 @@ public class JournalSheetActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_MENU:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

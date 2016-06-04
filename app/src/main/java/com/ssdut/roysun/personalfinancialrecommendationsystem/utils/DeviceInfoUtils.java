@@ -17,14 +17,14 @@ import java.io.InputStream;
  * 设备信息
  */
 public class DeviceInfoUtils {
-    private String[] commandMax = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"};
-    private String[] commandMin = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq"};
-    private String[] commandCur = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"};
-    public static final int MAX = 1;
     public static final int MIN = 0;
+    public static final int MAX = 1;
     public static final int CUR = 2;
+    private static String[] commandMax = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq"};
+    private static String[] commandMin = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_min_freq"};
+    private static String[] commandCur = {"/system/bin/cat", "/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq"};
 
-    public String getMaxCpu(int i) {
+    public static String getMaxCpu(int i) {
         String res = "";
         String command[];
         if (i == MAX) {
@@ -54,8 +54,25 @@ public class DeviceInfoUtils {
         return res;
     }
 
+    public static String changeCpuHZ(String str) {
+        try {
+            if (str.length() > 7) {
+//            str = str.substring(0,str.length()-4);
+                str = str.substring(0, str.length() - 6) + "00";
+                double d = Double.parseDouble(str) / 1000;
+                str = d + "GHZ";
+            } else {
+//            str = str.substring(0,str.length()-4)+"HZ";
+                str = str.substring(0, str.length() - 6) + "00HZ";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
     //获取CPU名字
-    public String getCpuName() {
+    public static String getCpuName() {
         try {
             FileReader fr = new FileReader("/proc/cpuinfo");
             BufferedReader br = new BufferedReader(fr);
@@ -69,7 +86,7 @@ public class DeviceInfoUtils {
     }
 
     //获取内存大小
-    public String getTotalMemory() {
+    public static String[] getTotalMemory() {
         String str1 = "/proc/meminfo";
         String str2 = "";
         String memTotal = "";
@@ -92,16 +109,21 @@ public class DeviceInfoUtils {
                     memSheng2 = str2.split(":")[1].substring(0, str2.split(":")[1].length() - 6).trim();
                     System.out.println("memSheng2" + memSheng2);
                     int memSheng = Integer.parseInt(memSheng1) + Integer.parseInt(memSheng2);
-                    return "RAM大小：" + memTotal + "MB  剩余大小：" + memSheng + "MB";
+
+                    String[] ramInfoString = new String[2];
+                    ramInfoString[0] = memTotal;
+                    ramInfoString[1] = String.valueOf(memSheng);
+
+                    return ramInfoString;
                 }
             }
         } catch (IOException e) {
         }
-        return "";
+        return null;
     }
 
     //Rom大小
-    public String[] getRomMemroy() {
+    public static String[] getRomMemroy() {
         long[] romInfoLong = new long[2];
         //Total rom memory
         romInfoLong[0] = getTotalInternalMemorySize();
@@ -123,7 +145,7 @@ public class DeviceInfoUtils {
         return romInfoString;
     }
 
-    public long getTotalInternalMemorySize() {
+    public static long getTotalInternalMemorySize() {
         File path = Environment.getDataDirectory();
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
@@ -133,7 +155,7 @@ public class DeviceInfoUtils {
     }
 
     //SD大小
-    public String[] getSDCardMemory() {
+    public static String[] getSDCardMemory() {
         long[] sdCardInfo = new long[2];
         String[] sdInfoString = new String[2];
         String state = Environment.getExternalStorageState();
@@ -159,7 +181,7 @@ public class DeviceInfoUtils {
     }
 
     //系统的版本信息
-    public String[] getVersion() {
+    public static String[] getVersion() {
         String[] version = {"null", "null", "null", "null"};
         String str1 = "/proc/version";
         String str2;
@@ -180,7 +202,7 @@ public class DeviceInfoUtils {
     }
 
     //获取开机时间，读取系统时钟
-    public String getTimes() {
+    public static String getTimes() {
         long ut = SystemClock.elapsedRealtime() / 1000;
         if (ut == 0) {
             ut = 1;

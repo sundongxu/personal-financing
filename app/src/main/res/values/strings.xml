@@ -51,7 +51,6 @@
     <string name="jz_tab2_fanhui">返回</string>
     <string name="jz_tab2_queding">确定</string>
     <string name="jz_del">del</string>
-    <string name="jz_main_add">添加</string>
     <string name="jz_main_mingxi">明细</string>
     <string name="jz_main_baobiao">报表</string>
     <string name="jz_main_yusuan">预算</string>
@@ -138,16 +137,158 @@
     <string name="tab_5">测试</string>
     <string name="exit_app">退出随心记</string>
     <string name="exit_confirm">确认退出？</string>
-    <string name="cancel">取消</string>
     <string name="exit_journal">退出记账</string>
     <string name="exit_stock">退出股票</string>
     <string name="exit_weather">退出天气</string>
     <string name="exit_translation">退出翻译</string>
     <string name="exit_calculation">退出计算</string>
     <string name="exit_memo">退出备忘</string>
-    <string name="confirm">确定</string>
     <string name="confirm_delete_memo_item">是否确认删除该条记录？</string>
     <string name="success_export">导出成功</string>
+
+    <!--预算页面BudgetActivity-->
+    <string name="title_budget_page">预算设置</string>
+    <string name="budget_amount_month">本月预算：</string>
+    <string name="budget_btn_save">保  存</string>
+    <string name="budget_btn_cancel">取  消</string>
+    <string name="budget_save_success">预算更新成功！</string>
+    <string name="budget_input_not_null">输入不能为空！</string>
+    <string name="too_much_money">你哪有那么多钱？</string>
+    <string name="budget_less_than_10000000">请输入少于10000000的预算金额</string>
+
+    <!--账目明细页面JournalMainActivity-->
+    <string name="title_journal_main_page">账目明细</string>
+    <string name="journal_main_expenditure_now">当前支出</string>
+    <string name="journal_main_income_now">当前收入</string>
+    <string name="journal_main_expenditure_year">本年支出</string>
+    <string name="journal_main_expenditure_month">本月支出</string>
+    <string name="journal_main_expenditure_week">本周支出</string>
+    <string name="journal_main_expenditure_today">今天支出</string>
+    <string name="journal_main_income_year">本年收入</string>
+    <string name="journal_main_income_month">本月收入</string>
+    <string name="journal_main_income_today">今天收入</string>
+    <string name="journal_main_budget_left">预算余额</string>
+    <string name="journal_main_btn_add">添加</string>
+    <string name="journal_main_btn_detail">明细</string>
+    <string name="journal_main_btn_sheet">报表</string>
+    <string name="journal_main_btn_budget">预算</string>
+    <string name="journal_main_btn_settings">设置</string>
+
+    <!--账目新增页面JournalAddActivity-->
+    <string name="title_journal_add_page">新增账目</string>
+    <string name="journal_add_expenditure_tab">支出</string>
+    <string name="journal_add_income_tab">收入</string>
+    <string name="journal_add_debit_crebit_tab">借贷</string>
+    <string name="journal_add_amount">金额</string>
+    <string name="journal_add_category">类别</string>
+    <string name="journal_add_time">时间</string>
+    <string name="journal_add_remark">备注</string>
+    <string name="journal_add_category_expenditure_default">餐饮>晚餐</string>
+    <string name="journal_add_category_income_default">工资</string>
+    <string name="journal_add_category_debit_crebit_default">借出</string>
+    <string name="journal_add_date_default">20160520</string>
+    <string name="journal_add_time_default">15:15</string>
+    <string name="journal_add_no_remark">无备注</string>
+    <string name="journal_add_photo">照片</string>
+    <string name="journal_btn_save">保  存</string>
+    <string name="journal_btn_cancel">取  消</string>
+    <string name="journal_btn_delete">删  除</string>
+    <string name="journal_update_expenditure">修改支出</string>
+    <string name="journal_update_income">修改收入</string>
+    <string name="journal_update_debit_crebit">修改借贷</string>
+    <string name="journal_add_amount_no_zero">金额不能为零</string>
+    <string name="journal_add_expenditure_save_success">该条支出记录保存成功！</string>
+    <string name="journal_add_expenditure_update_success">该条支出记录修改成功！</string>
+    <string name="journal_add_income_save_success">该条收入记录保存成功！</string>
+    <string name="journal_add_income_update_success">该条收入记录修改成功！</string>
+    <string name="journal_add_debit_crebit_save_success">该条收入记录保存成功！</string>
+    <string name="journal_add_debit_crebit_update_success">该条收入记录修改成功！</string>
+    <string name="journal_add_not_learn_math">没学过数学呀？</string>
+    <string name="journal_add_no_enough_cash">你有那么多零钱吗？</string>
+
+    <!--记账明细页面JournalDetailActivity-->
+    <string name="title_journal_detail_page">记账明细</string>
+    <string name="journal_detail_summerize">汇总</string>
+    <string name="journal_detail_summerize_profit_month">本月盈余</string>
+
+    <!--记账设置页面JournalSettingActivity-->
+    <string name="title_journal_setting_page">记账设置</string>
+    <string name="journal_setting_encrypt">程序加密</string>
+    <string name="journal_setting_create_update_password">修改或删除密码</string>
+    <string name="journal_setting_input_old_password">输入旧密码</string>
+    <string name="journal_setting_input_not_null">输入不能为空！</string>
+    <string name="journal_setting_password_6_digit">密码至少为6位！</string>
+    <string name="journal_setting_password_repeat_not_match">两次密码输入不一致！</string>
+    <string name="journal_setting_encrypt_success">加密成功！</string>
+    <string name="journal_setting_input_6_digit_password">请输入6位密码</string>
+    <string name="journal_setting_input_password_again">再次输入密码</string>
+    <string name="journal_setting_not_match_old_password">与旧密码不匹配！</string>
+    <string name="journal_setting_confirm_clear_all_data">确认清空所有数据？</string>
+    <string name="journal_setting_data_clear_success">清空成功！</string>
+    <string name="journal_setting_password_delete_success">密码删除成功！</string>
+    <string name="journal_setting_delete_password">删除密码</string>
+    <string name="journal_setting_clear_all_data">清除所有消费记录</string>
+
+    <!--注册界面RegisterActivity-->
+    <string name="title_register_page">用户注册</string>
+    <string name="username_already_exists">用户名已存在！</string>
+    <string name="register_success">注册成功！</string>
+    <string name="register_failure">注册失败！</string>
+
+    <!--登录界面LoginActivity-->
+    <string name="title_login_page">用户登录</string>
+    <string name="login_username_password_input_not_null">用户名或密码输入不能为空！</string>
+    <string name="login_username_or_password_input_not_null">输入不能为空！</string>
+    <string name="login_admin_success">管理员登录成功！</string>
+    <string name="login_normal_user_success">登录成功！</string>
+    <string name="login_password_wrong">密码错误！</string>
+    <string name="login_username_not_exists">用户名不存在！</string>
+    <string name="login_sign_out_first">你已登录过，请先注销！</string>
+
+    <!--忘记密码界面ForgetPasswordActivity-->
+    <string name="title_forget_password_page">密码找回</string>
+    <string name="forget_password_verify">验      证</string>
+    <string name="forget_password_username_not_null">用户名不能为空！</string>
+    <string name="forget_password_reset_password">重    置    密    码</string>
+    <string name="forget_password_security_answer_not_null">密保答案不能为空！</string>
+    <string name="forget_password_security_answer_wrong">密保答案错误！</string>
+    <string name="forget_password_input_password">请输入密码！</string>
+    <string name="forget_password_reset_password_success">密码重置成功！</string>
+    <string name="forget_password_reset_password_failure">密码重置失败！</string>
+    <string name="forget_password_same">新密码不能为之前一次的旧密码！</string>
+
+    <!--简易计算界面CalculationActivity-->
+    <string name="title_calculation_page">简易计算</string>
+    <string name="calculation_who_teach_your_math">学过数学没？</string>
+    <string name="calculation_too_much_decimal">这么多小数想干嘛？</string>
+
+    <!--在线翻译界面TranslationActivity-->
+    <string name="title_translation_page">在线翻译</string>
+    <string name="translation_input">请输入内容，单词、短语、\r\n长句（中英皆可）</string>
+    <string name="translation_access_failure">翻译获取失败！</string>
+    <string name="translation_access_success">翻译获取成功！</string>
+    <string name="translation_no_internet">没有连接到网络！</string>
+
+
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="zero">0</string>
+    <string name="point">.</string>
+    <string name="del">del</string>
+
+    <string name="login_first">请先登录！</string>
+    <string name="admin_only">你没有管理员权限！</string>
+    <string name="delete_success">删除成功！</string>
+    <string name="delete_failure">删除失败！</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
 
     <string-array name="fun_array">
         <item>备忘</item>
@@ -175,11 +316,22 @@ Consectetuer luctus tempor elit ut dolor ligula, quis dui per dui hendrerit ante
 Quam libero nulla netus eu porta curae, ut nulla bibendum facilisis et urna sed, quis congue vestibulum aliquam interdum etiam. Nulla vel lobortis ullamcorper vitae excepturi, neque urna feugiat lectus vel lacinia, massa pretium orci eu metus neque vulputate. Imperdiet ac velit rhoncus nulla malesuada nullam, nec pulvinar justo gravida lorem rutrum magna, habitasse repudiandae mi eros vestibulum ante, nec euismod dui iaculis in turpis pretium, ac id metus egestas proin lacus lectus. Laoreet lorem nec vitae risus erat arcu, vitae quam ut in ante tristique, porta dolor pede quam et odio nam, arcu lacus sem congue ante cursus massa. Et mattis sagittis erat accumsan fusce quam, vehicula ligula beatae natoque fusce sodales conubia, habitasse metus cum magnis viverra nam cursus, egestas urna wisi primis blandit eu magna, eget libero elit lacus lorem dis aliquam. Ut mauris ante natoque lacus massa, justo a lectus sodales enim adipiscing id, accumsan ut ipsum vestibulum sed enim auctor, vitae congue tincidunt id phasellus lacinia scelerisque, tincidunt sapien nulla euismod volutpat iaculis. Platea sociis nec aliquet nec molestie, in mi et augue sapien in vivamus, integer fames proin vitae in ullamcorper et. Fringilla etiam sapiente rhoncus suspendisse nec id, lobortis cras eget egestas dui ac nec, justo lacus ut lorem bibendum quia eros, eget a gravida id donec nunc suscipit, porta sed in sodales non rutrum. Lectus vel dui elementum pellentesque magna aliquam, vitae non sit pede et fusce nibh, id id deserunt ornare dui sit condimentum, in adipiscing imperdiet turpis nam aliquet, facilisis metus magna lacus wisi facilisis tortor. Vulputate elit accumsan quam amet ligula, suspendisse lacus mi nonummy integer urna, libero nulla nunc varius in odio, laoreet nulla amet placerat amet nec. Consectetuer vel massa hendrerit vitae iaculis id, sed ut ut laudantium odio in, elit vestibulum duis ante maecenas interdum in, neque vehicula ultrices varius in quam, pede tellus pellentesque sed nullam quis.</string>
     <string name="snackbar_hint">知道了</string>
     <string name="buy">购买</string>
+    <string name="share_txt">欢迎使用“随心记”，希望每天都是好心情，您可以在腾讯应用宝下载</string>
+    <string name="share_app">分享-随心记</string>
+    <string name="alipay">18973089012</string>
+    <string name="license">Copyright 2016 SunDongXu  Licensed under the Apache License, Version 2.0 (the \"License\"); you
+        may not use this file except in compliance with the License. You may obtain a copy of the License at     http://www.apache.org/licenses/LICENSE-2.0  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</string>
+    <string name="app_html">https://github.com/sdx18973089012/personal-financing</string>
+    <string name="readme">https://github.com/sdx18973089012/personal-financing/blob/master/README.md</string>
+    <string name="github">https://github.com/sdx18973089012</string>
+    <string name="blog">http://blog.csdn.net/u011348727</string>
+    <string name="email">371211947@qq.com</string>
 
     <string-array name="param_days">
         <item>短线</item>
         <item>中线</item>
         <item>长线</item>
     </string-array>
+
 
 </resources>

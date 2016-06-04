@@ -55,26 +55,27 @@ public class UserManager {
 
     // 管理员可以通过该方法获取所有已注册用户，点击第三个tab的第三个功能卡片，只有管理员才可以跳转到对应Activity
     public ArrayList<User> getUserListFromDB(String selection) {
-        ArrayList<User> _userList = new ArrayList<User>();
+        ArrayList<User> userList = new ArrayList<User>();
         Cursor cursor = mSQLiteDB.query(UserSqliteHelper.USER, null, selection, null, null, null, "ID DESC");
         cursor.moveToFirst();
         while (!cursor.isAfterLast() && (cursor.getString(1) != null)) {
-            User _user = new User();
-            _user.setId(cursor.getInt(0));
-            _user.setName(cursor.getString(1));
-            _user.setPassword(cursor.getString(2));
-            _user.setPic(cursor.getString(3));
-            _user.setCreateTime(cursor.getString(4));
-            _user.setUpdateTime(cursor.getString(5));
-            _user.setQuestion(cursor.getString(6));
-            _user.setAnswer(cursor.getString(7));
-            _user.setBalance(cursor.getDouble(8));
-            _user.setSpecial(cursor.getInt(9));
-            _userList.add(_user);
+            User user = new User();
+            user.setId(cursor.getInt(0));
+            user.setName(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setPic(cursor.getString(3));
+            user.setCreateTime(cursor.getString(4));
+            user.setUpdateTime(cursor.getString(5));
+            user.setQuestion(cursor.getString(6));
+            user.setAnswer(cursor.getString(7));
+            user.setBalance(cursor.getDouble(8));
+            user.setBudget(cursor.getInt(9));
+            user.setSpecial(cursor.getInt(10));
+            userList.add(user);
             cursor.moveToNext();
         }
         cursor.close();
-        return _userList;
+        return userList;
     }
 
 //    public User getUserFromDB(String selection) {
@@ -90,25 +91,26 @@ public class UserManager {
 //    }
 
     public User getUserFromDB(String userName) {
-        User _user = new User();
-        boolean _isUserExist = false;
+        User user = new User();
+        boolean isUserExist = false;
         Cursor cursor = mSQLiteDB.query(UserSqliteHelper.USER, null, "NAME ='" + userName + "'", null, null, null, null);
-        _isUserExist = cursor.moveToFirst();
+        isUserExist = cursor.moveToFirst();
         while (!cursor.isAfterLast() && (cursor.getString(1) != null)) {
-            _user.setId(cursor.getInt(0));
-            _user.setName(cursor.getString(1));
-            _user.setPassword(cursor.getString(2));
-            _user.setPic(cursor.getString(3));
-            _user.setCreateTime(cursor.getString(4));
-            _user.setUpdateTime(cursor.getString(5));
-            _user.setQuestion(cursor.getString(6));
-            _user.setAnswer(cursor.getString(7));
-            _user.setBalance(cursor.getDouble(8));
-            _user.setSpecial(cursor.getInt(9));
+            user.setId(cursor.getInt(0));
+            user.setName(cursor.getString(1));
+            user.setPassword(cursor.getString(2));
+            user.setPic(cursor.getString(3));
+            user.setCreateTime(cursor.getString(4));
+            user.setUpdateTime(cursor.getString(5));
+            user.setQuestion(cursor.getString(6));
+            user.setAnswer(cursor.getString(7));
+            user.setBalance(cursor.getDouble(8));
+            user.setBudget(cursor.getInt(9));
+            user.setSpecial(cursor.getInt(10));
             cursor.moveToNext();
             cursor.close();
         }
-        return _isUserExist ? _user : null;
+        return isUserExist ? user : null;
     }
 
     public User getCurUser() {
@@ -151,15 +153,16 @@ public class UserManager {
         values.put(User.QUESTION, user.getQuestion());
         values.put(User.ANSWER, user.getAnswer());
         values.put(User.BALANCE, user.getBalance());
+        values.put(User.BUDGET, user.getBudget());
         values.put(User.IS_SPECIAL, user.isSpecial());
-        Long _newRowId = mSQLiteDB.insert(UserSqliteHelper.USER, User.NAME, values);
-        return _newRowId;
+        Long newRowId = mSQLiteDB.insert(UserSqliteHelper.USER, User.NAME, values);
+        return newRowId;
     }
 
     public int deleteUser(int id) {
         //delete
-        int _rowsAffectedByDelete = mSQLiteDB.delete(UserSqliteHelper.USER, "ID =" + id, null);
-        return _rowsAffectedByDelete;
+        int rowsAffectedByDelete = mSQLiteDB.delete(UserSqliteHelper.USER, "ID =" + id, null);
+        return rowsAffectedByDelete;
     }
 
     public int updateUserInfo(User user, int id) {
@@ -174,9 +177,10 @@ public class UserManager {
         values.put(User.QUESTION, user.getQuestion());
         values.put(User.ANSWER, user.getAnswer());
         values.put(User.BALANCE, user.getBalance());
+        values.put(User.BUDGET, user.getBudget());
         values.put(User.IS_SPECIAL, user.isSpecial());
-        int _rowsAffectedByUpdate = mSQLiteDB.update(UserSqliteHelper.USER, values, "ID ='" + id + "'", null);
-        return _rowsAffectedByUpdate;
+        int rowsAffectedByUpdate = mSQLiteDB.update(UserSqliteHelper.USER, values, "ID ='" + id + "'", null);
+        return rowsAffectedByUpdate;
     }
 
     // 登录失败的原因：（1）用户名或密码输入为空（2）用户名不存在（3）用户名存在，密码匹配失败
@@ -208,7 +212,8 @@ public class UserManager {
             mCurUser.setQuestion(cursor.getString(6));
             mCurUser.setAnswer(cursor.getString(7));
             mCurUser.setBalance(cursor.getDouble(8));
-            mCurUser.setSpecial(cursor.getInt(9));
+            mCurUser.setBudget(cursor.getInt(9));
+            mCurUser.setSpecial(cursor.getInt(10));
         }
         cursor.close();
         return flag;

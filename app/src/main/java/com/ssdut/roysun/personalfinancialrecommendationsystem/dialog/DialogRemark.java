@@ -24,7 +24,7 @@ public class DialogRemark extends Dialog implements View.OnClickListener {
 
     // flag标识转发还是评论，id标识当前微博的id，where标识从哪里启动该dialog，两个地方可以启动，home界面，和内容界面
     public DialogRemark(Context context, String beizhuString) {
-        super(context, R.style.maindialog);
+        super(context, R.style.main_dialog);
         this.mContext = context;
         View diaView = View.inflate(context, R.layout.dialog_beizhu, null);
         this.setContentView(diaView);

@@ -3,7 +3,6 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +16,10 @@ import android.widget.ListView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.MemoListAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.Animation3D;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.MemoManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.MemoSetPasswordDialog;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
@@ -36,7 +35,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     private LinearLayout mMenu;  // 主界面底部多选删除界面
     private Button mBtnSelectAll, mBtnDelete, mBtnCancelSelect;  // 多选、删除、取消选择三个按钮，包含在mMenu(linearLayout)
 
-    private Handler handler;
+    private Handler mHandler;
     private MemoManager mMemoManager;  // 创建数据库对象
 
     @Override
@@ -51,15 +50,14 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     protected void initData() {
         super.initData();
         mMemoListAdapter = new MemoListAdapter(this);
-        handler = new Handler();
+        mHandler = new Handler();
         mMemoManager = new MemoManager(this);
     }
 
     @Override
     protected void initView() {
         super.initView();
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null){
+        if (mToolbar != null) {
             mToolbar.setTitle("备忘");
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -88,7 +86,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
         mMemoListAdapter.initList();  //adapte构造函数中已经getList一次了，这里重复调用导致数据库两次遍历该memo表
         mMemoListAdapter.notifyDataSetChanged();
         overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-        mMemoList.setLayoutAnimation(DongHua3d.listDongHua());
+        mMemoList.setLayoutAnimation(Animation3D.listDongHua());
         super.onResume();
     }
 
@@ -103,9 +101,9 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // 获取点击的Item的Tag（Tag设置为id）
-        int content_id = (Integer) view.getTag();
+        int contentId = (Integer) view.getTag();
         Intent intent = new Intent(this, MemoAddActivity.class);
-        intent.putExtra("id", content_id);
+        intent.putExtra("id", contentId);
         startActivity(intent);
     }
 
@@ -142,7 +140,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
             mMemoListAdapter.isShowCheck = false;  //每一次多选框标志位置位操作之后才能执行notifyDataSetChanged() -> getView()更新视图
             mMemoListAdapter.isSelectAll = false;
             mMemoListAdapter.notifyDataSetChanged();
-            DongHuaYanChi.dongHuaEnd(mMenu, MemoMainActivity.this, handler, R.anim.jz_menu_down, 300);
+            AnimationDelay.dongHuaEnd(mMenu, MemoMainActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
         } else {
             ToastUtils.showMsg(this, "你还没有选择要删除项");
         }
@@ -153,7 +151,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
                 if (mMenu.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mMenu, MemoMainActivity.this, handler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mMenu, MemoMainActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                     mMemoListAdapter.isShowCheck = false;
                     mMemoListAdapter.notifyDataSetChanged();
                 } else {
@@ -189,14 +187,14 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
                 if (!mMenu.isShown()) {
                     if (MemoListAdapter.sMemoList != null && MemoListAdapter.sMemoList.size() > 0) {
                         mMenu.setVisibility(View.VISIBLE);
-                        mMenu.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_menu_up));
+                        mMenu.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_menu_appear));
                         mMemoListAdapter.isShowCheck = true;  //显示多选框
                         mMemoListAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtils.showMsg(this, "没有可选条目");
                     }
                 } else {
-                    DongHuaYanChi.dongHuaEnd(mMenu, MemoMainActivity.this, handler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mMenu, MemoMainActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                     mMemoListAdapter.isShowCheck = false;
                     mMemoListAdapter.notifyDataSetChanged();
                 }
@@ -205,18 +203,7 @@ public class MemoMainActivity extends BaseActivity implements View.OnClickListen
                 //设置密码
                 new MemoSetPasswordDialog(this);
                 break;
-            case android.R.id.home:
-                finish();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*
-     * 点击图片以后的动画效果
-     */
-    public void dongHua(View v) {
-        v.setAnimation(AnimationUtils.loadAnimation(this, R.anim.shake));
-    }
-
 }

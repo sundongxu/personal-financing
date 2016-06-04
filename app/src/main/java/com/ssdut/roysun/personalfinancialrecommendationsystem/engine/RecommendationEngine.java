@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.FinanceProduct;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Stock;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DecimalUtils;
 
@@ -24,12 +25,17 @@ import java.util.TreeMap;
 /**
  * Created by roysun on 16/5/13.
  * 推荐算法引擎
- * 股票推荐，基于乖离率BIAS：网络操作 + 本地计算 + 比较 +排序
+ * 股票推荐，基于乖离率BIAS：网络操作 + 本地计算 + 比较 + 排序
  * ① 网络操作：数据集：自选股列表 -> 自选股各自历史收盘价（6天内、12天内、24天内） -> 一次性获取每只自选股的过去24天的收盘价，得到一个double数组 -> 6天、12天、24天的收盘价平均值
  * ② 本地计算：指标计算：公式BIAS(n)=（当前价格－n日移动平均值）/ n日移动平均值
  * ③ 比较：将每只股票的对应天数内的乖离率和超卖标准值比较，符合要求的放入结果集合
+ * ④ 排序：按乖离率大小排序
  * <p/>
- * 产品推荐，基于余弦相似度COS
+ * 产品推荐，基于余弦相似度COS：数据库读取 + 本地计算 + 排序
+ * ① 数据库读取：数据集：理财产品列表（自行模拟）-> 四个重要指标：收益率、投资周期、起购金额、手续费率 -> 按各指标取值划分范围[1,4]，分别得到全部产品的4维指标向量（,,,）
+ * ② 本地计算：分别计算被选中的产品与剩余其它产品的指标向量余弦相似度
+ * ③ 排序：根据每个产品与选中产品的相似度余弦值进行排序，从大到小选取5个作为推荐结果
+ *
  */
 public class RecommendationEngine {
 
@@ -46,16 +52,20 @@ public class RecommendationEngine {
     public static final int NETWORK_FINISHED = 0;
 
     private Context mContext;
+
     private ArrayList<Stock> mStockList;
     private int mRequestSize;
     private TreeMap<String, Double> mMap;  // 每一只自选股对应其乖离率
     private Handler mHandler;
-    private ArrayList<Stock> mResultList;
+    private ArrayList<Stock> mStockResultList;
     private int count;  // 请求计数
+
+    private ArrayList<FinanceProduct> mProductList;
+    private ArrayList<FinanceProduct> mProductResultList;
 
     // RecommendationEngine for FinanceProducts，数据库操作 + 本地计算 + 排序
     public RecommendationEngine(Context context) {
-
+        mProductResultList = new ArrayList<FinanceProduct>();
     }
 
     // RecommendationEngine for Stocks，网络请求 + 本地计算 + 比较 + 排序
@@ -66,16 +76,29 @@ public class RecommendationEngine {
         Log.v(TAG, "请求数目=" + mRequestSize);
         mMap = new TreeMap<>();
         mHandler = handler;
-        mResultList = new ArrayList<>();
+        mStockResultList = new ArrayList<>();
         count = 0;
+    }
+
+    public ArrayList<FinanceProduct> getProductResultList(String productName) {
+        FinanceProduct _product = new FinanceProduct();
+        _product.setId(5);
+        _product.setName("盈盈乐");
+        _product.setType("债券型");
+        _product.setReturnRate(0.25);
+        _product.setInvestmentCircle(12);
+        _product.setMinPurchaseAmount(10000);
+        _product.setExtraFeePercentage(0.02);
+        mProductResultList.add(_product);
+        return mProductResultList;
     }
 
     public void sendRequest(int dayNum) {
         new NetWorkThread(dayNum).start();
     }
 
-    public ArrayList<Stock> getResultList() {
-//        Log.v(TAG, "getResultList() invoked!!! 依据天数：" + dayNum);
+    public ArrayList<Stock> getStockResultList() {
+//        Log.v(TAG, "getStockResultList() invoked!!! 依据天数：" + dayNum);
 //        // 另起一新线程处理网络耗时请求
 //        new NetWorkThread(dayNum).start();
 //        // 由自选股列表mStockList作为数据集生成推荐结List
@@ -89,7 +112,7 @@ public class RecommendationEngine {
 //        }
 //        sortByBias(_resultList);
 //        return _resultList;
-        return mResultList;
+        return mStockResultList;
     }
 
     // 雅虎股票接口
@@ -237,11 +260,11 @@ public class RecommendationEngine {
     public void onAllRequestFinished(int dayNum) {
         for (Stock _stock : mStockList) {
             if (isShouldRecommend(_stock, dayNum)) {
-                mResultList.add(_stock);
+                mStockResultList.add(_stock);
             }
         }
-        sortByBias(mResultList);
-        System.out.println("sdx---推荐列表股票数目=" + mResultList.size());
+        sortByBias(mStockResultList);
+        System.out.println("sdx---推荐列表股票数目=" + mStockResultList.size());
         mHandler.sendEmptyMessage(NETWORK_FINISHED);
     }
 

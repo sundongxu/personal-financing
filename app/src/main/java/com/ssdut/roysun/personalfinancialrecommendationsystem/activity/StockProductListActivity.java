@@ -15,7 +15,9 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.StockProductListAdapter;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.FinanceProduct;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Stock;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.FinanceProductManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.StockManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ViewUtils;
@@ -36,8 +38,15 @@ public class StockProductListActivity extends BaseActivity implements Observable
     private StockProductListAdapter mAdapter;
     private int mParallaxImageHeight;
 
+    private boolean mIsStock;
+
+    // 股票
     private StockManager mStockManager;
     private ArrayList<Stock> mStockList;
+
+    // 理财产品
+    private FinanceProductManager mProductManager;
+    private ArrayList<FinanceProduct> mProductList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,21 +61,41 @@ public class StockProductListActivity extends BaseActivity implements Observable
         super.initData();
         mContext = this;
         mParallaxImageHeight = ViewUtils.dip2px(this, 200);
-        mStockManager = StockManager.getInstance(this);
-        mStockList = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'");
+
+        int _listType = getIntent().getIntExtra("LIST_TYPE", 2);
+        if (_listType == 0) {
+            mIsStock = true;
+        } else if (_listType == 1) {
+            mIsStock = false;
+        } else {
+            // 参数错误直接finish当前页面
+            finish();
+        }
+
+        if (mIsStock) {
+            mStockManager = StockManager.getInstance(this);
+            mStockList = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'");
+        } else {
+            mProductManager = FinanceProductManager.getInstance(this);
+            mProductList = mProductManager.getProductListFromDB("");
+        }
     }
 
     @Override
     protected void initView() {
         super.initView();
         if (mToolbar != null) {
-            mToolbar.setTitle("自选股列表");  // 这里根据intent传来的参数判断是自选股列表还是
+            if (mIsStock) {
+                mToolbar.setTitle("自选股列表");  // 这里根据intent传来的参数判断是自选股列表还是
+            } else {
+                mToolbar.setTitle("理财产品列表");
+            }
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mToolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.holo_blue_bright)));
         mHeaderPic = (ImageView) findViewById(R.id.iv_bg_header_mylist);
-        mWatchedList = (ObservableListView) findViewById(R.id.ol_stock_recommendation_result_list);
+        mWatchedList = (ObservableListView) findViewById(R.id.ol_recommendation_result_list);
         mWatchedList.setScrollViewCallbacks(this);
         View paddingView = new View(this);
         AbsListView.LayoutParams lp =
@@ -74,20 +103,33 @@ public class StockProductListActivity extends BaseActivity implements Observable
         paddingView.setLayoutParams(lp);
         paddingView.setClickable(true);
         mWatchedList.addHeaderView(paddingView);
-        mAdapter = new StockProductListAdapter(this, mStockList, mStockManager);
+        if (mIsStock) {
+            mAdapter = new StockProductListAdapter(this, mStockList, mStockManager, null, null);
+        } else {
+            mAdapter = new StockProductListAdapter(this, null, null, mProductList, mProductManager);
+        }
         mWatchedList.setAdapter(mAdapter);
         mWatchedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 这里因为ListView有一个HeaderView，所以条目点击相应位置position从1开始
                 // 跳转到详情页
-                Intent _intent = new Intent(mContext, StockDetailActivity.class);
-                _intent.putExtra("CODE_SELECTED", mStockList.get(position - 1).getCode());
-                startActivity(_intent);
+                if (mIsStock) {
+                    Intent _intent = new Intent(mContext, StockDetailActivity.class);
+                    _intent.putExtra("CODE_SELECTED", mStockList.get(position - 1).getCode());
+                    startActivity(_intent);
+                } else {
+                    // 加载推荐引擎
+                    Intent _intent = new Intent(mContext, FinanceProductDetailActivity.class);
+                    _intent.putExtra("NAME_SELECTED", mProductList.get(position - 1).getName());
+                    startActivity(_intent);
+                }
             }
         });
         mListBackgroundView = findViewById(R.id.list_background);
-        Snackbar.make(mToolbar, "共计" + mStockList.size() + "只自选股加载成功！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+        if (mIsStock) {
+            Snackbar.make(mToolbar, "共计" + mStockList.size() + "只自选股加载成功！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+        }
     }
 
     @Override

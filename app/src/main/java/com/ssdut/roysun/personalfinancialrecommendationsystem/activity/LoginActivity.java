@@ -3,6 +3,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SharedPreferenceUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
@@ -56,6 +58,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     protected void initData() {
         super.initData();
         mContext = this;
+        mIsRememberMe = false;
     }
 
     @Override
@@ -63,7 +66,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.initView();
         mToolbar = (Toolbar) findViewById(R.id.tb_signin_toolbar);
         if (mToolbar != null) {
-            mToolbar.setTitle("");
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -134,7 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.btn_sign_in:
                 if (mUserManager.isSignIn() && mUserManager.getCurUser() != null) {
                     // 已经登录过，请先注销
-                    ToastUtils.showMsg(mContext, "你已登录过，请先注销！");
+                    ToastUtils.showMsg(mContext, R.string.login_sign_out_first);
                 } else {
 //                    String _userName = mUserNameView.getEditText().getText().toString();
                     String _userName = mUserNameView.getText().toString();
@@ -142,30 +144,32 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String _password = mPasswordView.getText().toString();
                     if (_userName.equals("") || _password.equals("")) {
                         if (_userName.equals("") && _password.equals("")) {
-                            ToastUtils.showMsg(mContext, "用户名和密码输入不能为空！");
+                            Snackbar.make(mToolbar, R.string.login_username_password_input_not_null, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         } else {
                             String _strNull = _userName.equals("") ? "用户名" : "密码";
-                            ToastUtils.showMsg(mContext, _strNull + "输入不能为空！");
+                            Snackbar.make(mToolbar, _strNull + mContext.getResources().getString(R.string.login_username_or_password_input_not_null), Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         }
                     } else {
                         // 用户名和密码均非空，登录操作
                         mUserManager.signIn(_userName, _password);
                         if (mUserManager.isSignIn()) {
                             if (mUserManager.isSpecialAccount() == 1) {
-                                ToastUtils.showMsg(mContext, "管理员登录成功！");
+                                ToastUtils.showMsg(mContext, R.string.login_admin_success);
                                 rememberUser();
                                 finish();
+                                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                             } else {
-                                ToastUtils.showMsg(mContext, "登录成功！");
+                                ToastUtils.showMsg(mContext, R.string.login_normal_user_success);
                                 rememberUser();
                                 finish();
+                                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                             }
                         } else {
                             //登录失败
                             if (mUserManager.isUserExists(_userName)) {
-                                ToastUtils.showMsg(mContext, "密码错误！");
+                                Snackbar.make(mToolbar, R.string.login_password_wrong, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             } else {
-                                ToastUtils.showMsg(mContext, "用户名不存在！");
+                                Snackbar.make(mToolbar, R.string.login_username_not_exists, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             }
                         }
                     }
@@ -183,10 +187,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void rememberUser() {
         if (mIsRememberMe) {
             SharedPreferenceUtils.addToList(mContext,
-//                    Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN, mUserNameView.getEditText().getText().toString());
                     Utils.LOGIN_HISTORY, Utils.USERNAME_LAST_LOGIN, mUserNameView.getText().toString());
             SharedPreferenceUtils.addToList(mContext,
-//                    Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN, mPasswordView.getEditText().getText().toString());
                     Utils.LOGIN_HISTORY, Utils.PASSWORD_LAST_LOGIN, mPasswordView.getText().toString());
 
         }
@@ -206,6 +208,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 }

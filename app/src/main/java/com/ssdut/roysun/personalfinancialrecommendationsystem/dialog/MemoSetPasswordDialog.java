@@ -14,13 +14,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.JournalSqliteHelper;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
 
 /**
  * Created by roysun on 16/3/12.
+ *
  */
 public class MemoSetPasswordDialog extends Dialog implements View.OnClickListener {
+    public static final String BWMIMA = "BWMIMA";
+    //密码  和密码标识
+    int mi = 0, tempmi = 0;
     //密码输入框
     private EditText mima1, mima2;
     //设置密码标题
@@ -32,12 +36,9 @@ public class MemoSetPasswordDialog extends Dialog implements View.OnClickListene
     //Dialog的View
     private View diaView;
     private Handler handler;
-    public static final String BWMIMA = "BWMIMA";
-    //密码  和密码标识
-    int mi = 0, tempmi = 0;
 
     public MemoSetPasswordDialog(Context context) {
-        super(context, R.style.maindialog);
+        super(context, R.style.main_dialog);
         this.context = context;
         handler = new Handler();
         diaView = View.inflate(context, R.layout.dialog_bwmima, null);
@@ -91,7 +92,7 @@ public class MemoSetPasswordDialog extends Dialog implements View.OnClickListene
                     tempmi = mi;
                     JournalSqliteHelper.saveBudget(context, BWMIMA, BWMIMA, mi);
                     title.setText("修改或删除密码");
-                    DongHuaYanChi.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
+                    AnimationDelay.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
                     showMsg("加密成功");
                     mima1.setText("");
                     mima2.setText("");
@@ -121,13 +122,13 @@ public class MemoSetPasswordDialog extends Dialog implements View.OnClickListene
                 mima1.setText("");
                 mima2.setText("");
                 showMsg("删除成功");
-                DongHuaYanChi.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
+                AnimationDelay.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
                 break;
             case R.id.dialog_bwmima_quxiao_bt:
                 mima1.setText("");
                 mima2.setText("");
                 tempmi = -1;
-                DongHuaYanChi.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
+                AnimationDelay.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
                 break;
         }
     }
@@ -137,7 +138,7 @@ public class MemoSetPasswordDialog extends Dialog implements View.OnClickListene
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 //dialog退出动画
-                DongHuaYanChi.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
+                AnimationDelay.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
                 return false;
         }
         return super.onKeyDown(keyCode, event);

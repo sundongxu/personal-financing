@@ -14,7 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.ImageDownloadHandler;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.network.service.ImageDownloadHandler;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 
 import org.apache.http.HttpEntity;

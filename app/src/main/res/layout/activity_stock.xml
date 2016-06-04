@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/bg_3">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/bg_3">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -16,9 +16,8 @@
             android:layout_marginLeft="27dp"
             android:layout_marginRight="27dp"
             android:layout_marginTop="45dp"
-            android:background="@drawable/bw_new_et_bg_1"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <EditText
             android:id="@+id/et_stock_code"
@@ -27,9 +26,8 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bw_new_et_bg_1"
             android:hint="@string/stockapp4"
-            android:text="@string/stockapp1" />
+            android:text="@string/stockapp1"/>
 
         <Button
             android:id="@+id/btn_stock_query"
@@ -40,7 +38,7 @@
             android:layout_marginRight="50dp"
             android:layout_marginTop="50dp"
             android:background="@drawable/wz_mian_dingwei_selector"
-            android:text="@string/stockapp2" />
+            android:text="@string/stockapp2"/>
 
         <ImageView
             android:id="@+id/iv_stock_pic"
@@ -49,8 +47,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="25dp"
-            android:background="@drawable/bw_new_et_bg_1" />
+            android:layout_marginTop="25dp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_1"
@@ -61,7 +58,7 @@
             android:layout_marginRight="45dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_2"
@@ -71,7 +68,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_3"
@@ -80,7 +77,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_4"
@@ -89,7 +86,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_5"
@@ -99,7 +96,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_6"
@@ -109,7 +106,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_7"
@@ -119,7 +116,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_8"
@@ -129,7 +126,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_9"
@@ -138,7 +135,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_10"
@@ -147,7 +144,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_11"
@@ -156,7 +153,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_12"
@@ -165,7 +162,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_13"
@@ -174,7 +171,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_14"
@@ -183,7 +180,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_15"
@@ -192,7 +189,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_16"
@@ -201,7 +198,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_17"
@@ -210,7 +207,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_18"
@@ -219,7 +216,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_19"
@@ -228,7 +225,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_20"
@@ -237,7 +234,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_21"
@@ -246,7 +243,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_22"
@@ -255,7 +252,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_23"
@@ -264,7 +261,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_24"
@@ -273,7 +270,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_25"
@@ -282,7 +279,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_26"
@@ -291,7 +288,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_27"
@@ -300,7 +297,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_28"
@@ -309,7 +306,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_29"
@@ -318,7 +315,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_30"
@@ -327,7 +324,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_31"
@@ -336,7 +333,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_32"
@@ -345,7 +342,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_stock_info_33"
@@ -354,7 +351,7 @@
             android:layout_marginLeft="45dp"
             android:layout_marginRight="45dp"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </LinearLayout>
 
 </ScrollView>

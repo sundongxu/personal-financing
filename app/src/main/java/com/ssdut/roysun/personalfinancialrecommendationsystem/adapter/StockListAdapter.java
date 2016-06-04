@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockDetailActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Stock;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMovedListener;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectedListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMoveListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnStartDragListener;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
  * Created by roysun on 16/5/18.
  * 股票主界面自选股列表 -> 跟当前用户绑定
  */
-public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.StockItemViewHolder> implements OnItemTouchHelperSelectedListener {
+public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.StockItemViewHolder> implements OnItemTouchHelperMoveListener {
 
     public static final String TAG = "StockListAdapter";
 
@@ -136,7 +136,7 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Stoc
         void onStockRemoved(Stock stock);
     }
 
-    public class StockItemViewHolder extends RecyclerView.ViewHolder implements OnItemTouchHelperMovedListener {
+    public class StockItemViewHolder extends RecyclerView.ViewHolder implements OnItemTouchHelperSelectListener {
 
         public LinearLayout mItemArea;
         public TextView mNameText;
@@ -147,7 +147,7 @@ public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.Stoc
         public StockItemViewHolder(View v) {
             super(v);
             mItemArea = (LinearLayout) v.findViewById(R.id.ll_stock_item);
-            mNameText = (TextView) v.findViewById(R.id.tv_stock_watched_name);
+            mNameText = (TextView) v.findViewById(R.id.tv_watched_name);
             mNowPriceText = (TextView) v.findViewById(R.id.tv_stock_now_price);
             mIncreasePercentageText = (TextView) v.findViewById(R.id.tv_stock_increase_percentage);
             mIncreaseAmountText = (TextView) v.findViewById(R.id.tv_stock_increase_amount);

@@ -80,8 +80,8 @@ public class JournalItem {
     public static final String REIMBURSEMENT = "报销";
     public static final String OTHERS = "其他";
     //借贷项目
-    public static final String BORROW = "借入";
-    public static final String LEND = "借出";
+    public static final String BORROWING = "借入";
+    public static final String LENDING = "借出";
     public static final String PAYMENT = "还款";
     public static final String RECEIVEMENT = "收款";
     public static String sMeal[] = new String[]{MEAL_BREAKFAST, MEAL_LUNCH, MEAL_SUPPER, MEAL_MIDNIGHT_SNACK, MEAL_SNACK, MEAL_INGREDIENT, MEAL_OTHERS};
@@ -94,5 +94,5 @@ public class JournalItem {
     public static String sFavorContact[] = new String[]{FAVOR_CONTACT_GIFT, FAVOR_CONTACT_ITEM, FAVOR_CONTACT_PAYMENT_FOR_OTHERS, FAVOR_CONTACT_DONATION_FOR_CHARITY, FAVOR_CONTACT_OTHERS};
     public static String sExpenseCategory[] = new String[]{MEAL, TRAFFIC, SHOPPING, ENTERTAINMENT, MEDITATION_EDUCATION, DAILY_EXPENSE, INVESTMENT, FAVOR_CONTACT};
     public static String sIncomeCategory[] = new String[]{SALARY, STOCK, BONUS, INTERESTS, DIVIDEND, SUBSIDY, REIMBURSEMENT, OTHERS};
-    public static String sCreditDebitCategory[] = new String[]{BORROW, LEND, PAYMENT, RECEIVEMENT};
+    public static String sCreditDebitCategory[] = new String[]{BORROWING, LENDING, PAYMENT, RECEIVEMENT};
 }

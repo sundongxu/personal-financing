@@ -18,7 +18,7 @@
         android:background="@android:color/white"/>
 
     <com.github.ksoichiro.android.observablescrollview.ObservableListView
-        android:id="@+id/ol_stock_recommendation_result_list"
+        android:id="@+id/ol_recommendation_result_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

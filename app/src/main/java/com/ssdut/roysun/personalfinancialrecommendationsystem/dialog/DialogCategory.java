@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.JournalAddActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal.JournalCategoryAdapter;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.Animation3D;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 
 /**
  * Created by roysun on 16/3/12.
@@ -48,13 +48,13 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
         //类别列表
         mCategoryList = (ListView) mCategoryView.findViewById(R.id.leibie_dialog_list);
         mCategoryList.setAdapter(mJournalCategoryAdapter);
-        mCategoryList.setOnItemClickListener(new clickItem());
+        mCategoryList.setOnItemClickListener(new ItemClickListener());
         //类别子类列表
         mSubCategoryList = (ListView) mCategoryView.findViewById(R.id.leibie_dialog_sub_list);
         mSubCategoryList.setVisibility(View.GONE);
         mTopLayout = (RelativeLayout) mCategoryView.findViewById(R.id.leibie_dialog_rl);
         mTopLayout.setOnClickListener(this);
-        this.show();
+        show();
         mCategoryView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.push_up_in));
     }
 
@@ -65,7 +65,7 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
     public void getTextandSend(View view) {
         String string = (String) view.getTag();
         //dialog退出动画
-        DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
+        AnimationDelay.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
         Message msg = Message.obtain();
         msg.what = JournalAddActivity.CATEGORY_MSG;
         msg.obj = string;//发送当前选择给ToolsJiZhangAddActivity，让其界面作出相应改变
@@ -78,17 +78,17 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK: {
                 if (mCategoryView.isShown()) {
-                    DongHuaYanChi.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
+                    AnimationDelay.dongHuaDialogEnd(this, mCategoryView, mContext, mHandler, R.anim.push_up_out, 300);
                     return false;
                 } else {
-                    this.cancel();
+                    cancel();
                 }
             }
         }
         return super.onKeyDown(keyCode, keyEvent);
     }
 
-    private class clickItem implements AdapterView.OnItemClickListener {
+    private class ItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (mNowFlag == JournalAddActivity.EXPENDITURE) {
@@ -105,10 +105,10 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
                     //子list进入动画
                     mSubCategoryList.setAnimation(AnimationUtils.loadAnimation(mContext, R.anim.push_left_in));
                     mSubCategoryList.setVisibility(View.VISIBLE);
-                    mSubCategoryList.setLayoutAnimation(DongHua3d.listDongHua());
+                    mSubCategoryList.setLayoutAnimation(Animation3D.listDongHua());
                 }
                 mFlagShow = _categoryStr;
-                mSubCategoryList.setOnItemClickListener(new clickSubItem());
+                mSubCategoryList.setOnItemClickListener(new SubItemClickListener());
             } else if (mNowFlag == JournalAddActivity.INCOME) {
                 getTextandSend(view);
             } else if (mNowFlag == JournalAddActivity.CREDIT_DEBIT) {
@@ -117,10 +117,8 @@ public class DialogCategory extends Dialog implements View.OnClickListener {
         }
     }
 
-    /*
-     * 子条目点击事件
-     * */
-    private class clickSubItem implements AdapterView.OnItemClickListener {
+    // 子条目点击事件
+    private class SubItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             getTextandSend(view);

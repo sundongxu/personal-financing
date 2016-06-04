@@ -30,12 +30,13 @@ public class JournalDetailAdapter extends BaseAdapter {
     private JournalManager mJournalManager;  //数据库操作
 
     public JournalDetailAdapter(Context context) {
-        this.mContext = context;
-        mJournalManager = new JournalManager(context);
+        mContext = context;
+        mJournalManager = JournalManager.getInstance(mContext);
     }
 
     /**
      * 根据传入的参数获取相应的集合
+     *
      * @param year
      * @param month
      * @param day
@@ -43,30 +44,30 @@ public class JournalDetailAdapter extends BaseAdapter {
      * @return 返回由年月组成的日期内的总支出和总收入两个元素的double数组
      */
     public double[] getList(int year, int month, int day, int flag) {
-        this.mFlag = flag;
-        double _expenditureSum = 0, _incomeSum = 0;
+        mFlag = flag;
+        double expenditureSum = 0, incomeSum = 0;
 
-        ArrayList<Expenditure> _expenditureList;
+        ArrayList<Expenditure> expenditureList;
         //支出 选择条件
-        String _expenditureSelection = Expenditure.YEAR + "=" + year + " and " + Expenditure.MONTH + "=" + month;
-        _expenditureList = mJournalManager.getExpenditureListFromDB(_expenditureSelection);
-        for (Expenditure _expenditure : _expenditureList) {
-            _expenditureSum += _expenditure.getAmount();
+        String expenditureSelection = Expenditure.YEAR + "=" + year + " and " + Expenditure.MONTH + "=" + month;
+        expenditureList = mJournalManager.getExpenditureListFromDB(expenditureSelection);
+        for (Expenditure _expenditure : expenditureList) {
+            expenditureSum += _expenditure.getAmount();
         }
 
-        ArrayList<Income> _incomeList;
+        ArrayList<Income> incomeList;
         //收入 选择条件
-        String _incomeSelection = Income.YEAR + "=" + year + " and " + Income.MONTH + "=" + month;
-        _incomeList = mJournalManager.getIncomeListFromDB(_incomeSelection);
-        for (Income _income : _incomeList) {
-            _incomeSum += _income.getAmount();
+        String incomeSelection = Income.YEAR + "=" + year + " and " + Income.MONTH + "=" + month;
+        incomeList = mJournalManager.getIncomeListFromDB(incomeSelection);
+        for (Income income : incomeList) {
+            incomeSum += income.getAmount();
         }
         if (flag == JournalDetailActivity.EXPENDITURE_FLAG) {
-            sDetailList = _expenditureList;
+            sDetailList = expenditureList;
         } else if (flag == JournalDetailActivity.INCOME_FLAG) {
-            sDetailList = _incomeList;
+            sDetailList = incomeList;
         }
-        return new double[]{_expenditureSum, _incomeSum};
+        return new double[]{expenditureSum, incomeSum};
     }
 
     @Override
@@ -87,30 +88,30 @@ public class JournalDetailAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = LayoutInflater.from(mContext).inflate(R.layout.journal_detail_list_item, null);
-        Expenditure _expenditure;
-        Income _income;
-        TextView _itemCategory = (TextView) convertView.findViewById(R.id.tv_item_category);
-        TextView _itemAmount = (TextView) convertView.findViewById(R.id.tv_item_amount);
-        TextView _itemRemark = (TextView) convertView.findViewById(R.id.tv_item_remark);
-        TextView _itemTime = (TextView) convertView.findViewById(R.id.tv_item_time);
+        Expenditure expenditure;
+        Income income;
+        TextView itemCategory = (TextView) convertView.findViewById(R.id.tv_item_category);
+        TextView itemAmount = (TextView) convertView.findViewById(R.id.tv_item_amount);
+        TextView itemRemark = (TextView) convertView.findViewById(R.id.tv_item_remark);
+        TextView itemTime = (TextView) convertView.findViewById(R.id.tv_item_time);
         if (mFlag == JournalDetailActivity.EXPENDITURE_FLAG) {
-            _expenditure = (Expenditure) sDetailList.get(position);
-            convertView.setTag(_expenditure);
-            if (_expenditure.getSubCategory().length() > 0) {
-                _itemCategory.setText(_expenditure.getCategory() + ">" + _expenditure.getSubCategory());
+            expenditure = (Expenditure) sDetailList.get(position);
+            convertView.setTag(expenditure);
+            if (expenditure.getSubCategory().length() > 0) {
+                itemCategory.setText(expenditure.getCategory() + ">" + expenditure.getSubCategory());
             } else {
-                _itemCategory.setText(_expenditure.getCategory());
+                itemCategory.setText(expenditure.getCategory());
             }
-            _itemAmount.setText(_expenditure.getAmount() + "");
-            _itemRemark.setText(_expenditure.getRemark());
-            _itemTime.setText(_expenditure.getDay() + "日 " + _expenditure.getTime());
+            itemAmount.setText(expenditure.getAmount() + "");
+            itemRemark.setText(expenditure.getRemark());
+            itemTime.setText(expenditure.getDay() + "日 " + expenditure.getTime());
         } else if (mFlag == JournalDetailActivity.INCOME_FLAG) {
-            _income = (Income) sDetailList.get(position);
-            convertView.setTag(_income);
-            _itemCategory.setText(_income.getCategory());
-            _itemAmount.setText(_income.getAmount() + "");
-            _itemRemark.setText(_income.getRemark());
-            _itemTime.setText(_income.getDay() + "日 " + _income.getTime());
+            income = (Income) sDetailList.get(position);
+            convertView.setTag(income);
+            itemCategory.setText(income.getCategory());
+            itemAmount.setText(income.getAmount() + "");
+            itemRemark.setText(income.getRemark());
+            itemTime.setText(income.getDay() + "日 " + income.getTime());
         }
         return convertView;
     }

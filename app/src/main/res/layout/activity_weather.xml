@@ -19,7 +19,6 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/bw_new_et_bg_1"
             android:hint="@string/tq_chengshi"
             android:visibility="visible">
 

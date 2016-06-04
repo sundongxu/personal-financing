@@ -8,9 +8,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,8 +22,9 @@ import android.widget.ListAdapter;
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.PicUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
@@ -79,7 +80,7 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     protected void initView() {
         super.initView();
         if (mToolbar != null) {
-            mToolbar.setTitle("用户注册");  // 继承自父类的通用toolbar
+            mToolbar.setTitle(R.string.title_register_page);  // 继承自父类的通用toolbar
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -175,17 +176,6 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.civ_user_icon:
@@ -221,33 +211,34 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.btn_register:
-                String _userName = mUserNameView.getEditText().getText().toString();
-                String _password = mPasswordView.getEditText().getText().toString();
-                String _pic = mPicPath;
-                String _createTime = TimeUtils.getYear() + "." + TimeUtils.getMonth() + "." + TimeUtils.getDay();
-                String _updateTime = _createTime;
-                String _securityQuestion = mSecurityQuestionView.getEditText().getText().toString();
-                String _securityAnswer = mSecurityAnswerView.getEditText().getText().toString();
-                int _isSpecial = mIsSpecialAccount;
-                if (mUserManager.isUserExists(_userName)) {
-                    ToastUtils.showMsg(mContext, "用户名已存在！");
+                String userName = mUserNameView.getEditText().getText().toString();
+                String password = mPasswordView.getEditText().getText().toString();
+                String pic = mPicPath;
+                String createTime = TimeUtils.getYear() + "." + TimeUtils.getMonth() + "." + TimeUtils.getDay();
+                String updateTime = createTime;
+                String securityQuestion = mSecurityQuestionView.getEditText().getText().toString();
+                String securityAnswer = mSecurityAnswerView.getEditText().getText().toString();
+                int isSpecial = mIsSpecialAccount;
+                if (mUserManager.isUserExists(userName)) {
+                    Snackbar.make(mToolbar, R.string.username_already_exists, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 } else {
-                    User _user = new User();
-                    _user.setName(_userName);
-                    _user.setPassword(_password);
-                    _user.setPic(_pic);
-                    _user.setCreateTime(_createTime);
-                    _user.setUpdateTime(_updateTime);
-                    _user.setQuestion(_securityQuestion);
-                    _user.setAnswer(_securityAnswer);
-                    _user.setBalance(0.0);
-                    _user.setSpecial(_isSpecial);
-                    if (mUserManager.register(_user) != -1) {
-                        ToastUtils.showMsg(mContext, "注册成功！");
-                        finish();
+                    User user = new User();
+                    user.setName(userName);
+                    user.setPassword(password);
+                    user.setPic(pic);
+                    user.setCreateTime(createTime);
+                    user.setUpdateTime(updateTime);
+                    user.setQuestion(securityQuestion);
+                    user.setAnswer(securityAnswer);
+                    user.setBalance(0.0);
+                    user.setBudget(0);
+                    user.setSpecial(isSpecial);
+                    if (mUserManager.register(user) != -1) {
+                        ToastUtils.showMsg(mContext, R.string.register_success);
+                        finishSelf();
                     } else {
                         //数据库insert操作出错
-                        ToastUtils.showMsg(mContext, "注册失败！");
+                        Snackbar.make(mToolbar, R.string.register_failure, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                     }
                 }
                 break;
@@ -257,32 +248,32 @@ public class RegisterActivity extends PicBaseActivity implements View.OnClickLis
     //接收图片信息，更改用户头像
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File _file;
-        Bitmap _bmp;
+        File file;
+        Bitmap bmp;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PHOTO_FROM_CAMERA:  // 获取拍摄的文件
                     mPicPath = captureFile.getAbsolutePath();
-                    _file = new File(mPicPath);
-                    _bmp = PicUtils.decodeFileAndCompress(_file);
-                    mUserIconView.setImageBitmap(_bmp);
+                    file = new File(mPicPath);
+                    bmp = PicUtils.decodeFileAndCompress(file);
+                    mUserIconView.setImageBitmap(bmp);
                     break;
                 case PHOTO_FROM_DATA:  // 获取从图库选择的文件
                     Uri uri = data.getData();
                     String scheme = uri.getScheme();
                     if (scheme.equalsIgnoreCase("file")) {
                         mPicPath = uri.getPath();
-                        _file = new File(mPicPath);
-                        _bmp = PicUtils.decodeFileAndCompress(_file);
-                        mUserIconView.setImageBitmap(_bmp);
+                        file = new File(mPicPath);
+                        bmp = PicUtils.decodeFileAndCompress(file);
+                        mUserIconView.setImageBitmap(bmp);
                     } else if (scheme.equalsIgnoreCase("content")) {
                         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                         if (cursor != null) {
                             cursor.moveToFirst();
                             mPicPath = cursor.getString(1);
-                            _file = new File(mPicPath);
-                            _bmp = PicUtils.decodeFileAndCompress(_file);
-                            mUserIconView.setImageBitmap(_bmp);
+                            file = new File(mPicPath);
+                            bmp = PicUtils.decodeFileAndCompress(file);
+                            mUserIconView.setImageBitmap(bmp);
                         }
                     }
                     break;

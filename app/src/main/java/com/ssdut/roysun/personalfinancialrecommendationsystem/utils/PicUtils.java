@@ -3,8 +3,6 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.utils;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

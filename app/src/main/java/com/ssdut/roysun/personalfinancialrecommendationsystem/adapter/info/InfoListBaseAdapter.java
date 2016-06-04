@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMovedListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectListener;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,20 @@ public class InfoListBaseAdapter extends RecyclerView.Adapter<InfoListBaseAdapte
     public static final int INFO_DEVICE_ = 7311;
 
     // 应用信息
-    public static final int INFO_APP_ = 7411;
+    public static final int INFO_APP_INTRODUCTION = 7411;
+    public static final int INFO_APP_VERSION = 7412;
+    public static final int INFO_APP_RECOMMENDATION = 7421;
+    public static final int INFO_APP_STAR = 7422;
+    public static final int INFO_APP_ENCOURAGE = 7423;
+    public static final int INFO_APP_AUTHOR = 7431;
+    public static final int INFO_APP_BLOG = 7432;
+    public static final int INFO_APP_GITHUB = 7433;
+    public static final int INFO_APP_EMAIL = 7434;
+    public static final int INFO_APP_COPYRIGHT = 7441;
+    public static final int INFO_APP_STOCK_SOURCE = 7442;
+    public static final int INFO_APP_WEATHER_SOURCE = 7443;
+    public static final int INFO_APP_TRANSLATION_SOURCE = 7444;
+    public static final int INFO_APP_PIC_SOURCE = 7445;
 
     public ArrayList<Integer> mInfoIconList = new ArrayList<>();
     public ArrayList<String> mInfoTitleList = new ArrayList<>();
@@ -79,7 +92,7 @@ public class InfoListBaseAdapter extends RecyclerView.Adapter<InfoListBaseAdapte
         return viewHolder;
     }
 
-    public class InfoItemViewHolder extends RecyclerView.ViewHolder implements OnItemTouchHelperMovedListener {
+    public class InfoItemViewHolder extends RecyclerView.ViewHolder implements OnItemTouchHelperSelectListener {
         // 用户信息条目内容
         public RelativeLayout mItemArea;
         public ImageView mItemIcon;

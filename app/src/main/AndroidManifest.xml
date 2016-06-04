@@ -206,11 +206,11 @@
 
         <!-- Service -->
         <service
-            android:name=".service.WeatherService"
+            android:name=".network.service.WeatherService"
             android:enabled="true"
             android:exported="true"/>
         <service
-            android:name=".service.TranslationService"
+            android:name=".network.service.TranslationService"
             android:enabled="true"
             android:exported="true"/>
 
@@ -262,6 +262,11 @@
         <activity
             android:name=".activity.InvestmentSimulationActivity"
             android:label="模拟投资"
+            android:theme="@style/MyAppTheme">
+        </activity>
+        <activity
+            android:name=".activity.FinanceProductDetailActivity"
+            android:label="产品详情"
             android:theme="@style/MyAppTheme">
         </activity>
     </application>

@@ -59,8 +59,6 @@ public class SharedPreferenceUtils {
 
         // 不应该删除吧，应该删除第一个加入list的item
         if (list.size() > MAX_SIZE) {
-//            list.clear();
-//            deleteList(context, fileName);
             list.remove(0);
         }
 
