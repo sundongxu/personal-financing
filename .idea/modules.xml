@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PersonalFinancialRecommendationSystem 6.iml" filepath="$PROJECT_DIR$/PersonalFinancialRecommendationSystem 6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PersonalFinancialApp.iml" filepath="$PROJECT_DIR$/PersonalFinancialApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/ahbottomnavigation/ahbottomnavigation.iml" filepath="$PROJECT_DIR$/ahbottomnavigation/ahbottomnavigation.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
