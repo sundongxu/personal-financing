@@ -40,6 +40,7 @@ public class AppInfoActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         mContext = this;
+        // hahah 
     }
 
     @Override
