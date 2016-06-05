@@ -9,7 +9,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 
 /**
  * Created by roysun on 16/3/12.
@@ -21,7 +21,7 @@ public class DialogAbout extends Dialog {
 
     // flag标识转发还是评论，id标识当前微博的id，where标识从哪里启动该dialog，两个地方可以启动，home界面，和内容界面
     public DialogAbout(Context context, String text) {
-        super(context, R.style.maindialog);
+        super(context, R.style.main_dialog);
         this.context = context;
         handler = new Handler();
         diaView = View.inflate(context, R.layout.dialog_about, null);
@@ -38,7 +38,7 @@ public class DialogAbout extends Dialog {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                DongHuaYanChi.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
+                AnimationDelay.dongHuaDialogEnd(this, diaView, context, handler, R.anim.push_up_out, 300);
                 return false;
         }
         return super.onKeyDown(keyCode, event);

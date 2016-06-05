@@ -11,6 +11,7 @@ import android.widget.ListView;
  */
 public class Utils {
 
+    // 主界面搜索框搜索历史功能
     public static final String SEARCH_HISTORY = "HISTORY_RECORD";
     public static final String SEARCH_CONTENT = "SEARCH_CONTENT";
     // 登录界面“记住我功能

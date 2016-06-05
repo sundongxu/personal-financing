@@ -21,26 +21,26 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMovedListener;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectedListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMoveListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectListener;
 
 /**
  * An implementation of {@link ItemTouchHelper.Callback} that enables basic drag & drop and
  * swipe-to-dismiss. Drag events are automatically started by an item long-press.<br/>
  * </br/>
  * Expects the <code>RecyclerView.Adapter</code> to listen for {@link
- * OnItemTouchHelperSelectedListener} callbacks and the <code>RecyclerView.ViewHolder</code> to implement
- * {@link OnItemTouchHelperMovedListener}.
+ * OnItemTouchHelperMoveListener} callbacks and the <code>RecyclerView.ViewHolder</code> to implement
+ * {@link OnItemTouchHelperSelectListener}.
  *
- * @author Paul Burke (ipaulpro)
+ * @author Roysun
  */
 public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public static final float ALPHA_FULL = 1.0f;
 
-    private final OnItemTouchHelperSelectedListener mAdapter;
+    private final OnItemTouchHelperMoveListener mAdapter;
 
-    public ItemTouchHelperCallback(OnItemTouchHelperSelectedListener adapter) {
+    public ItemTouchHelperCallback(OnItemTouchHelperMoveListener adapter) {
         mAdapter = adapter;
     }
 
@@ -101,9 +101,9 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // We only want the active item to change
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            if (viewHolder instanceof OnItemTouchHelperMovedListener) {
+            if (viewHolder instanceof OnItemTouchHelperSelectListener) {
                 // Let the view holder know that this item is being moved or dragged
-                OnItemTouchHelperMovedListener itemViewHolder = (OnItemTouchHelperMovedListener) viewHolder;
+                OnItemTouchHelperSelectListener itemViewHolder = (OnItemTouchHelperSelectListener) viewHolder;
                 itemViewHolder.onItemSelected();
             }
         }
@@ -117,9 +117,9 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
         viewHolder.itemView.setAlpha(ALPHA_FULL);
 
-        if (viewHolder instanceof OnItemTouchHelperMovedListener) {
+        if (viewHolder instanceof OnItemTouchHelperSelectListener) {
             // Tell the view holder it's time to restore the idle state
-            OnItemTouchHelperMovedListener itemViewHolder = (OnItemTouchHelperMovedListener) viewHolder;
+            OnItemTouchHelperSelectListener itemViewHolder = (OnItemTouchHelperSelectListener) viewHolder;
             itemViewHolder.onItemClear();
         }
     }

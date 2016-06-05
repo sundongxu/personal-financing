@@ -1,6 +1,7 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,8 @@ import android.widget.LinearLayout;
 import com.iangclifton.android.floatlabel.FloatLabel;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 /**
  * Created by roysun on 16/4/29.
@@ -56,7 +57,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     protected void initView() {
         super.initView();
         if (mToolbar != null) {
-            mToolbar.setTitle("找回密码 -> 密保方式");  // 继承自父类的通用toolbar
+            mToolbar.setTitle(R.string.title_forget_password_page);  // 继承自父类的通用toolbar
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -147,12 +148,12 @@ public class ForgetPasswordActivity extends BaseActivity {
                             mUserNameView.setLabel("");
                             mSecurityQuestionArea.setVisibility(View.VISIBLE);
                             mSecurityAnswerArea.setVisibility(View.VISIBLE);
-                            mButton.setText("验      证");
+                            mButton.setText(R.string.forget_password_verify);
                         } else {
-                            ToastUtils.showMsg(mContext, "用户名不存在！");
+                            Snackbar.make(mToolbar, R.string.login_username_not_exists, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         }
                     } else {
-                        ToastUtils.showMsg(mContext, "用户名不能为空！");
+                        Snackbar.make(mToolbar, R.string.forget_password_username_not_null, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                     }
                 } else if (mPasswordArea.getVisibility() == View.GONE) {
                     String _securityAnswer = mSecurityAnswerView.getEditText().getText().toString();
@@ -162,11 +163,11 @@ public class ForgetPasswordActivity extends BaseActivity {
                         mSecurityAnswerView.setLabel("");
                         mPasswordArea.setVisibility(View.VISIBLE);
                         mPasswordRepeatArea.setVisibility(View.VISIBLE);
-                        mButton.setText("重    置    密    码");
+                        mButton.setText(R.string.forget_password_reset_password);
                     } else if (_securityAnswer.equals("")) {
-                        ToastUtils.showMsg(mContext, "密保答案不能为空！");
+                        Snackbar.make(mToolbar, R.string.forget_password_security_answer_not_null, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                     } else {
-                        ToastUtils.showMsg(mContext, "密保答案错误！");
+                        Snackbar.make(mToolbar, R.string.forget_password_security_answer_wrong, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                     }
                 } else {
                     // 修改密码
@@ -174,12 +175,12 @@ public class ForgetPasswordActivity extends BaseActivity {
                     String _newPasswordRepeat = mPasswordRepeatView.getEditText().getText().toString();
                     if (!_newPassword.equals("") && !_newPasswordRepeat.equals("")) {
                         if (!_newPasswordRepeat.equals(_newPassword)) {
-                            ToastUtils.showMsg(mContext, "两次输入的密码不一致！");
+                            Snackbar.make(mToolbar, R.string.journal_setting_password_repeat_not_match, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         } else {
                             resetPassword(_newPassword);
                         }
                     } else {
-                        ToastUtils.showMsg(mContext, "请输入密码！");
+                        Snackbar.make(mToolbar, R.string.forget_password_input_password, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                     }
                 }
 
@@ -203,13 +204,14 @@ public class ForgetPasswordActivity extends BaseActivity {
             mUser.setUpdateTime(TimeUtils.getYear() + "." + TimeUtils.getMonth() + "." + TimeUtils.getDay());
             if (mUserManager.updateUserInfo(mUser, mUser.getId()) == 1) {
                 //  之前就保证了去重逻辑，数据库中用户名唯一
-                ToastUtils.showMsg(this, "修改成功！");
+                Snackbar.make(mToolbar, R.string.forget_password_reset_password_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 finish();
+                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
             } else {
-                ToastUtils.showMsg(this, "修改失败！");
+                Snackbar.make(mToolbar, R.string.forget_password_reset_password_failure, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
             }
         } else {
-            ToastUtils.showMsg(this, "新密码不能为之前一次的旧密码！");
+            Snackbar.make(mToolbar, R.string.forget_password_same, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
         }
     }
 

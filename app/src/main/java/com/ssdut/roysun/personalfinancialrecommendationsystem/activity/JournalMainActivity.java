@@ -3,7 +3,6 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -17,12 +16,11 @@ import android.widget.TextView;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.db.JournalSqliteHelper;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.Animation3D;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.view.JournalMainAmountLeftView;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.view.JournalMainExpenditureIncomeView;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.JournalManager;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHua3d;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.JZPaintViewYuE;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.JZPaintViewZandS;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
 
 import java.util.List;
@@ -35,18 +33,19 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
 
     public static final String TAG = "JournalMainActivity";
 
-    private TextView mExpenditureYear, mExpenditureMonth, mExpenditureDay;
-    private TextView mBudgetMonth, mBudgetMonthLeft;  //支出界面的TextView
-    private TextView mIncomeYear, mIncomeMonth, mIncomeDay;  //收入界面的TextView
-    private FrameLayout mExpenditureTabArea, mIncomeTabArea;  //顶部framelayout支出和收入
-    private RelativeLayout mExpenditureStatsPic, mBudgetStatsPic, mIncomeStatsPic;  //绘图区域
-    private Button mBtnAdd, mBtnDetail, mBtnSheet, mBtnBudget, mBtnSettings;  //底部环形按钮 添加， 明细，报表，预算，设置。
-    private ImageView mExpenditureTabPic, mIncomeTabPic, mMenu;  //tab1顶部支出和收入按钮选中后背景图像
-    private LinearLayout mJournalExpenditureArea, mJournalIncomeArea;  //tab1顶部支出和收入按钮选中后下面显示的内容
-    private Button mBtns[] = null;  //button集合 方便管理按钮显示隐藏
-    private boolean isShown = false;  //底部环形按钮是否显示
+    private TextView mExpenditureYearText, mExpenditureMonthText, mExpenditureDayText;
+    private TextView mBudgetMonthText, mBudgetMonthLeftText;  // 支出界面的TextView
+    private TextView mIncomeYearText, mIncomeMonthText, mIncomeDayText;  // 收入界面的TextView
+    private FrameLayout mExpenditureTabArea, mIncomeTabArea;  // 顶部framelayout支出和收入
+    private RelativeLayout mExpenditureStatsPic, mBudgetStatsPic, mIncomeStatsPic;  // 绘图区域
+    private Button mBtnAdd, mBtnDetail, mBtnSheet, mBtnBudget, mBtnSettings;  // 底部环形按钮 添加、明细、报表、预算、设置
+    private ImageView mExpenditureTabPic, mIncomeTabPic, mPopMenu;  // tab1顶部支出和收入按钮选中后背景图像
+    private LinearLayout mJournalExpenditureArea, mJournalIncomeArea;  // tab1顶部支出和收入按钮选中后下面显示的内容
+    private Button mBtns[];  //button集合 方便管理按钮显示隐藏
+    private boolean mIsShown;  //底部环形按钮是否显示
 
-    private JournalManager mJournalDataHelper;  //数据库操作
+    private JournalManager mJournalManager;  //数据库操作
+    private User mCurUser;  // 当前用户名
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +58,22 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void initData() {
         super.initData();
-        mJournalDataHelper = new JournalManager(this);
+        mContext = this;
+        mIsShown = false;
+        mJournalManager = JournalManager.getInstance(this);
+        mCurUser = mUserManager.getCurUser();
     }
 
     @Override
     protected void initView() {
+        super.initView();
+        if (mToolbar != null) {
+            mToolbar.setTitle(R.string.title_journal_main_page);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mExpenditureTabPic = (ImageView) findViewById(R.id.iv_expenditure_tab_pic);
-        mExpenditureTabPic.setImageResource(R.drawable.jz_tab1_bt_bgs);
+        mExpenditureTabPic.setImageResource(R.drawable.journal_main_tab_pic);
         mIncomeTabPic = (ImageView) findViewById(R.id.iv_income_tab_pic);
         mJournalExpenditureArea = (LinearLayout) findViewById(R.id.ll_journal_expenditure_main);
         mJournalExpenditureArea.setVisibility(View.VISIBLE);
@@ -74,14 +82,14 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
         mExpenditureStatsPic = (RelativeLayout) findViewById(R.id.rl_expenditure_stats_pic);
         mBudgetStatsPic = (RelativeLayout) findViewById(R.id.rl_budget_stats_pic);
         mIncomeStatsPic = (RelativeLayout) findViewById(R.id.rl_income_stats_pic);
-        mExpenditureYear = (TextView) findViewById(R.id.tv_expenditure_year);
-        mExpenditureMonth = (TextView) findViewById(R.id.tv_expenditure_month);
-        mExpenditureDay = (TextView) findViewById(R.id.tv_expenditure_day);
-        mBudgetMonth = (TextView) findViewById(R.id.tv_budget_month);
-        mBudgetMonthLeft = (TextView) findViewById(R.id.tv_budget_left_month);
-        mIncomeYear = (TextView) findViewById(R.id.tv_income_year);
-        mIncomeMonth = (TextView) findViewById(R.id.tv_income_month);
-        mIncomeDay = (TextView) findViewById(R.id.tv_income_day);
+        mExpenditureYearText = (TextView) findViewById(R.id.tv_expenditure_year);
+        mExpenditureMonthText = (TextView) findViewById(R.id.tv_expenditure_month);
+        mExpenditureDayText = (TextView) findViewById(R.id.tv_expenditure_day);
+        mBudgetMonthText = (TextView) findViewById(R.id.tv_budget_month);
+        mBudgetMonthLeftText = (TextView) findViewById(R.id.tv_budget_left_month);
+        mIncomeYearText = (TextView) findViewById(R.id.tv_income_year);
+        mIncomeMonthText = (TextView) findViewById(R.id.tv_income_month);
+        mIncomeDayText = (TextView) findViewById(R.id.tv_income_day);
 
         //顶部收入、支出按钮
         mExpenditureTabArea = (FrameLayout) findViewById(R.id.fl_expenditure_tab);
@@ -98,76 +106,51 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
         mBtnBudget.setOnClickListener(this);
         mBtnSettings = (Button) findViewById(R.id.btn_settings);
         mBtnSettings.setOnClickListener(this);
-        mMenu = (ImageView) findViewById(R.id.iv_menu);
-        mMenu.setOnClickListener(this);
+        mPopMenu = (ImageView) findViewById(R.id.iv_menu);
+        mPopMenu.setOnClickListener(this);
         mBtns = new Button[]{mBtnAdd, mBtnDetail, mBtnSheet, mBtnBudget, mBtnSettings};
-        hideView();
+        hideMenu();
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
         mExpenditureStatsPic.removeAllViews();
         mBudgetStatsPic.removeAllViews();
         mIncomeStatsPic.removeAllViews();
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
         getExpenditure();
         getBudget();
         getIncome();
-        super.onResume();
     }
 
     @Override
     protected void onPause() {
-        hideView();
-        mMenu.setImageResource(R.drawable.jz_main_more);
         super.onPause();
+        hideMenu();
+        mPopMenu.setImageResource(R.drawable.journal_main_pop_menu);
     }
 
-    /*
-     * 底部环形按钮显示动画
-     */
-    public void btnDongHua() {
-        isShown = true;
+    // 动画弹出底部菜单
+    public void menuPopUpWithAnimation() {
+        mIsShown = true;
         for (Button btn : mBtns) {
-            dongHua(btn);
+            btn.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_menu_appear));
+            btn.setVisibility(View.VISIBLE);
         }
     }
 
-    public void dongHua(Button b) {
-        b.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_menu_up));
-        b.setVisibility(View.VISIBLE);
-    }
-
-    /*
-     * 隐藏底部环形按钮动画
-     */
-    public void btnHiddenDonghua() {
-        isShown = false;
-        final Handler handler = new Handler();
-        for (Button bt : mBtns) {
-            bt.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_menu_down));
+    // 动画隐藏底部环形菜单
+    public void hideMenuWithAnimation() {
+        mIsShown = false;
+        for (Button btn : mBtns) {
+            btn.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_menu_disappear));
+            btn.setVisibility(View.INVISIBLE);
         }
-        new Thread() {
-            public void run() {
-                try {
-                    sleep(300);
-                    handler.post(new Runnable() {
-                        public void run() {
-                            hideView();
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 
-    /*
-     * 隐藏底部环形按钮
-     */
-    private void hideView() {
-        isShown = false;
+    // 无动画隐藏底部环形菜单
+    private void hideMenu() {
+        mIsShown = false;
         for (Button btn : mBtns) {
             btn.setVisibility(View.INVISIBLE);
         }
@@ -176,48 +159,45 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fl_expenditure_tab:  //顶部支出按钮
-                mExpenditureTabPic.setImageResource(R.drawable.jz_tab1_bt_bgs);
+            case R.id.fl_expenditure_tab:  // 顶部支出按钮
+                mExpenditureTabPic.setImageResource(R.drawable.journal_main_tab_pic);
                 mIncomeTabPic.setImageDrawable(null);
-                mExpenditureTabPic.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_top_right2left));
-                DongHua3d.yanChiShow(mJournalExpenditureArea, mJournalIncomeArea);
+                mExpenditureTabPic.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_top_right2left));
+                Animation3D.delayShow(mJournalExpenditureArea, mJournalIncomeArea);
                 break;
-            case R.id.fl_income_tab:  //顶部收入按钮
-                mIncomeTabPic.setImageResource(R.drawable.jz_tab1_bt_bgs);
+            case R.id.fl_income_tab:  // 顶部收入按钮
+                mIncomeTabPic.setImageResource(R.drawable.journal_main_tab_pic);
                 mExpenditureTabPic.setImageDrawable(null);
-                mIncomeTabPic.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_top_left2right));
-                DongHua3d.yanChiShow(mJournalIncomeArea, mJournalExpenditureArea);
+                mIncomeTabPic.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_top_left2right));
+                Animation3D.delayShow(mJournalIncomeArea, mJournalExpenditureArea);
                 break;
-            case R.id.iv_menu:  //底部环形按钮
-                if (!isShown) {
-                    btnDongHua();
-                    mMenu.setImageResource(R.drawable.jz_main_more_s);
+            case R.id.iv_menu:  // 底部环形菜单
+                if (!mIsShown) {
+                    menuPopUpWithAnimation();
+                    mPopMenu.setImageResource(R.drawable.journal_main_withdraw_menu);
                 } else {
-                    btnHiddenDonghua();
-                    mMenu.setImageResource(R.drawable.jz_main_more);
+                    hideMenuWithAnimation();
+                    mPopMenu.setImageResource(R.drawable.journal_main_pop_menu);
                 }
                 break;
-            case R.id.btn_add:  //记账
+            case R.id.btn_add:  // 记账
                 changeActivity(JournalAddActivity.class);
                 break;
-            case R.id.btn_detail:  //明细
+            case R.id.btn_detail:  // 明细
                 changeActivity(JournalDetailActivity.class);
                 break;
-            case R.id.btn_budget:  //预算
+            case R.id.btn_budget:  // 预算
                 changeActivity(BudgetActivity.class);
                 break;
-            case R.id.btn_sheet:  //报表
+            case R.id.btn_sheet:  // 报表
                 changeActivity(JournalSheetActivity.class);
                 break;
-            case R.id.btn_settings:  //设置
+            case R.id.btn_settings:  // 设置
                 changeActivity(JournalSettingActivity.class);
                 break;
         }
     }
 
-    /*
-     * 切换界面
-     */
     public void changeActivity(Class<?> c) {
         Intent intent = new Intent(JournalMainActivity.this, c);
         startActivity(intent);
@@ -227,153 +207,148 @@ public class JournalMainActivity extends BaseActivity implements View.OnClickLis
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
-                if (isShown) {
-                    btnHiddenDonghua();
-                    mMenu.setImageResource(R.drawable.jz_main_more);
+                if (mIsShown) {
+                    hideMenuWithAnimation();
+                    mPopMenu.setImageResource(R.drawable.journal_main_pop_menu);
                     return false;
-                } else {
-                    DialogUtils.showExitDialog(this, ACTIVITY_JOURNAL_MAIN);
                 }
                 break;
             case KeyEvent.KEYCODE_MENU:
-                if (isShown) {
-                    btnHiddenDonghua();
-                    mMenu.setImageResource(R.drawable.jz_main_more);
+                if (mIsShown) {
+                    hideMenuWithAnimation();
+                    mPopMenu.setImageResource(R.drawable.journal_main_pop_menu);
                 } else {
-                    btnDongHua();
-                    mMenu.setImageResource(R.drawable.jz_main_more_s);
+                    menuPopUpWithAnimation();
+                    mPopMenu.setImageResource(R.drawable.journal_main_withdraw_menu);
                 }
                 break;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * 获取支出页面各个金额总数：年、月、日
-     */
+    // 按年、月、日获取支出数据
     public void getExpenditure() {
-        float _expenditureYearSum = 0, _expenditureMonthSum = 0, _expenditureDaySum = 0;
-        String _selectionExpenditureYear = Expenditure.YEAR + "=" + TimeUtils.getYear();
-        List<Expenditure> _expenditureYearList = mJournalDataHelper.getExpenditureListFromDB(_selectionExpenditureYear);
-        if (_expenditureYearList != null) {
-            for (Expenditure _expenditure : _expenditureYearList) {
-                _expenditureYearSum += _expenditure.getAmount();
+        float fExpenditureYearSum = 0, fExpenditureMonthSum = 0, fExpenditureDaySum = 0;
+        // 获取年支出
+        String strSelectionExpenditureYear = Expenditure.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Expenditure.YEAR + "=" + TimeUtils.getYear();
+        List<Expenditure> expenditureYearList = mJournalManager.getExpenditureListFromDB(strSelectionExpenditureYear);
+        if (expenditureYearList != null) {
+            for (Expenditure _expenditure : expenditureYearList) {
+                fExpenditureYearSum += _expenditure.getAmount();
             }
-            mExpenditureYear.setText(_expenditureYearSum + "");
+            mExpenditureYearText.setText(fExpenditureYearSum + "");
         } else {
-            mExpenditureYear.setText(0 + "");
+            mExpenditureYearText.setText(0 + "");
         }
-
-        String _selectionExpenditureMonth = Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + TimeUtils.getMonth();
-        List<Expenditure> _expenditureMonthList = mJournalDataHelper.getExpenditureListFromDB(_selectionExpenditureMonth);
-        if (_expenditureMonthList != null) {
-            for (Expenditure _expenditure : _expenditureMonthList) {
-                _expenditureMonthSum += _expenditure.getAmount();
+        // 获取月支出
+        String strSelectionExpenditureMonth = Expenditure.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + TimeUtils.getMonth();
+        List<Expenditure> expenditureMonthList = mJournalManager.getExpenditureListFromDB(strSelectionExpenditureMonth);
+        if (expenditureMonthList != null) {
+            for (Expenditure expenditure : expenditureMonthList) {
+                fExpenditureMonthSum += expenditure.getAmount();
             }
-            mExpenditureMonth.setText(_expenditureMonthSum + "");
+            mExpenditureMonthText.setText(fExpenditureMonthSum + "");
         } else {
-            mExpenditureMonth.setText(0 + "");
+            mExpenditureMonthText.setText(0 + "");
         }
-
-        String _selectionExpenditureDay = Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + TimeUtils.getMonth() + " and " + Expenditure.DAY + "=" + TimeUtils.getDay();
-        List<Expenditure> _expenditureDayList = mJournalDataHelper.getExpenditureListFromDB(_selectionExpenditureDay);
-        if (_expenditureDayList != null) {
-            for (Expenditure _expenditure : _expenditureDayList) {
-                _expenditureDaySum += _expenditure.getAmount();
+        // 获取日支出
+        String strSelectionExpenditureDay = Expenditure.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Expenditure.YEAR + "=" + TimeUtils.getYear() + " and " + Expenditure.MONTH + "=" + TimeUtils.getMonth() + " and " + Expenditure.DAY + "=" + TimeUtils.getDay();
+        List<Expenditure> expenditureDayList = mJournalManager.getExpenditureListFromDB(strSelectionExpenditureDay);
+        if (expenditureDayList != null) {
+            for (Expenditure expenditure : expenditureDayList) {
+                fExpenditureDaySum += expenditure.getAmount();
             }
-            mExpenditureDay.setText(_expenditureDaySum + "");
+            mExpenditureDayText.setText(fExpenditureDaySum + "");
         } else {
-            mExpenditureDay.setText(0 + "");
+            mExpenditureDayText.setText(0 + "");
         }
         //判断当前状态确定是否绘图
-        if (_expenditureYearSum > 0 || _expenditureMonthSum > 0 || _expenditureDaySum > 0) {
+        if (fExpenditureYearSum > 0 || fExpenditureMonthSum > 0 || fExpenditureDaySum > 0) {
             // 创建绘图区域
             mExpenditureStatsPic.setBackgroundDrawable(null);
-            mExpenditureStatsPic.addView(new JZPaintViewZandS(this, Color.BLUE, 30, _expenditureYearSum / 20, "本年支出"));  // /20?
-            mExpenditureStatsPic.addView(new JZPaintViewZandS(this, Color.BLACK, 100, _expenditureMonthSum / 20, "本月支出"));
-            mExpenditureStatsPic.addView(new JZPaintViewZandS(this, Color.CYAN, 170, _expenditureDaySum / 20, "今天支出"));
-
+            System.out.println("sdx---r2=" + fExpenditureMonthSum / fExpenditureYearSum + "\n r3=" + fExpenditureDaySum / fExpenditureYearSum);
+            mExpenditureStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.CYAN, 100, 1, "本年支出"));  // /20?
+            mExpenditureStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.YELLOW, 250, fExpenditureMonthSum / fExpenditureYearSum, "本月支出"));
+            mExpenditureStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.MAGENTA, 400, fExpenditureDaySum / fExpenditureYearSum, "今天支出"));
         } else {
-            mExpenditureStatsPic.setBackgroundResource(R.drawable.jz_empty_zhichu_zhuxing);
+            mExpenditureStatsPic.setBackgroundResource(R.drawable.journal_main_empty_expenditure);
         }
     }
 
-    /**
-     * 获取预算
-     */
+    // 获取月预算数据
     public void getBudget() {
-        final float _budgetAmount = JournalSqliteHelper.readPreferenceFile(this, JournalSqliteHelper.BUDGET_MONTH, JournalSqliteHelper.BUDGET_MONTH);
-        mBudgetMonth.setText(_budgetAmount + "");  //月预算
-        final float _expenditureMonth = Float.parseFloat(mExpenditureMonth.getText().toString().trim());  //月预算余额 = 月预算 - 月支出
-        mBudgetMonthLeft.setText((_budgetAmount - _expenditureMonth) + "");
+//        int iBudgetAmount = JournalSqliteHelper.readPreferenceFile(this, JournalSqliteHelper.BUDGET_MONTH, JournalSqliteHelper.BUDGET_MONTH);
+        int iBudgetAmount = mCurUser.getBudget();
+        mBudgetMonthText.setText(iBudgetAmount + "");  //月预算
+        float fExpenditureMonth = Float.parseFloat(mExpenditureMonthText.getText().toString().trim());  //月预算余额 = 月预算 - 月支出
+        mBudgetMonthLeftText.setText((iBudgetAmount - fExpenditureMonth) + "");
 
-        int _stepping;  //根据不同的剩余调整步进速度
-        if ((_budgetAmount / _expenditureMonth) < 0.3) {
-            _stepping = 1;
-        } else if ((_budgetAmount / _expenditureMonth) >= 0.3 && (_budgetAmount / _expenditureMonth) <= 0.6) {
-            _stepping = 3;
+        int iStepping;  //根据不同的剩余调整步进速度
+        if ((iBudgetAmount / fExpenditureMonth) < 0.3) {
+            iStepping = 1;
+        } else if ((iBudgetAmount / fExpenditureMonth) >= 0.3 && (iBudgetAmount / fExpenditureMonth) <= 0.6) {
+            iStepping = 3;
         } else {
-            _stepping = 6;
+            iStepping = 6;
         }
-        if (_budgetAmount > 0 || _expenditureMonth > 0) {
+        if (iBudgetAmount > 0 || fExpenditureMonth > 0) {
             mBudgetStatsPic.setBackgroundDrawable(null);
-            mBudgetStatsPic.addView(new JZPaintViewYuE(this, 0, 0, Color.BLUE, 50));
-            mBudgetStatsPic.addView(new JZPaintViewYuE(JournalMainActivity.this, _budgetAmount, _expenditureMonth, Color.RED, _stepping));
+            mBudgetStatsPic.addView(new JournalMainAmountLeftView(this, 0, 0, Color.BLUE, 50));
+            mBudgetStatsPic.addView(new JournalMainAmountLeftView(JournalMainActivity.this, iBudgetAmount, fExpenditureMonth, Color.RED, iStepping));
         } else {
-            mBudgetStatsPic.setBackgroundResource(R.drawable.jz_empty_yusuan);
+            mBudgetStatsPic.setBackgroundResource(R.drawable.journal_main_empty_budget);
         }
     }
 
-    /*
-     * 获取收入页面各个金额总数：年、月、日
-     */
+    // 按年、月、日获取收入数据
     public void getIncome() {
-        float _incomeYearSum = 0, _incomeMonthSum = 0, _incomeDaySum = 0;
+        float fIncomeYearSum = 0, fIncomeMonthSum = 0, fIncomeDaySum = 0;
         //获取年收入
-        String _selectionIncomeYear = Income.YEAR + "=" + TimeUtils.getYear();
-        List<Income> _incomeYearList = mJournalDataHelper.getIncomeListFromDB(_selectionIncomeYear);
-        if (_incomeYearList != null) {
-            _incomeYearSum = 0;
-            for (Income _income : _incomeYearList) {
-                _incomeYearSum += _income.getAmount();
+        String strSelectionIncomeYear = Income.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Income.YEAR + "=" + TimeUtils.getYear();
+        List<Income> incomeYearList = mJournalManager.getIncomeListFromDB(strSelectionIncomeYear);
+        if (incomeYearList != null) {
+            fIncomeYearSum = 0;
+            for (Income income : incomeYearList) {
+                fIncomeYearSum += income.getAmount();
             }
-            mIncomeYear.setText(_incomeYearSum + "");
+            mIncomeYearText.setText(fIncomeYearSum + "");
         } else {
-            mIncomeYear.setText(0 + "");
+            mIncomeYearText.setText(0 + "");
         }
         //获取月收入
-        String _selectionIncomeMonth = Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + TimeUtils.getMonth();
-        List<Income> _incomeMonthList = mJournalDataHelper.getIncomeListFromDB(_selectionIncomeMonth);
-        if (_incomeMonthList != null) {
-            _incomeMonthSum = 0;
-            for (Income _income : _incomeMonthList) {
-                _incomeMonthSum += _income.getAmount();
+        String strSelectionIncomeMonth = Income.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + TimeUtils.getMonth();
+        List<Income> incomeMonthList = mJournalManager.getIncomeListFromDB(strSelectionIncomeMonth);
+        if (incomeMonthList != null) {
+            fIncomeMonthSum = 0;
+            for (Income income : incomeMonthList) {
+                fIncomeMonthSum += income.getAmount();
             }
-            mIncomeMonth.setText(_incomeMonthSum + "");
+            mIncomeMonthText.setText(fIncomeMonthSum + "");
         } else {
-            mIncomeMonth.setText(0 + "");
+            mIncomeMonthText.setText(0 + "");
         }
         //获取日收入
-        String _selectionIncomeDay = Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + TimeUtils.getMonth() + " and " + Income.DAY + "=" + TimeUtils.getDay();
-        List<Income> _incomeDayList = mJournalDataHelper.getIncomeListFromDB(_selectionIncomeDay);
-        if (_incomeDayList != null) {
-            _incomeDaySum = 0;
-            for (Income _income : _incomeDayList) {
-                _incomeDaySum += _income.getAmount();
+        String strSelectionIncomeDay = Income.USER_NAME + "='" + mCurUser.getName() + "'" + " and " + Income.YEAR + "=" + TimeUtils.getYear() + " and " + Income.MONTH + "=" + TimeUtils.getMonth() + " and " + Income.DAY + "=" + TimeUtils.getDay();
+        List<Income> incomeDayList = mJournalManager.getIncomeListFromDB(strSelectionIncomeDay);
+        if (incomeDayList != null) {
+            fIncomeDaySum = 0;
+            for (Income income : incomeDayList) {
+                fIncomeDaySum += income.getAmount();
             }
-            mIncomeDay.setText(_incomeDaySum + "");
+            mIncomeDayText.setText(fIncomeDaySum + "");
         } else {
-            mIncomeDay.setText(0 + "");
+            mIncomeDayText.setText(0 + "");
         }
         //判断当前状态确定是否绘图
-        if (_incomeYearSum > 0 || _incomeMonthSum > 0 || _incomeDaySum > 0) {
+        if (fIncomeYearSum > 0 || fIncomeMonthSum > 0 || fIncomeDaySum > 0) {
             // 创建绘图区域
             mIncomeStatsPic.setBackgroundDrawable(null);
-            mIncomeStatsPic.addView(new JZPaintViewZandS(this, Color.BLUE, 30, _incomeYearSum / 40, "本年收入"));
-            mIncomeStatsPic.addView(new JZPaintViewZandS(this, Color.BLACK, 100, _incomeMonthSum / 40, "本月收入"));
-            mIncomeStatsPic.addView(new JZPaintViewZandS(this, Color.CYAN, 170, _incomeDaySum / 40, "今天收入"));
+            System.out.println("sdx---r2=" + fIncomeMonthSum / fIncomeYearSum + "\n r3=" + fIncomeDaySum / fIncomeYearSum);
+            mIncomeStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.CYAN, 100, 1, "本年收入"));
+            mIncomeStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.YELLOW, 250, fIncomeMonthSum / fIncomeYearSum, "本月收入"));
+            mIncomeStatsPic.addView(new JournalMainExpenditureIncomeView(this, Color.MAGENTA, 400, fIncomeDaySum / fIncomeYearSum, "今天收入"));
         } else {
-            mIncomeStatsPic.setBackgroundResource(R.drawable.jz_empty_zhichu_zhuxing);
+            mIncomeStatsPic.setBackgroundResource(R.drawable.journal_main_empty_expenditure);
         }
     }
 }

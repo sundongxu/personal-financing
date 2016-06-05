@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
@@ -120,4 +121,19 @@ public class BaseActivity extends AppCompatActivity {
         return mUserManager;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void finishSelf() {
+        finish();
+        mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
+    }
 }

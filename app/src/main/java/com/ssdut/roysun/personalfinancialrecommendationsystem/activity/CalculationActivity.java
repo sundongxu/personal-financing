@@ -1,14 +1,12 @@
 package com.ssdut.roysun.personalfinancialrecommendationsystem.activity;
 
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 /**
  * Created by roysun on 16/3/12.
@@ -17,21 +15,37 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 public class CalculationActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String TAG = "CalculationActivity";
-
-    Button mBtn1, mBtn2, mBtn3, mBtn4, mBtn5, mBtn6, mBtn7, mBtn8, mBtn9, mBtn0, mBtnPoint, mBtnAdd, mBtnSubtract, mBtnMultiply, mBtnDivide, mBtnEqual, mBtnDel, mBtnClean;
-    Button mBtn[] = new Button[]{mBtn0, mBtn1, mBtn2, mBtn3, mBtn4, mBtn5, mBtn6, mBtn7, mBtn8, mBtn9, mBtnPoint, mBtnDel};
-    EditText mTextInput;
+    double mFirstNum = 0;
+    double mSecondNum = 0;
+    char mOperator = '0';
+    double mResult = 0;
+    private Button mBtn1, mBtn2, mBtn3, mBtn4, mBtn5, mBtn6, mBtn7, mBtn8, mBtn9, mBtn0, mBtnPoint, mBtnAdd, mBtnSubtract, mBtnMultiply, mBtnDivide, mBtnEqual, mBtnDel, mBtnClean;
+    private Button mBtn[] = new Button[]{mBtn0, mBtn1, mBtn2, mBtn3, mBtn4, mBtn5, mBtn6, mBtn7, mBtn8, mBtn9, mBtnPoint, mBtnDel};
+    private EditText mTextInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate);
+        initData();
         initView();
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        mContext = this;
+    }
+
+    @Override
     protected void initView() {
-        mTextInput = (EditText) findViewById(R.id.et_text_input);
+        super.initView();
+        if (mToolbar != null) {
+            mToolbar.setTitle(R.string.title_calculation_page);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        mTextInput = (EditText) findViewById(R.id.et_num_input);
         int id[] = new int[]{R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4, R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9, R.id.btn_point, R.id.btn_delete};
         for (int i = 0; i < mBtn.length; i++) {
             mBtn[i] = (Button) findViewById(id[i]);
@@ -50,13 +64,6 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
         mBtnEqual.setOnClickListener(this);
         mBtnClean = (Button) this.findViewById(R.id.btn_clean);
         mBtnClean.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-//        overridePendingTransition(0, 0);
-        super.onResume();
     }
 
     @Override
@@ -91,20 +98,15 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
         mOperator = '0';
     }
 
-    double mFirstNum = 0;
-    double mSecondNum = 0;
-    char mOperator = '0';
-
     public void calculate(Button button) {
-        String _strInput = mTextInput.getText().toString().trim();
+        String strInput = mTextInput.getText().toString().trim();
         //防止数字末尾是小数点
-        if (_strInput.contains(".") && _strInput.indexOf(".") == (_strInput.length() - 1)) {
-            _strInput = _strInput.substring(0, _strInput.length() - 1);  //start -> end-1
+        if (strInput.contains(".") && strInput.indexOf(".") == (strInput.length() - 1)) {
+            strInput = strInput.substring(0, strInput.length() - 1);  //start -> end-1
         }
-        if (_strInput.endsWith("+") || _strInput.endsWith("-") || _strInput.endsWith("*") || _strInput.endsWith("/")) {
-            String _strNew = _strInput.substring(0, _strInput.length() - 1);
-            _strInput = _strNew;
-            mTextInput.setText(_strInput);
+        if (strInput.endsWith("+") || strInput.endsWith("-") || strInput.endsWith("*") || strInput.endsWith("/")) {
+            strInput = strInput.substring(0, strInput.length() - 1);
+            mTextInput.setText(strInput);
             mOperator = button.getText().charAt(0);
             mTextInput.append(mOperator + "");
             return;
@@ -116,7 +118,7 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
         } else {
             mOperator = button.getText().charAt(0);
             mTextInput.append(mOperator + "");
-            mFirstNum = Double.parseDouble(_strInput);
+            mFirstNum = Double.parseDouble(strInput);
         }
     }
 
@@ -124,24 +126,21 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
      * 获取最后一次输入符号后面的的数字
      * */
     public String getLastNum() {
-        String _strInput = mTextInput.getText().toString().trim();
+        String strInput = mTextInput.getText().toString().trim();
         //防止输入末尾出现符号
-        if (_strInput.endsWith("+") || _strInput.endsWith("-") || _strInput.endsWith("*") || _strInput.endsWith("/")) {
-            String _strNew = _strInput.substring(0, _strInput.length() - 1);
-            _strInput = _strNew;
+        if (strInput.endsWith("+") || strInput.endsWith("-") || strInput.endsWith("*") || strInput.endsWith("/")) {
+            strInput = strInput.substring(0, strInput.length() - 1);
         }
-        int _opIndex = _strInput.lastIndexOf(mOperator + "") + 1;
-        String _lastNum = _strInput.substring(_opIndex);
-        if (_lastNum.equals("") || _lastNum.equals(null)) {
-            _lastNum = "0";
+        int opIndex = strInput.lastIndexOf(mOperator + "") + 1;
+        String lastNum = strInput.substring(opIndex);
+        if (lastNum.equals("") || lastNum.equals(null)) {
+            lastNum = "0";
             if (mOperator == '*' || mOperator == '/') {
-                _lastNum = "1";
+                lastNum = "1";
             }
         }
-        return _lastNum;
+        return lastNum;
     }
-
-    double mResult = 0;
 
     public void equalTo() {
         if (mOperator == '0') {
@@ -159,27 +158,27 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
                 mResult = mFirstNum * mSecondNum;
                 break;
             case '/':
-                if (mSecondNum == 0 || mSecondNum == 0.0) {
-                    ToastUtils.showMsg(this, "你数学是体育老师教的吧？");
+                if (mSecondNum == 0) {
+                    Snackbar.make(mToolbar, R.string.calculation_who_teach_your_math, Snackbar.LENGTH_LONG).show();
                     return;
                 } else {
                     mResult = mFirstNum / mSecondNum;
                 }
                 break;
         }
-        String _resultString = String.valueOf(mResult);
-        if (_resultString.contains(".")) {
-            String _str[] = _resultString.split("\\.");
-            if (_str[1].equals("0")) {
+        String strResult = String.valueOf(mResult);
+        if (strResult.contains(".")) {
+            String str[] = strResult.split("\\.");
+            if (str[1].equals("0")) {
                 //小数部分为0，即运算结果为整数
-                mTextInput.setText(_str[0]);
+                mTextInput.setText(str[0]);
             } else {
                 //运算结果含小数
-                mTextInput.setText(_resultString);
+                mTextInput.setText(strResult);
             }
         } else {
             //运算结果不含小数
-            mTextInput.setText(_resultString);
+            mTextInput.setText(strResult);
         }
         mFirstNum = mResult;
         mSecondNum = 0;
@@ -191,18 +190,8 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK: {
-                DialogUtils.showExitDialog(this, ACTIVITY_CAlCULATION);
-                return false;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     private class NumberClickListener implements View.OnClickListener {
+
         private EditText et;
 
         public NumberClickListener(EditText et) {
@@ -211,52 +200,52 @@ public class CalculationActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onClick(View v) {
-            Button _button = (Button) v;
-            String _num = et.getText().toString().trim();
-            if (v.getId() != R.id.btn_delete && !_num.contains("+") && !_num.contains("-") && !_num.contains("*") && !_num.contains("/") && _num.length() > 12) {
+            Button btn = (Button) v;
+            String num = et.getText().toString().trim();
+            if (v.getId() != R.id.btn_delete && !num.contains("+") && !num.contains("-") && !num.contains("*") && !num.contains("/") && num.length() > 12) {
                 return;
             }
-            if (_num.length() > 11) {
+            if (num.length() > 11) {
                 et.setTextSize(25);
             } else {
                 et.setTextSize(40);
             }
             if (v.getId() != R.id.btn_delete) {
-                if (_num.equals("0") || mOperator == '=') {
+                if (num.equals("0") || mOperator == '=') {
                     // 第一次输入时,符号为 = 或者文本框内容为0
                     mOperator = '0';  //把符号改为 0 避免再次进入该段程序
-                    if (_button.getText().equals(".")) {
+                    if (btn.getText().equals(".")) {
                         et.setText("0.");
                     } else {
-                        et.setText(_button.getText());
+                        et.setText(btn.getText());
                     }
                 } else {
-                    if (_num.contains(".")) {
+                    if (num.contains(".")) {
                         // 金额中已经包含小数点
-                        if (_button.getText().equals(".") && _num.indexOf(".", _num.lastIndexOf(mOperator + "")) != -1) {
+                        if (btn.getText().equals(".") && num.indexOf(".", num.lastIndexOf(mOperator + "")) != -1) {
                             //已有小数点情况下依然输入小数点
-                            ToastUtils.showMsg(CalculationActivity.this, "没学过数学呀？");
+                            Snackbar.make(mToolbar, R.string.calculation_who_teach_your_math, Snackbar.LENGTH_LONG).show();
                             return;
                         }
                         // 小数点后超过6位时
-                        if ((_num.length() - _num.indexOf(".")) <= 6 || (
-                                _num.contains("+") ||
-                                        _num.contains("-") ||
-                                        _num.contains("*") ||
-                                        _num.contains("/"))) {
-                            et.append(_button.getText());
+                        if ((num.length() - num.indexOf(".")) <= 6 || (
+                                num.contains("+") ||
+                                        num.contains("-") ||
+                                        num.contains("*") ||
+                                        num.contains("/"))) {
+                            et.append(btn.getText());
                         } else {
-                            ToastUtils.showMsg(CalculationActivity.this, "这么多小数，想整死我啊？");
+                            Snackbar.make(mToolbar, R.string.calculation_too_much_decimal, Snackbar.LENGTH_LONG).show();
                         }
                     } else {
-                        et.append(_button.getText());
+                        et.append(btn.getText());
                     }
                 }
             } else {
                 // 如果是删除键
-                if (!_num.equals("0")) {
-                    if (_num.length() > 1) {
-                        String str = _num.substring(0, _num.length() - 1);
+                if (!num.equals("0")) {
+                    if (num.length() > 1) {
+                        String str = num.substring(0, num.length() - 1);
                         et.setText(str);
                     } else {
                         et.setText("0");

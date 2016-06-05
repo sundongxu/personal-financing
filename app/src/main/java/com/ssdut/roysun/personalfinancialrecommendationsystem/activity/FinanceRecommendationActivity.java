@@ -31,10 +31,12 @@ public class FinanceRecommendationActivity extends BaseActivity {
 
     private LinearLayout mStockListArea;
     private LinearLayout mStockRecommendationArea;
+    private LinearLayout mProductListArea;
     private TextView mCurUserNameText;
-    private TextView mWatchedNumText;
-    private TextView mMainIndexText;
-    private TextView mAlgorithmText;
+    private TextView mStockWatchedNumText;
+    private TextView mStockIndexText;
+    private TextView mProductExistNumText;
+    private TextView mProductIndexText;
     private Spinner mDaysOptions;
     private int mDayNum;
 
@@ -70,7 +72,7 @@ public class FinanceRecommendationActivity extends BaseActivity {
                 // 跳转进自选股列表页面
                 Intent _intent = new Intent(mContext, StockProductListActivity.class);
                 // type = 0，表示为股票列表；type = 1，表示为理财产品列表
-                _intent.putExtra("TYPE", 0);
+                _intent.putExtra("LIST_TYPE", 0);
                 startActivity(_intent);
             }
         });
@@ -78,22 +80,35 @@ public class FinanceRecommendationActivity extends BaseActivity {
         mStockRecommendationArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 跳转进推荐结果页面，要不要来个Material风的progressbar?
+                // 跳转进推荐结果页面，要不要来个Material风的progressbar? -> 有啦
                 Intent _intent = new Intent(mContext, RecommendationResultActivity.class);
                 _intent.putExtra("PARAM_DAYS", mDayNum);
+                startActivity(_intent);
+            }
+        });
+        mProductListArea = (LinearLayout) findViewById(R.id.ll_product_list);
+        mProductListArea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转进理财产品列表页面
+                Intent _intent = new Intent(mContext, StockProductListActivity.class);
+                // type = 0，表示为股票列表；type = 1，表示为理财产品列表
+                _intent.putExtra("LIST_TYPE", 1);
                 startActivity(_intent);
             }
         });
 
         mCurUserNameText = (TextView) findViewById(R.id.tv_user_now);
         mCurUserNameText.setText("当前用户：" + mUserManager.getCurUser().getName());
-        mWatchedNumText = (TextView) findViewById(R.id.tv_stock_num);
+        mStockWatchedNumText = (TextView) findViewById(R.id.tv_stock_num);
         int _iWatchedNum = mStockManager.getStockListFromDB("WATCHER_NAME='" + mUserManager.getCurUser().getName() + "'").size();
-        mWatchedNumText.setText("关注股数：" + String.valueOf(_iWatchedNum));
-        mMainIndexText = (TextView) findViewById(R.id.tv_index);
-        mMainIndexText.setText("参考指标：乖离率");
-        mAlgorithmText = (TextView) findViewById(R.id.tv_algorithm);
-        mAlgorithmText.setText("推荐依据：\n\n" + "价格波动理论");
+        mStockWatchedNumText.setText("关注股数：" + String.valueOf(_iWatchedNum));
+        mStockIndexText = (TextView) findViewById(R.id.tv_stock_index_refer_to);
+        mStockIndexText.setText("参考指标：乖离率");
+        mProductExistNumText = (TextView) findViewById(R.id.tv_product_num);
+        mProductExistNumText.setText("产品数目：6");
+        mProductIndexText = (TextView) findViewById(R.id.tv_product_index_refer_to);
+        mProductIndexText.setText("参考指标：余弦相似度");
 
         mDaysOptions = (Spinner) findViewById(R.id.sp_param_days);
         final SpinnerAdapter _adapter = new SpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, getResources().getStringArray(R.array.param_days));

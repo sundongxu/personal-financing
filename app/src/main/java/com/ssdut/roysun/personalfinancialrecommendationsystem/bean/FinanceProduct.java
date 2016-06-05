@@ -7,7 +7,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.bean;
 public class FinanceProduct {
 
     public static final String NAME = "NAME";  // 产品名
-    public static final String TYPE = "TYPE";  // 类型，四种：债券型、信托型、挂钩型、QDII型
+    public static final String TYPE = "TYPE";  // 类型，四种：基金、信托、银行、p2p
     public static final String RETURN_RATE = "RETURN_RATE";  // 回报率，百分比
     public static final String INVESTMENT_CYCLE = "INVESTMENT_CYCLE";  // 投资周期，以月为单位
     public static final String MIN_PURCHASE_AMOUNT = "MIN_PURCHASE_AMOUNT";  // 起购金额

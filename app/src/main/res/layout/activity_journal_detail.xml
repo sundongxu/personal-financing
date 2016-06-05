@@ -1,57 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/jz_main_bg">
+    android:background="@color/white">
+
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/jz_mingxi_title"
-            android:baselineAligned="false">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="12"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/jz_mingxi_tittle"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical">
-
-
-                <Button
-                    android:id="@+id/btn_summerize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/jz_addbt_selector"
-                    android:text="@string/jz_mingxi_huizhong"
-                    android:textColor="#000000"
-                    android:textSize="20dp" />
-
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@drawable/jz_tab1_chose"
+            android:background="@drawable/journal_main_bg_tab"
             android:orientation="vertical">
 
             <LinearLayout
@@ -71,9 +36,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/jz_add_nowtime"
+                    android:text="@string/journal_add_time_default"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#000000" />
+                    android:textColor="@color/white"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_detail_move_to_next_month"
@@ -94,14 +59,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1.05"
-                    android:background="@drawable/jz_add_numbt_selector"
+                    android:background="@drawable/journal_add_number_selector"
                     android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/jz_benyue_zhichu"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="@string/journal_main_expenditure_month"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -114,8 +80,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/jz_benyue_shouru"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="@string/journal_main_income_month"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/white"/>
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
@@ -131,7 +98,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/jz_bg_main_paper"
+                android:background="@drawable/journal_main_bg_content"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -152,13 +119,13 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/jz_bg_bottom"/>
+                android:background="@drawable/journal_main_bg_bottom"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -166,8 +133,8 @@
         android:id="@+id/ll_summerize_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@drawable/main_menubt_bg">
+        android:layout_alignParentBottom="true"
+        android:background="@color/holo_blue_bright">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -179,20 +146,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/jz_benyue_zhichu"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/journal_main_expenditure_month"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/jz_shouru_benyue"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/journal_main_income_month"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/jz_mingxi_shengyu"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:text="@string/journal_detail_summerize_profit_month"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
         </LinearLayout>
 
         <LinearLayout
@@ -206,7 +176,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="@string/jz_0"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/tv_income_this_month"
@@ -214,7 +185,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="@string/jz_0"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/tv_amount_left"
@@ -222,8 +194,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:text="@string/jz_0"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"/>
         </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

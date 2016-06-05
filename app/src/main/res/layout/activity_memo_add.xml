@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +28,7 @@
                     android:id="@+id/tv_topbar_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#000000" />
+                    android:textColor="@color/black"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -41,7 +45,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@drawable/bw_pic_bg"
                     android:contentDescription="@string/app_name"
-                    android:text="@string/jz_tab2_tianjiapic" />
+                    android:text="@string/jz_tab2_tianjiapic"/>
 
                 <ImageButton
                     android:id="@+id/ib_color_bg_choose"
@@ -50,7 +54,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/bw_color"
-                    android:contentDescription="@string/app_name" />
+                    android:contentDescription="@string/app_name"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -61,7 +65,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/bw_list_bg"
             android:gravity="top"
-            android:hint="@string/bw_hint" />
+            android:hint="@string/bw_hint"/>
 
     </LinearLayout>
 
@@ -90,8 +94,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bw_new_et_bg_1" />
+                    android:layout_marginTop="16dp"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_bg_color_2"
@@ -99,7 +102,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bw_new_et_bg_2" />
+                    android:background="@drawable/bw_new_et_bg_2"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_bg_color_3"
@@ -107,7 +110,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bw_new_et_bg_3" />
+                    android:background="@drawable/bw_new_et_bg_3"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_bg_color_4"
@@ -115,7 +118,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bw_new_et_bg_4" />
+                    android:background="@drawable/bw_new_et_bg_4"/>
 
                 <RelativeLayout
                     android:id="@+id/rl_bg_color_5"
@@ -123,7 +126,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bw_new_et_bg_5" />
+                    android:background="@drawable/bw_new_et_bg_5"/>
             </LinearLayout>
         </RelativeLayout>
 
@@ -157,8 +160,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
                         android:text="@string/bw_text_size"
-                        android:textColor="#000000"
-                        android:textSize="20sp" />
+                        android:textColor="@color/black"
+                        android:textSize="20sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -176,8 +179,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:text="@string/bw_text_size"
-                        android:textColor="#000000"
-                        android:textSize="25sp" />
+                        android:textColor="@color/black"
+                        android:textSize="25sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -194,8 +197,8 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:text="@string/bw_text_size"
-                        android:textColor="#000000"
-                        android:textSize="30sp" />
+                        android:textColor="@color/black"
+                        android:textSize="30sp"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -213,11 +216,11 @@
                         android:layout_centerHorizontal="true"
                         android:layout_centerInParent="true"
                         android:text="@string/bw_text_size"
-                        android:textColor="#000000"
-                        android:textSize="35sp" />
+                        android:textColor="@color/black"
+                        android:textSize="35sp"/>
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

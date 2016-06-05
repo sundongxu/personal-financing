@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="30dp"
-            android:background="@drawable/jz_addbt_selector"
+            android:background="@drawable/journal_detail_btn_summerize_selector"
             android:text="@string/jz_tab2_queding"
             android:textColor="#000000" />
 
@@ -63,7 +63,7 @@
             android:id="@+id/dialog_bwmima_shanchu_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/jz_addbt_selector"
+            android:background="@drawable/journal_detail_btn_summerize_selector"
             android:text="@string/js_shanchu"
             android:textColor="#000000" />
 
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/jz_addbt_selector"
+            android:background="@drawable/journal_detail_btn_summerize_selector"
             android:text="@string/jz_add_quxiao"
             android:textColor="#000000" />
     </LinearLayout>

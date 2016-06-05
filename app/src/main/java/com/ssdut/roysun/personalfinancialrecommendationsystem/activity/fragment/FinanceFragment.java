@@ -3,6 +3,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity.fragment
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +19,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockActi
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.StockMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FinanceListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FunctionCardListBaseAdapter;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 
 
 public class FinanceFragment extends BaseFragment {
@@ -47,7 +48,7 @@ public class FinanceFragment extends BaseFragment {
     }
 
     @Override
-    public void initCardList(View view) {
+    public void initCardList(final View view) {
         super.initCardList(view);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_finance_list);
         mRecyclerView.setHasFixedSize(true);
@@ -66,7 +67,7 @@ public class FinanceFragment extends BaseFragment {
                             if (((MainActivity) mContext).getUserManager().isSignIn()) {
                                 startActivity(new Intent(mContext, InvestmentSimulationActivity.class));
                             } else {
-                                ToastUtils.showMsg(mContext, "清先登录！");
+                                Snackbar.make(view, R.string.login_first, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             }
                         }
                         break;
@@ -78,7 +79,7 @@ public class FinanceFragment extends BaseFragment {
                             if (((MainActivity) mContext).getUserManager().isSignIn()) {
                                 startActivity(new Intent(mContext, FinanceRecommendationActivity.class));
                             } else {
-                                ToastUtils.showMsg(mContext, "请先登录！");
+                                Snackbar.make(view, R.string.login_first, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             }
                         }
                         break;

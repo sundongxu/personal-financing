@@ -13,7 +13,6 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoAddAc
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.MemoMainActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.MemoListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.MemoContent;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -143,7 +142,7 @@ public class DialogUtils {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (((MemoAddActivity) context).isUpdate) {
-                        ((MemoAddActivity) context).mMemoDataHelper.deleteMemoInfo(((MemoAddActivity) context).mMemoItem.getId());
+                        ((MemoAddActivity) context).mMemoManager.deleteMemoInfo(((MemoAddActivity) context).mMemoItem.getId());
                     } else {
                         ((MemoAddActivity) context).mMemoContent.setText("");
                     }

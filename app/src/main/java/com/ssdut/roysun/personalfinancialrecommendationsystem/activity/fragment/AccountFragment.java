@@ -3,6 +3,7 @@ package com.ssdut.roysun.personalfinancialrecommendationsystem.activity.fragment
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +19,7 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.UserInfoA
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.UserManagementActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.AccountListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.functioncard.FunctionCardListBaseAdapter;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 
 
 public class AccountFragment extends BaseFragment {
@@ -47,7 +48,7 @@ public class AccountFragment extends BaseFragment {
     }
 
     @Override
-    public void initCardList(View view) {
+    public void initCardList(final View view) {
         super.initCardList(view);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_fragment_account_list);
         mRecyclerView.setHasFixedSize(true);
@@ -72,7 +73,7 @@ public class AccountFragment extends BaseFragment {
                             if (((MainActivity) mContext).getUserManager().isSignIn()) {
                                 startActivity(new Intent(mContext, UserInfoActivity.class));
                             } else {
-                                ToastUtils.showMsg(mContext, "你还未登录！");
+                                Snackbar.make(view, R.string.login_first, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             }
                         }
                         break;
@@ -82,10 +83,10 @@ public class AccountFragment extends BaseFragment {
                                 if (((MainActivity) mContext).getUserManager().getCurUser().isSpecial() == 1) {
                                     startActivity(new Intent(mContext, UserManagementActivity.class));
                                 } else {
-                                    ToastUtils.showMsg(mContext, "你没有管理员权限！");
+                                    Snackbar.make(view, R.string.admin_only, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                                 }
                             } else {
-                                ToastUtils.showMsg(mContext, "请先登录！");
+                                Snackbar.make(view, R.string.login_first, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             }
                         }
                         break;

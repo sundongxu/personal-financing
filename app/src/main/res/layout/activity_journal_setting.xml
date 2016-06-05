@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/jz_main_bg"
+    android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/jz_mingxi_title"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="@string/jz_shezhi"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </RelativeLayout>
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,44 +17,58 @@
             android:id="@+id/rl_psd_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/jz_paper_bg"
+            android:background="@drawable/journal_main_bg_paper"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/tv_psd_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/jz_jiami"
-                android:textColor="#000000"
-                android:textSize="25dp" />
+                android:text="@string/journal_setting_encrypt"
+                android:textColor="@color/black"
+                android:textSize="25sp"/>
+
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_psd_set_area"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:background="@drawable/bw_new_et_bg_1"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/et_new_psd"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:hint="@string/jz_jiami_hint1"
-                android:inputType="number"
-                android:maxLength="6" />
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/et_psd_repeat"
+                <EditText
+                    android:id="@+id/et_new_psd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:hint="@string/journal_setting_input_6_digit_password"
+                    android:inputType="number"
+                    android:maxLength="6"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:hint="@string/jz_jiami_hint2"
-                android:inputType="number"
-                android:maxLength="6" />
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_psd_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:hint="@string/journal_setting_input_password_again"
+                    android:inputType="number"
+                    android:maxLength="6"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/ll_btn_area"
@@ -75,63 +78,55 @@
 
                 <Button
                     android:id="@+id/btn_psd_confirm"
+                    style="?android:textAppearanceSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="30dp"
-                    android:background="@drawable/jz_addbt_selector"
-                    android:text="@string/jz_tab2_queding"
-                    android:textColor="#000000" />
+                    android:layout_height="40dp"
+                    android:background="@drawable/button_round_corner"
+                    android:text="@string/confirm"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btn_psd_delete"
+                    style="?android:textAppearanceSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/jz_addbt_selector"
-                    android:text="@string/jz_shezhi_shanchumima"
-                    android:textColor="#000000" />
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/button_round_corner"
+                    android:text="@string/journal_setting_delete_password"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
 
                 <Button
                     android:id="@+id/btn_cancel"
+                    style="?android:textAppearanceSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:background="@drawable/jz_addbt_selector"
-                    android:text="@string/jz_add_quxiao"
-                    android:textColor="#000000" />
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/button_round_corner"
+                    android:text="@string/cancel"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+
             </LinearLayout>
+
         </LinearLayout>
 
         <RelativeLayout
-            android:id="@+id/rl_delete_all"
+            android:id="@+id/rl_clear_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/jz_paper_bg"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/journal_main_bg_paper"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/tv_delete_all_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/jz_shezhi_qingchu"
-                android:textColor="#000000"
-                android:textSize="25dp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_about_software"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/jz_paper_bg"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_about_software"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/jz_shezhi_about"
-                android:textColor="#000000"
-                android:textSize="25dp" />
+                android:text="@string/journal_setting_clear_all_data"
+                android:textColor="@color/black"
+                android:textSize="25sp"/>
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>

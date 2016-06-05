@@ -24,11 +24,11 @@ import android.widget.TextView;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.MemoListAdapter;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.MemoContent;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.MemoManager;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.DialogUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.PicUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
@@ -45,26 +45,22 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
     public static final String TAG = "MemoAddActivity";
 
     public EditText mMemoContent;  //备忘录输入框
-    private LinearLayout mBgColorSelectArea, mTextSizeSelectArea;  //更换颜色和字体LinerLayout
     public TextView mTime;  //顶部日期
-    private ImageButton mIBPicChoose, mIBColorChoose;
-    public MemoManager mMemoDataHelper;
     public Boolean isUpdate;  //新建false，修改true
     public MemoContent mMemoItem;  //当前选中的备忘录条目
+    public MemoManager mMemoManager;
+    private LinearLayout mBgColorSelectArea, mTextSizeSelectArea;  //更换颜色和字体LinerLayout
+    private ImageButton mIBPicChoose, mIBColorChoose;
     private String mUpdateString;
-
     //字体大小
     private float mTextSize = 24;
     private float mUpdateTextSize = 0;
     private float mSizeFloats[] = new float[]{20, 24, 29, 34};
-
     //背景颜色
-    private int mBgColorId = R.drawable.bw_new_et_bg_1;
-    private int mUpdateBgColorId = R.drawable.bw_new_et_bg_1;
-    private int mIds[] = new int[]{R.drawable.bw_new_et_bg_1, R.drawable.bw_new_et_bg_2, R.drawable.bw_new_et_bg_3, R.drawable.bw_new_et_bg_4, R.drawable.bw_new_et_bg_5};
-
+    private int mBgColorId = R.drawable.bw_new_et_bg_2;
+    private int mUpdateBgColorId = R.drawable.bw_new_et_bg_2;
+    private int mIds[] = new int[]{R.drawable.bw_new_et_bg_2, R.drawable.bw_new_et_bg_3, R.drawable.bw_new_et_bg_4, R.drawable.bw_new_et_bg_5};
     private Handler mHandler;
-
     private String mPicPath = "";// 文件路径
 
     @Override
@@ -77,42 +73,44 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
     }
 
     @Override
-    protected void initView() {
-        super.initView();
-        mTime = (TextView) this.findViewById(R.id.tv_topbar_time);
-        mMemoContent = (EditText) this.findViewById(R.id.et_main_content);
-        mMemoContent.setOnClickListener(this);
-        mMemoContent.setTextSize(mSizeFloats[1]);
-        mIBPicChoose = (ImageButton) this.findViewById(R.id.ib_pic_choose);
-        mIBPicChoose.setOnClickListener(this);
-        mIBColorChoose = (ImageButton) this.findViewById(R.id.ib_color_bg_choose);
-        mIBColorChoose.setOnClickListener(this);
-        initBGColor();
-        initTextSize();
-    }
-
-    @Override
     protected void initData() {
         super.initData();
         isUpdate = false;
         mMemoItem = new MemoContent();
         mHandler = new Handler();
-        mMemoDataHelper = new MemoManager(this);
+        mMemoManager = new MemoManager(this);
     }
 
-    /**
-     * 初始化背景颜色
-     */
+    @Override
+    protected void initView() {
+        super.initView();
+        if (mToolbar != null) {
+            mToolbar.setTitle("新增备忘");
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        mTime = (TextView) findViewById(R.id.tv_topbar_time);
+        mMemoContent = (EditText) findViewById(R.id.et_main_content);
+        mMemoContent.setOnClickListener(this);
+        mMemoContent.setTextSize(mSizeFloats[1]);
+        mIBPicChoose = (ImageButton) findViewById(R.id.ib_pic_choose);
+        mIBPicChoose.setOnClickListener(this);
+        mIBColorChoose = (ImageButton) findViewById(R.id.ib_color_bg_choose);
+        mIBColorChoose.setOnClickListener(this);
+        initBGColor();
+        initTextSize();
+    }
+
     private void initBGColor() {
         mBgColorSelectArea = (LinearLayout) this.findViewById(R.id.ll_bg_color_select);
         mBgColorSelectArea.setVisibility(View.GONE);
-        RelativeLayout _color_1 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_1);
-        RelativeLayout _color_2 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_2);
-        RelativeLayout _color_3 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_3);
-        RelativeLayout _color_4 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_4);
-        RelativeLayout _color_5 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_5);
-        RelativeLayout _colors[] = new RelativeLayout[]{_color_1, _color_2, _color_3, _color_4, _color_5};
-        for (RelativeLayout color : _colors) {
+        RelativeLayout color_1 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_1);
+        RelativeLayout color_2 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_2);
+        RelativeLayout color_3 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_3);
+        RelativeLayout color_4 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_4);
+        RelativeLayout color_5 = (RelativeLayout) this.findViewById(R.id.rl_bg_color_5);
+        RelativeLayout colors[] = new RelativeLayout[]{color_1, color_2, color_3, color_4, color_5};
+        for (RelativeLayout color : colors) {
             color.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -134,24 +132,21 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                             break;
                     }
                     mMemoContent.setBackgroundResource(mBgColorId);
-                    DongHuaYanChi.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
+                    AnimationDelay.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
                 }
             });
         }
     }
 
-    /**
-     * 初始化文本大小
-     */
     private void initTextSize() {
         mTextSizeSelectArea = (LinearLayout) this.findViewById(R.id.ll_textsize_select);
         mTextSizeSelectArea.setVisibility(View.GONE);
-        RelativeLayout _size_1 = (RelativeLayout) this.findViewById(R.id.rl_textsize_1);
-        RelativeLayout _size_2 = (RelativeLayout) this.findViewById(R.id.rl_textsize_2);
-        RelativeLayout _size_3 = (RelativeLayout) this.findViewById(R.id.rl_textsize_3);
-        RelativeLayout _size_4 = (RelativeLayout) this.findViewById(R.id.rl_textsize_4);
-        RelativeLayout _sizes[] = new RelativeLayout[]{_size_1, _size_2, _size_3, _size_4};
-        for (RelativeLayout size : _sizes) {
+        RelativeLayout size_1 = (RelativeLayout) this.findViewById(R.id.rl_textsize_1);
+        RelativeLayout size_2 = (RelativeLayout) this.findViewById(R.id.rl_textsize_2);
+        RelativeLayout size_3 = (RelativeLayout) this.findViewById(R.id.rl_textsize_3);
+        RelativeLayout size_4 = (RelativeLayout) this.findViewById(R.id.rl_textsize_4);
+        RelativeLayout sizes[] = new RelativeLayout[]{size_1, size_2, size_3, size_4};
+        for (RelativeLayout size : sizes) {
             size.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -170,29 +165,26 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                             break;
                     }
                     mMemoContent.setTextSize(mTextSize);
-                    DongHuaYanChi.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                 }
             });
         }
     }
 
-    /**
-     * 初始化更新信息
-     */
     private void initUpdate() {
         Intent intent = this.getIntent();
         if (intent.hasExtra("id")) {
             int id = intent.getIntExtra("id", 0);
-            for (MemoContent _memoContent : MemoListAdapter.sMemoList) {
-                if (_memoContent.getId() == id) {
-                    mTime.setText(_memoContent.getYear() + "年" + _memoContent.getMonth() + "月" + _memoContent.getDay() + "日" + " " + _memoContent.getTime());
+            for (MemoContent memoContent : MemoListAdapter.sMemoList) {
+                if (memoContent.getId() == id) {
+                    mTime.setText(memoContent.getYear() + "年" + memoContent.getMonth() + "月" + memoContent.getDay() + "日" + " " + memoContent.getTime());
                     isUpdate = true;
-                    mUpdateString = _memoContent.getContent();
+                    mUpdateString = memoContent.getContent();
                     mMemoContent.setText(mUpdateString);
                     Editable ea = mMemoContent.getText();
                     Selection.setSelection((Spannable) ea, ea.length());  //设置光标在文字末尾
                     //初始化文字的大小
-                    mTextSize = _memoContent.getSize();
+                    mTextSize = memoContent.getSize();
                     mUpdateTextSize = mTextSize;
                     if (mTextSize == 0) {
                         mTextSize = 24;
@@ -200,31 +192,25 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                     }
                     mMemoContent.setTextSize(mTextSize);
                     //初始化图片 存在图片就设置图片
-                    if (_memoContent.getPic() != null && !_memoContent.getPic().equals("") && !SDrw.getSDPath().equals("")) {
-                        mPicPath = _memoContent.getPic();
+                    if (memoContent.getPic() != null && !memoContent.getPic().equals("") && !SDrw.getSDPath().equals("")) {
+                        mPicPath = memoContent.getPic();
                         File picFile = new File(mPicPath);
                         mIBPicChoose.setImageBitmap(PicUtils.decodeFileAndCompress(picFile));
                     } else {
-                        _memoContent.setPic("");//防止修改时空指针异常
+                        memoContent.setPic("");//防止修改时空指针异常
                     }
 
                     //初始化背景颜色
-                    mBgColorId = _memoContent.getColor();
+                    mBgColorId = memoContent.getColor();
                     mUpdateBgColorId = mBgColorId;
                     mMemoContent.setBackgroundResource(mUpdateBgColorId);
-                    mMemoItem = _memoContent;
+                    mMemoItem = memoContent;
                     return;
                 }
             }
         } else {
             mTime.setText(TimeUtils.getYear() + "年" + TimeUtils.getMonth() + "月" + TimeUtils.getDay() + "日" + " " + TimeUtils.getTime());
         }
-    }
-
-    @Override
-    protected void onResume() {
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-        super.onResume();
     }
 
     @Override
@@ -246,7 +232,7 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                 break;
             case R.id.ib_color_bg_choose:
                 if (mBgColorSelectArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
+                    AnimationDelay.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
                 } else {
                     mBgColorSelectArea.setVisibility(View.VISIBLE);
                     mBgColorSelectArea.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
@@ -254,63 +240,60 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                 break;
             case R.id.et_main_content:
                 if (mBgColorSelectArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
+                    AnimationDelay.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
                 }
                 if (mTextSizeSelectArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                 }
                 break;
         }
     }
 
-    /*
-     * 存储备忘录item到数据库
-	 * */
     private void saveToDB() {
-        MemoContent _memoContent = new MemoContent();
-        int _year = TimeUtils.getYear();
-        int _month = TimeUtils.getMonth();
-        int _week = TimeUtils.getWeek();
-        int _day = TimeUtils.getDay();
-        String _time = TimeUtils.getTime();
-        String _content = mMemoContent.getText().toString().trim();
-        int _color = mBgColorId;
-        if (_content.equals(null) || _content.equals("")) {
+        MemoContent memoContent = new MemoContent();
+        int year = TimeUtils.getYear();
+        int month = TimeUtils.getMonth();
+        int week = TimeUtils.getWeek();
+        int day = TimeUtils.getDay();
+        String time = TimeUtils.getTime();
+        String content = mMemoContent.getText().toString().trim();
+        int color = mBgColorId;
+        if (content.equals(null) || content.equals("")) {
             ToastUtils.showMsg(this, "输入不能为空");
             return;
         }
         //一个备忘录item共有10个属性需要保存
-        _memoContent.setYear(_year);
-        _memoContent.setMonth(_month);
-        _memoContent.setWeek(_week);
-        _memoContent.setDay(_day);
-        _memoContent.setTime(_time);
-        _memoContent.setContent(_content);
-        _memoContent.setColor(_color);
-        _memoContent.setSize(mTextSize);
+        memoContent.setYear(year);
+        memoContent.setMonth(month);
+        memoContent.setWeek(week);
+        memoContent.setDay(day);
+        memoContent.setTime(time);
+        memoContent.setContent(content);
+        memoContent.setColor(color);
+        memoContent.setSize(mTextSize);
         if (!isUpdate) {
             //新建，不需要保存id，因为是直接添加到数据库表的末尾
             if (!"".equals(mPicPath) && !mPicPath.equals(null)) {
-                _memoContent.setPic(mPicPath);
+                memoContent.setPic(mPicPath);
             } else {
-                _memoContent.setPic("");
+                memoContent.setPic("");
             }
-            mMemoDataHelper.addMemoInfo(_memoContent);  //不需要id
+            mMemoManager.addMemoInfo(memoContent);  //不需要id
             ToastUtils.showMsg(this, "存储成功");
         } else {
             //修改，_content实际已是修改后的内容
-            if (!mUpdateString.equals(_content) ||
+            if (!mUpdateString.equals(content) ||
                     mUpdateBgColorId != mBgColorId ||
                     mUpdateTextSize != mTextSize ||
                     !mPicPath.equals(mMemoItem.getPic())) {
                 if (!mPicPath.equals(mMemoItem.getPic())) {
-                    _memoContent.setPic(mPicPath);
+                    memoContent.setPic(mPicPath);
                 }
-                mMemoDataHelper.updateMemoInfo(_memoContent, mMemoItem.getId());  //需要id，根据id在数据库表中查询
+                mMemoManager.updateMemoInfo(memoContent, mMemoItem.getId());  //需要id，根据id在数据库表中查询
                 ToastUtils.showMsg(this, "修改成功");
             }
         }
-        finish();
+        finishSelf();
     }
 
     @Override
@@ -327,10 +310,10 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
         switch (item.getItemId()) {
             case 100:
                 if (mTextSizeSelectArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                 } else {
                     mTextSizeSelectArea.setVisibility(View.VISIBLE);
-                    mTextSizeSelectArea.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_menu_up));
+                    mTextSizeSelectArea.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_menu_appear));
                 }
                 break;
             case 200:
@@ -344,7 +327,7 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                 DialogUtils.showExportDialog(this);
                 break;
             case 400:
-                finish();  //back to MemoMainActivity
+                finishSelf();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -358,24 +341,24 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                 if (mBgColorSelectArea.isShown() || mTextSizeSelectArea.isShown()) {
                     //当选择颜色和选择字体大小界面显示时按下返回键先关闭显示的界面
                     if (mBgColorSelectArea.isShown()) {
-                        DongHuaYanChi.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
+                        AnimationDelay.dongHuaEnd(mBgColorSelectArea, MemoAddActivity.this, mHandler, R.anim.picpush_right_out, 300);
                     }
                     if (mTextSizeSelectArea.isShown()) {
-                        DongHuaYanChi.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.jz_menu_down, 300);
+                        AnimationDelay.dongHuaEnd(mTextSizeSelectArea, MemoAddActivity.this, mHandler, R.anim.journal_main_menu_disappear, 300);
                     }
                     return false;
                 }
                 //如果内容有字符或有图片就存储到数据库中
                 if (!"".equals(mMemoContent.getText().toString().trim()) || !"".equals(mPicPath)) {
                     saveToDB();
-                    finish();
+                    finishSelf();
                     return false;
                 } else {
                     if (isUpdate) {
                         //如果当前状态为更新且内容为空则删除该条
-                        mMemoDataHelper.deleteMemoInfo(mMemoItem.getId());
+                        mMemoManager.deleteMemoInfo(mMemoItem.getId());
                     }
-                    finish();
+                    finishSelf();
                 }
             }
         }
@@ -387,16 +370,16 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
      * 这里有bug，保存以后再进入该备忘录条目就无法重新选择相片了，imageView来展示是不是更好？
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File _file;
-        Bitmap _bmp;
+        File file;
+        Bitmap bitmap;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PHOTO_FROM_CAMERA:
                     //获取拍摄的文件
                     mPicPath = captureFile.getAbsolutePath();
-                    _file = new File(mPicPath);
-                    _bmp = PicUtils.decodeFileAndCompress(_file);
-                    mIBPicChoose.setImageBitmap(_bmp);  //选择图片按钮显示该图
+                    file = new File(mPicPath);
+                    bitmap = PicUtils.decodeFileAndCompress(file);
+                    mIBPicChoose.setImageBitmap(bitmap);  //选择图片按钮显示该图
                     break;
                 case PHOTO_FROM_DATA:
                     //获取从图库选择的文件
@@ -404,17 +387,17 @@ public class MemoAddActivity extends PicBaseActivity implements View.OnClickList
                     String scheme = uri.getScheme();
                     if (scheme.equalsIgnoreCase("file")) {
                         mPicPath = uri.getPath();  //从uri中获得路径
-                        _file = new File(mPicPath);
-                        _bmp = PicUtils.decodeFileAndCompress(_file);  //转换图片大小
-                        mIBPicChoose.setImageBitmap(_bmp);
+                        file = new File(mPicPath);
+                        bitmap = PicUtils.decodeFileAndCompress(file);  //转换图片大小
+                        mIBPicChoose.setImageBitmap(bitmap);
                     } else if (scheme.equalsIgnoreCase("content")) {
                         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                         if (cursor != null) {
                             cursor.moveToFirst();
                             mPicPath = cursor.getString(1);
-                            _file = new File(mPicPath);
-                            _bmp = PicUtils.decodeFileAndCompress(_file);
-                            mIBPicChoose.setImageBitmap(_bmp);
+                            file = new File(mPicPath);
+                            bitmap = PicUtils.decodeFileAndCompress(file);
+                            mIBPicChoose.setImageBitmap(bitmap);
                         }
                     }
                     break;

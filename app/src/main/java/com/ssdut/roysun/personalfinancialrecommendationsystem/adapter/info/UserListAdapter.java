@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.R;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.activity.UserManagementActivity;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.User;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperSelectedListener;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnItemTouchHelperMoveListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.OnStartDragListener;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import me.drakeet.materialdialog.MaterialDialog;
  * Created by roysun on 16/5/15.
  * 用户列表适配器
  */
-public class UserListAdapter extends InfoListBaseAdapter implements OnItemTouchHelperSelectedListener {
+public class UserListAdapter extends InfoListBaseAdapter implements OnItemTouchHelperMoveListener {
 
     public static final String TAG = "UserListAdapter";
     private final OnStartDragListener mStartDragListener;

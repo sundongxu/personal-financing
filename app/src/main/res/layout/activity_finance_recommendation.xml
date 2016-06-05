@@ -12,7 +12,7 @@
         android:id="@+id/ll_stock_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"
+        android:layout_weight="0.33"
         android:background="@drawable/item_click_ripple"
         android:clickable="true"
         android:orientation="horizontal">
@@ -34,7 +34,7 @@
                 android:id="@+id/tv_title_mylist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="自选列表"
+                android:text="股票列表"
                 android:textColor="@drawable/text_info_item_selector"
                 android:textSize="20sp"/>
 
@@ -45,7 +45,7 @@
                 android:layout_marginTop="30dp"
                 android:text="当前用户："
                 android:textColor="@drawable/text_info_item_selector"
-                android:textSize="15sp"/>
+                android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_stock_num"
@@ -54,7 +54,58 @@
                 android:layout_marginTop="30dp"
                 android:text="已经关注："
                 android:textColor="@drawable/text_info_item_selector"
-                android:textSize="15sp"/>
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_product_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.34"
+        android:background="@drawable/item_click_ripple"
+        android:clickable="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/icon_recommendation_card_finance_product_list"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title_product_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="产品列表"
+                android:textColor="@drawable/text_info_item_selector"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/tv_product_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="产品数目："
+                android:textColor="@drawable/text_info_item_selector"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/tv_product_index_refer_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="参考指标："
+                android:textColor="@drawable/text_info_item_selector"
+                android:textSize="13sp"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -64,7 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.5"
+        android:layout_weight="0.33"
         android:background="@drawable/item_click_ripple"
         android:clickable="true"
         android:orientation="horizontal">
@@ -98,38 +149,29 @@
                     android:id="@+id/tv_param_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:text="操作类型："
                     android:textColor="@drawable/text_info_item_selector"
-                    android:textSize="15sp"/>
+                    android:textSize="13sp"/>
 
                 <Spinner
                     android:id="@+id/sp_param_days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="67dp"
-                    android:layout_marginTop="19dp"
+                    android:layout_marginTop="28dp"
                     android:entries="@array/param_days"/>
 
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/tv_index"
+                android:id="@+id/tv_stock_index_refer_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="参考指标:"
+                android:layout_marginTop="30dp"
+                android:text="参考指标："
                 android:textColor="@drawable/text_info_item_selector"
-                android:textSize="15sp"/>
-
-            <TextView
-                android:id="@+id/tv_algorithm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="推荐依据:"
-                android:textColor="@drawable/text_info_item_selector"
-                android:textSize="15sp"/>
+                android:textSize="13sp"/>
 
         </LinearLayout>
 

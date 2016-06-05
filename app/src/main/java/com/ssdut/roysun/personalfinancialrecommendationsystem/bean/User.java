@@ -14,6 +14,7 @@ public class User {
     public static final String QUESTION = "QUESTION";  // 密保问题
     public static final String ANSWER = "ANSWER";  // 密保答案
     public static final String BALANCE = "BALANCE";  // 账户余额
+    public static final String BUDGET = "BUDGET";  // 本月预算
     public static final String IS_SPECIAL = "IS_SPECIAL";  // 管理员标志位
 
     private int id;
@@ -25,6 +26,7 @@ public class User {
     private String question;
     private String answer;
     private double balance;
+    private int budget;
     private int isSpecial;
 
     public int getId() {
@@ -89,6 +91,14 @@ public class User {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
     }
 
     public double getBalance() {

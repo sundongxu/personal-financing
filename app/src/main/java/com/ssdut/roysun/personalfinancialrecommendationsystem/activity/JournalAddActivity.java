@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -28,14 +29,14 @@ import com.ssdut.roysun.personalfinancialrecommendationsystem.adapter.journal.Jo
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Expenditure;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.Income;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.bean.JournalItem;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.component.anim.AnimationDelay;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.db.manager.JournalManager;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.DialogCategory;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.dialog.DialogRemark;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.DongHuaYanChi;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.service.SDrw;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.listener.SnackbarClickListener;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.PicUtils;
+import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.SDrw;
 import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.TimeUtils;
-import com.ssdut.roysun.personalfinancialrecommendationsystem.utils.ToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,68 +50,78 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
 
     public static final String TAG = "JournalAddActivity";
 
-    // 当前界面收到的消息表示（msg.what）
-    public static final int CATEGORY_MSG = 1010, REMARK_MSG = 1020;
-    // 当前选择的添加类别支出，收入，借贷
-    public static final int EXPENDITURE = 2010, INCOME = 2020, CREDIT_DEBIT = 2030;
+    public static final int CATEGORY_MSG = 1010, REMARK_MSG = 1020;  // 当前界面收到的消息表示（msg.what）
+    public static final int EXPENDITURE = 2010, INCOME = 2020, CREDIT_DEBIT = 2030;  // 当前选择的添加类别支出，收入，借贷
     public MessageHandler mMsgHandler;
     private TextView mAmount, mCategory, mDate, mTime, mRemark;  // TextView金额，类别，时间，备注。
-    private FrameLayout mExpenditureTab, mIncomeTab, mCreditDebitTab, mBtnSave, mBtnCancel, mBtnDelete;  // FrameLayout支出，收入，借贷，保存，取消。
+    private FrameLayout mExpenditureTab, mIncomeTab, mCreditDebitTab; // FrameLayout支出，收入，借贷，保存，取消。
+    private Button mBtnSave, mBtnCancel, mBtnDelete;
     private LinearLayout mPicArea, mNumInputArea;  // LinearLayout图片，底部数字按钮
-    private ImageView mExpenditureTabPic, mIncomeTabPic, mCreitDebitTabPic, mPic;  // 顶部选中标识ImageView支出，收入，借贷，图片
+    private ImageView mExpenditureTabPic, mIncomeTabPic, mCreitDebitTabPic, mPic;  // 顶部选中标识ImageView支出、收入、借贷、图片
     private Button mBtnNum_0, mBtnNum_1, mBtnNum_2, mBtnNum_3, mBtnNum_4, mBtnNum_5, mBtnNum_6, mBtnNum_7, mBtnNum_8, mBtnNum_9, mBtnPoint, mBtnNumDelete;  // 底部数字按钮
-    private Button mBtnNum[] = new Button[]{mBtnNum_0, mBtnNum_1, mBtnNum_2, mBtnNum_3, mBtnNum_4, mBtnNum_5, mBtnNum_6, mBtnNum_7, mBtnNum_8, mBtnNum_9, mBtnPoint, mBtnNumDelete};  // 按钮集合
-    private TextView mExpenditureTabName, mIncomeTabName, mCreditDebitTabName;  // 顶部支出 收入 借贷 文本，修改时需要改动文本内容
-    private int mNowFlag = EXPENDITURE;  // 当前选择的类型
+    private Button mBtnNum[];
+    private TextView mExpenditureTabName, mIncomeTabName, mCreditDebitTabName;  // 顶部支出、收入、借贷，修改时需要改动文本内容
+    private int mNowFlag;  // 当前选择的类型
     private int mUpdateType, mUpdateId, mUpdateFlag;  // 更改的类型（支处 收入 借贷）
-    private boolean isUpdate = false;  // 判断当前是初始创建还是二次更新
-    private String mPicPath = "";// 文件路径
-    private JournalManager mJournalDataHelper;  // 数据库操作
-    /*
-     * 如果是以修改的方式打开该界面
-     */
-    private Expenditure mExpenditure = new Expenditure();
-    private Income mIncome = new Income();
+    private boolean mIsUpdate;  // 判断当前是初始创建还是二次更新
+    private String mPicPath;// 文件路径
+    private Expenditure mExpenditure;
+    private Income mIncome;
+    private JournalManager mJournalManager;  // 数据库操作
+    private String mCurUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal_add);
-        mMsgHandler = new MessageHandler();
+        initData();
         initView();
         initUpdate();
     }
 
     @Override
+    protected void initData() {
+        super.initData();
+        mContext = this;
+        mBtnNum = new Button[]{mBtnNum_0, mBtnNum_1, mBtnNum_2, mBtnNum_3, mBtnNum_4, mBtnNum_5, mBtnNum_6, mBtnNum_7, mBtnNum_8, mBtnNum_9, mBtnPoint, mBtnNumDelete};  // 按钮集合
+        mNowFlag = EXPENDITURE;
+        mIsUpdate = false;
+        mPicPath = "";
+        mExpenditure = new Expenditure();
+        mIncome = new Income();
+        mJournalManager = JournalManager.getInstance(this);
+        mMsgHandler = new MessageHandler();
+        mCurUserName = mUserManager.getCurUser().getName();
+    }
+
+    @Override
     protected void initView() {
         super.initView();
-        // 金额数量
+        if (mToolbar != null) {
+            mToolbar.setTitle(R.string.title_journal_add_page);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         mAmount = (TextView) findViewById(R.id.tv_amount);
         mAmount.setOnClickListener(new ItemClickListener());
-        // 类别
         mCategory = (TextView) findViewById(R.id.tv_category);
         mCategory.setOnClickListener(new ItemClickListener());
-        // 日期
         mDate = (TextView) findViewById(R.id.tv_date);
         mDate.setText(TimeUtils.getYear() + "-" + TimeUtils.getMonth() + "-" + TimeUtils.getDay());
         mDate.setOnClickListener(new ItemClickListener());
-        // 时间
         mTime = (TextView) findViewById(R.id.tv_time);
         mTime.setText(TimeUtils.getHour() + ":" + TimeUtils.getMinute());
         mTime.setOnClickListener(new ItemClickListener());
-        // 备注
         mRemark = (TextView) findViewById(R.id.tv_remark);
         mRemark.setOnClickListener(new ItemClickListener());
-        // 图片
         mPic = (ImageView) findViewById(R.id.iv_photo_add);
         mPic.setOnClickListener(new ItemClickListener());
         // mPic linearlayout当选择收入或借贷时隐藏该选项
         mPicArea = (LinearLayout) findViewById(R.id.ll_photo_area);
-        // 底部数字按钮
         mNumInputArea = (LinearLayout) findViewById(R.id.ll_num_input_area);
         mNumInputArea.setVisibility(View.GONE);
 
-        DongHuaYanChi.dongHuaStart(mNumInputArea, this, mMsgHandler, R.anim.jz_menu_up, 400);
+        AnimationDelay.startAnim(mNumInputArea, this, mMsgHandler, R.anim.journal_main_menu_appear, 400);
 
         mExpenditureTabPic = (ImageView) findViewById(R.id.iv_expenditure_tab_img);
         mIncomeTabPic = (ImageView) findViewById(R.id.iv_income_tab_img);
@@ -122,52 +133,49 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         mIncomeTab.setOnClickListener(this);
         mCreditDebitTab = (FrameLayout) findViewById(R.id.fl_credit_debit_tab);
         mCreditDebitTab.setOnClickListener(this);
-        mBtnSave = (FrameLayout) findViewById(R.id.fl_save);
+        mBtnSave = (Button) findViewById(R.id.btn_journal_save);
         mBtnSave.setOnClickListener(this);
-        mBtnCancel = (FrameLayout) findViewById(R.id.fl_cancel);
+        mBtnCancel = (Button) findViewById(R.id.btn_journal_cancel);
         mBtnCancel.setOnClickListener(this);
-
         // 删除当前要修改的数据，只在修改时有效
-        mBtnDelete = (FrameLayout) this.findViewById(R.id.fl_delete);
+        mBtnDelete = (Button) findViewById(R.id.btn_journal_delete);
         mBtnDelete.setOnClickListener(this);
-        mBtnDelete.setVisibility(View.INVISIBLE);
+        mBtnDelete.setVisibility(View.GONE);
 
         int id[] = new int[]{R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3, R.id.btn_num_4, R.id.btn_num_5, R.id.btn_num_6, R.id.btn_num_7, R.id.btn_num_8, R.id.btn_num_9, R.id.btn_num_point, R.id.btn_num_delete};
         for (int i = 0; i < mBtnNum.length; i++) {
-            mBtnNum[i] = (Button) this.findViewById(id[i]);
+            mBtnNum[i] = (Button) findViewById(id[i]);
             mBtnNum[i].setOnClickListener(new NumberClickListener(mAmount, this));
         }
     }
 
-    /**
-     * intent含参数“update”(还含type、id等)，则为二次更新该新增账目页面，初始化该页面
-     */
+    // intent含参数“update”(还含type、id等)，则为二次更新该新增账目页面，初始化该页面
     private void initUpdate() {
-        Intent _intent = getIntent();
-        if (_intent.hasExtra("update")) {
-            isUpdate = true;
-            mExpenditureTabName = (TextView) this.findViewById(R.id.tv_expenditure_tab_name);
-            mIncomeTabName = (TextView) this.findViewById(R.id.tv_income_tab_name);
-            mCreditDebitTabName = (TextView) this.findViewById(R.id.tv_credit_debit_tab_name);
+        Intent intent = getIntent();
+        if (intent.hasExtra("update")) {
+            mIsUpdate = true;
+            mExpenditureTabName = (TextView) findViewById(R.id.tv_expenditure_tab_name);
+            mIncomeTabName = (TextView) findViewById(R.id.tv_income_tab_name);
+            mCreditDebitTabName = (TextView) findViewById(R.id.tv_credit_debit_tab_name);
             mBtnDelete.setVisibility(View.VISIBLE);
-            mUpdateType = _intent.getIntExtra("type", 0);
-            mUpdateId = _intent.getIntExtra("id", 0);
-            ArrayList<?> _detailList = JournalDetailAdapter.sDetailList;
+            mUpdateType = intent.getIntExtra("type", 0);
+            mUpdateId = intent.getIntExtra("id", 0);
+            ArrayList<?> detailList = JournalDetailAdapter.sDetailList;
             if (mUpdateType == EXPENDITURE) {
-                for (Object object : _detailList) {
-                    Expenditure _expenditure = (Expenditure) object;
-                    if (mUpdateId == _expenditure.getId()) {
-                        mExpenditure = _expenditure;
-                        getExpenditureType(_expenditure);
+                for (Object object : detailList) {
+                    Expenditure expenditure = (Expenditure) object;
+                    if (mUpdateId == expenditure.getId()) {
+                        mExpenditure = expenditure;
+                        getExpenditureType(expenditure);
                         return;
                     }
                 }
             } else if (mUpdateType == INCOME) {
-                for (Object object : _detailList) {
-                    Income _income = (Income) object;
-                    if (mUpdateId == _income.getId()) {
-                        mIncome = _income;
-                        getIncomeType(_income);
+                for (Object object : detailList) {
+                    Income income = (Income) object;
+                    if (mUpdateId == income.getId()) {
+                        mIncome = income;
+                        getIncomeType(income);
                         return;
                     }
                 }
@@ -175,29 +183,27 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         }
     }
 
-    /*
-     * 判断该支出类型是否为借贷，借出 和 还款 均属于支出
-     */
+    // 判断该支出类型是否为借贷，借出和还款均属于支出
     public void getExpenditureType(Expenditure expenditure) {
         mPicArea.setVisibility(View.GONE);
-        if (expenditure.getCategory().equals(JournalItem.LEND) || expenditure.getCategory().equals(JournalItem.PAYMENT)) {
+        if (expenditure.getCategory().equals(JournalItem.LENDING) || expenditure.getCategory().equals(JournalItem.PAYMENT)) {
             mNowFlag = CREDIT_DEBIT;
-            mCreditDebitTabName.setText("修改借贷");
+            mCreditDebitTabName.setText(R.string.journal_update_debit_crebit);
             mCategory.setText(expenditure.getCategory());
             setTopTabBG(mNowFlag, mCreitDebitTabPic);
             mExpenditureTab.setVisibility(View.INVISIBLE);
             mIncomeTab.setVisibility(View.INVISIBLE);
         } else {
             mNowFlag = EXPENDITURE;
-            mExpenditureTabName.setText("修改支出");
+            mExpenditureTabName.setText(R.string.journal_update_expenditure);
             mCategory.setText(expenditure.getCategory() + ">" + expenditure.getSubCategory());
             setTopTabBG(mNowFlag, mExpenditureTabPic);
             mCreditDebitTab.setVisibility(View.INVISIBLE);
             mIncomeTab.setVisibility(View.INVISIBLE);
             mPicPath = expenditure.getPic();  // 获取图片路径
             if (mPicPath != null && mPicPath.endsWith("jpg")) {
-                File _filePic = new File(mPicPath);
-                mPic.setImageBitmap(PicUtils.decodeFileAndCompress(_filePic));
+                File filePic = new File(mPicPath);
+                mPic.setImageBitmap(PicUtils.decodeFileAndCompress(filePic));
             }
         }
         mUpdateFlag = EXPENDITURE;  // 用于删除当前数据功能
@@ -207,20 +213,18 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         mRemark.setText(expenditure.getRemark());
     }
 
-    /*
-     * 判断该收入类型是否为借贷，借入 和 收款 均属于收入
-     */
+    // 判断该收入类型是否为借贷，借入和收款 均属于收入
     public void getIncomeType(Income income) {
         mPicArea.setVisibility(View.GONE);
-        if (income.getCategory().equals(JournalItem.BORROW) || income.getCategory().equals(JournalItem.RECEIVEMENT)) {
-            mNowFlag = CREDIT_DEBIT;  // 用于判断当前状态
-            mCreditDebitTabName.setText("修改借贷");
+        if (income.getCategory().equals(JournalItem.BORROWING) || income.getCategory().equals(JournalItem.RECEIVEMENT)) {
+            mNowFlag = CREDIT_DEBIT;
+            mCreditDebitTabName.setText(R.string.journal_update_debit_crebit);
             setTopTabBG(mNowFlag, mCreitDebitTabPic);
             mExpenditureTab.setVisibility(View.INVISIBLE);
             mIncomeTab.setVisibility(View.INVISIBLE);
         } else {
             mNowFlag = INCOME;
-            mIncomeTabName.setText("修改收入");
+            mIncomeTabName.setText(R.string.journal_update_income);
             setTopTabBG(mNowFlag, mIncomeTabPic);
             mCreditDebitTab.setVisibility(View.INVISIBLE);
             mExpenditureTab.setVisibility(View.INVISIBLE);
@@ -238,41 +242,42 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.fl_expenditure_tab:  // 支出tab
                 setTopTabBG(EXPENDITURE, mExpenditureTabPic);
-                mCategory.setText("餐饮>晚餐");  //默认选项
+                mCategory.setText(R.string.journal_add_category_expenditure_default);  // 默认支出类别
                 break;
             case R.id.fl_income_tab:  // 收入tab
                 setTopTabBG(INCOME, mIncomeTabPic);
-                mCategory.setText("工资");
+                mCategory.setText(R.string.journal_add_category_income_default);  // 默认收入类别
                 break;
             case R.id.fl_credit_debit_tab:  // 借贷tab
                 setTopTabBG(CREDIT_DEBIT, mCreitDebitTabPic);
-                mCategory.setText("借出");
+                mCategory.setText(R.string.journal_add_category_debit_crebit_default);
                 break;
-            case R.id.fl_save:  // 保存按钮
+            case R.id.btn_journal_save:
                 saveToDB();
                 break;
-            case R.id.fl_cancel:  // 取消按钮
-                finish();
+            case R.id.btn_journal_cancel:
+                finishSelf();
                 break;
-            case R.id.fl_delete:  // 删除按钮
-                mJournalDataHelper = new JournalManager(this);
+            case R.id.btn_journal_delete:
                 switch (mUpdateFlag) {
                     case EXPENDITURE:
-                        int _num1 = mJournalDataHelper.delExpenditureInfo(mUpdateId);
-                        if (_num1 > 0) {
-                            ToastUtils.showMsg(this, "删除成功");
-                            finish();
+                        int n1 = mJournalManager.delExpenditureInfo(mUpdateId);
+                        if (n1 > 0) {
+                            Snackbar.make(mToolbar, R.string.delete_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+                            finishSelf();
                         } else {
-                            ToastUtils.showMsg(this, "删除失败");
+                            Snackbar.make(mToolbar, R.string.delete_failure, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+                            mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                         }
                         break;
                     case INCOME:
-                        int _num2 = mJournalDataHelper.delIncomeInfo(mUpdateId);
-                        if (_num2 > 0) {
-                            ToastUtils.showMsg(this, "删除成功");
-                            finish();
+                        int n2 = mJournalManager.delIncomeInfo(mUpdateId);
+                        if (n2 > 0) {
+                            Snackbar.make(mToolbar, R.string.delete_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+                            finishSelf();
                         } else {
-                            ToastUtils.showMsg(this, "删除失败");
+                            Snackbar.make(mToolbar, R.string.delete_failure, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+                            mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                         }
                         break;
                 }
@@ -280,141 +285,128 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         }
     }
 
-    /*
-     * 存储 支出、收入、借贷 到数据库
-     */
+    // 存储支出、收入、借贷到数据库
     public void saveToDB() {
-        mJournalDataHelper = new JournalManager(this);
-        Expenditure _expenditure = new Expenditure();
-        Income _income = new Income();
-        // 类别
-        String _category = mCategory.getText().toString().trim();
-        String _items[] = _category.split(">");
-        // 日期
-        String _dateString = mDate.getText().toString().trim();
-        String _dates[] = _dateString.split("-");
-        // 时间
-        String _timeString = mTime.getText().toString().trim();
-        // 金额
-        String _amountString = mAmount.getText().toString().trim();
-        // 备注
-        String _remarkString = mRemark.getText().toString().trim();
+        Expenditure expenditure = new Expenditure();
+        Income income = new Income();
+        String category = mCategory.getText().toString().trim();
+        String categories[] = category.split(">");
+        String date = mDate.getText().toString().trim();
+        String dates[] = date.split("-");
+        String time = mTime.getText().toString().trim();
+        String amount = mAmount.getText().toString().trim();
+        String remark = mRemark.getText().toString().trim();
 
-        if (_amountString.equals("0.00")) {
-            ToastUtils.showMsg(this, "金额不能为零");
+        if (amount.equals("0.00")) {
+            Snackbar.make(mToolbar, R.string.journal_add_amount_no_zero, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
             return;
         }
         if (mNowFlag == EXPENDITURE) {
-            _expenditure.setCategory(_items[0]);
-            _expenditure.setSubCategory(_items[1]);
-            _expenditure.setYear(Integer.parseInt(_dates[0]));
-            _expenditure.setMonth(Integer.parseInt(_dates[1]));
-            _expenditure.setDay(Integer.parseInt(_dates[2]));
-            _expenditure.setTime(_timeString);
-            _expenditure.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(_dates[0]), Integer.parseInt(_dates[1]), Integer.parseInt(_dates[2])));
-            _expenditure.setPic(mPicPath);
-            _expenditure.setAmount(Double.parseDouble(_amountString));
-            _expenditure.setRemark(_remarkString);
-            if (!isUpdate) {
-                mJournalDataHelper.addExpenditureInfo(_expenditure);
-                ToastUtils.showMsg(this, "该条支出存储成功");
+            expenditure.setUserName(mCurUserName);
+            expenditure.setCategory(categories[0]);
+            expenditure.setSubCategory(categories[1]);
+            expenditure.setYear(Integer.parseInt(dates[0]));
+            expenditure.setMonth(Integer.parseInt(dates[1]));
+            expenditure.setDay(Integer.parseInt(dates[2]));
+            expenditure.setTime(time);
+            expenditure.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2])));
+            expenditure.setPic(mPicPath);
+            expenditure.setAmount(Double.parseDouble(amount));
+            expenditure.setRemark(remark);
+            if (!mIsUpdate) {
+                mJournalManager.addExpenditureInfo(expenditure);
+                Snackbar.make(mToolbar, R.string.journal_add_expenditure_save_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 mPicPath = "";
             } else {
-                mJournalDataHelper.updateExpenditureInfo(_expenditure, mExpenditure.getId());
-                ToastUtils.showMsg(this, "该条支出修改成功");
+                mJournalManager.updateExpenditureInfo(expenditure, mExpenditure.getId());
+                Snackbar.make(mToolbar, R.string.journal_add_expenditure_update_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
             }
         } else if (mNowFlag == INCOME) {
-            _income.setCategory(_category);
-            _income.setYear(Integer.parseInt(_dates[0]));
-            _income.setMonth(Integer.parseInt(_dates[1]));
-            _income.setDay(Integer.parseInt(_dates[2]));
-            _income.setTime(_timeString);
-            _income.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(_dates[0]), Integer.parseInt(_dates[1]), Integer.parseInt(_dates[2])));
-            _income.setAmount(Double.parseDouble(_amountString));
-            _income.setRemark(_remarkString);
-            if (!isUpdate) {
-                mJournalDataHelper.addIncomeInfo(_income);
-                ToastUtils.showMsg(this, "该条收入存储成功");
+            income.setUserName(mCurUserName);
+            income.setCategory(category);
+            income.setYear(Integer.parseInt(dates[0]));
+            income.setMonth(Integer.parseInt(dates[1]));
+            income.setDay(Integer.parseInt(dates[2]));
+            income.setTime(time);
+            income.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2])));
+            income.setAmount(Double.parseDouble(amount));
+            income.setRemark(remark);
+            if (!mIsUpdate) {
+                mJournalManager.addIncomeInfo(income);
+                Snackbar.make(mToolbar, R.string.journal_add_income_save_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
+
             } else {
-                mJournalDataHelper.updateIncomeInfo(_income, mIncome.getId());
-                ToastUtils.showMsg(this, "该条收入修改成功");
+                mJournalManager.updateIncomeInfo(income, mIncome.getId());
+                Snackbar.make(mToolbar, R.string.journal_add_income_update_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
             }
         } else if (mNowFlag == CREDIT_DEBIT) {
             // 借贷中包含借入和借出 分别存储到支出和收入中
-            if (_category.equals(JournalItem.LEND) || _category.equals(JournalItem.PAYMENT)) {
-                _expenditure.setCategory(_category);
-                _expenditure.setSubCategory("");
-                _expenditure.setYear(Integer.parseInt(_dates[0]));
-                _expenditure.setMonth(Integer.parseInt(_dates[1]));
-                _expenditure.setDay(Integer.parseInt(_dates[2]));
-                _expenditure.setTime(_timeString);
-                _expenditure.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(_dates[0]), Integer.parseInt(_dates[1]), Integer.parseInt(_dates[2])));
-                _expenditure.setPic("");
-                _expenditure.setAmount(Double.parseDouble(_amountString));
-                _expenditure.setRemark(_remarkString);
-                if (!isUpdate) {
-                    mJournalDataHelper.addExpenditureInfo(_expenditure);
-                    ToastUtils.showMsg(this, "该条支出存储成功");
+            if (category.equals(JournalItem.LENDING) || category.equals(JournalItem.PAYMENT)) {
+                expenditure.setUserName(mCurUserName);
+                expenditure.setCategory(category);
+                expenditure.setSubCategory("");
+                expenditure.setYear(Integer.parseInt(dates[0]));
+                expenditure.setMonth(Integer.parseInt(dates[1]));
+                expenditure.setDay(Integer.parseInt(dates[2]));
+                expenditure.setTime(time);
+                expenditure.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2])));
+                expenditure.setPic("");
+                expenditure.setAmount(Double.parseDouble(amount));
+                expenditure.setRemark(remark);
+                if (!mIsUpdate) {
+                    mJournalManager.addExpenditureInfo(expenditure);
+                    Snackbar.make(mToolbar, R.string.journal_add_expenditure_save_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 } else {
-                    mJournalDataHelper.updateExpenditureInfo(_expenditure, mExpenditure.getId());
-                    ToastUtils.showMsg(this, "该条支出修改成功");
+                    mJournalManager.updateExpenditureInfo(expenditure, mExpenditure.getId());
+                    Snackbar.make(mToolbar, R.string.journal_add_expenditure_update_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 }
-            } else if (_category.equals(JournalItem.BORROW) || _category.equals(JournalItem.RECEIVEMENT)) {
-                _income.setCategory(_category);
-                _income.setYear(Integer.parseInt(_dates[0]));
-                _income.setMonth(Integer.parseInt(_dates[1]));
-                _income.setDay(Integer.parseInt(_dates[2]));
-                _income.setTime(_timeString);
-                _income.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(_dates[0]), Integer.parseInt(_dates[1]), Integer.parseInt(_dates[2])));
-                _income.setAmount(Double.parseDouble(_amountString));
-                _income.setRemark(_remarkString);
-                if (!isUpdate) {
-                    mJournalDataHelper.addIncomeInfo(_income);
-                    ToastUtils.showMsg(this, "该条借贷存储成功");
+            } else if (category.equals(JournalItem.BORROWING) || category.equals(JournalItem.RECEIVEMENT)) {
+                income.setUserName(mCurUserName);
+                income.setCategory(category);
+                income.setYear(Integer.parseInt(dates[0]));
+                income.setMonth(Integer.parseInt(dates[1]));
+                income.setDay(Integer.parseInt(dates[2]));
+                income.setTime(time);
+                income.setWeek(TimeUtils.getTheWeekOfYear(Integer.parseInt(dates[0]), Integer.parseInt(dates[1]), Integer.parseInt(dates[2])));
+                income.setAmount(Double.parseDouble(amount));
+                income.setRemark(remark);
+                if (!mIsUpdate) {
+                    mJournalManager.addIncomeInfo(income);
+                    Snackbar.make(mToolbar, R.string.journal_add_debit_crebit_save_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 } else {
-                    mJournalDataHelper.updateIncomeInfo(_income, mIncome.getId());
-                    ToastUtils.showMsg(this, "该条借贷修改成功");
+                    mJournalManager.updateIncomeInfo(income, mIncome.getId());
+                    Snackbar.make(mToolbar, R.string.journal_add_debit_crebit_update_success, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 }
             }
         }
         finish();
+        mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
     }
 
-    /*
-     * 设置顶部切换按钮的背景及动画
-     */
-    private void setTopTabBG(int _nowFlag, ImageView iv) {
-        mNowFlag = _nowFlag;  // 赋值给全局变量
-        if (_nowFlag == EXPENDITURE) {
+    // 设置顶部切换按钮的背景及动画
+    private void setTopTabBG(int nowFlag, ImageView iv) {
+        mNowFlag = nowFlag;  // 赋值给全局变量
+        if (nowFlag == EXPENDITURE) {
             if (!mPicArea.isShown()) {
                 mPicArea.setVisibility(View.VISIBLE);
                 mPicArea.setAnimation(AnimationUtils.loadAnimation(this, R.anim.push_left_in));
             }
-        } else if (_nowFlag == INCOME) {
+        } else if (nowFlag == INCOME) {
             if (mPicArea.isShown()) {
-                DongHuaYanChi.dongHuaEnd(mPicArea, this, mMsgHandler, R.anim.push_left_out, 400);
+                AnimationDelay.dongHuaEnd(mPicArea, this, mMsgHandler, R.anim.push_left_out, 400);
             }
-        } else if (_nowFlag == CREDIT_DEBIT) {
+        } else if (nowFlag == CREDIT_DEBIT) {
             if (mPicArea.isShown()) {
-                DongHuaYanChi.dongHuaEnd(mPicArea, this, mMsgHandler, R.anim.push_left_out, 400);
+                AnimationDelay.dongHuaEnd(mPicArea, this, mMsgHandler, R.anim.push_left_out, 400);
             }
         }
         mIncomeTabPic.setImageDrawable(null);
         mExpenditureTabPic.setImageDrawable(null);
         mCreitDebitTabPic.setImageDrawable(null);
-        iv.setImageResource(R.drawable.jz_tab1_bt_bgs);
-        iv.setAnimation(AnimationUtils.loadAnimation(this, R.anim.jz_top_right2left));
+        iv.setImageResource(R.drawable.journal_main_tab_pic);
+        iv.setAnimation(AnimationUtils.loadAnimation(this, R.anim.journal_main_top_right2left));
     }
 
-    @Override
-    protected void onResume() {
-        overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-        super.onResume();
-    }
-
-    /*
-     * 日期dialog
-     */
     @Override
     protected Dialog onCreateDialog(int id) {
         if (id == R.id.tv_date) {
@@ -444,29 +436,27 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
         switch (kCode) {
             case KeyEvent.KEYCODE_BACK: {
                 if (mNumInputArea.isShown()) {
-                    DongHuaYanChi.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.jz_menu_down, 300);
+                    AnimationDelay.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.journal_main_menu_disappear, 300);
                     return false;
                 } else {
                     finish();
+                    mInputMethodManager.hideSoftInputFromWindow(mToolbar.getWindowToken(), 0);
                 }
             }
         }
         return super.onKeyDown(kCode, kEvent);
     }
 
-    /*
-     * 选择图片的回传处理
-     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        File _file;
-        Bitmap _bmp;
+        File file;
+        Bitmap bitmap;
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PHOTO_FROM_CAMERA:// 获取拍摄的文件
                     mPicPath = captureFile.getAbsolutePath();
-                    _file = new File(mPicPath);
-                    _bmp = PicUtils.decodeFileAndCompress(_file);
-                    mPic.setImageBitmap(_bmp);
+                    file = new File(mPicPath);
+                    bitmap = PicUtils.decodeFileAndCompress(file);
+                    mPic.setImageBitmap(bitmap);
                     break;
                 case PHOTO_FROM_DATA:// 获取从图库选择的文件
                     Uri uri = data.getData();
@@ -474,17 +464,17 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
                     if (scheme.equalsIgnoreCase("file")) {
                         mPicPath = uri.getPath();
                         System.out.println(mPicPath);
-                        _file = new File(mPicPath);
-                        _bmp = PicUtils.decodeFileAndCompress(_file);
-                        mPic.setImageBitmap(_bmp);
+                        file = new File(mPicPath);
+                        bitmap = PicUtils.decodeFileAndCompress(file);
+                        mPic.setImageBitmap(bitmap);
                     } else if (scheme.equalsIgnoreCase("content")) {
                         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                         if (cursor != null) {
                             cursor.moveToFirst();
                             mPicPath = cursor.getString(1);
-                            _file = new File(mPicPath);
-                            _bmp = PicUtils.decodeFileAndCompress(_file);
-                            mPic.setImageBitmap(_bmp);
+                            file = new File(mPicPath);
+                            bitmap = PicUtils.decodeFileAndCompress(file);
+                            mPic.setImageBitmap(bitmap);
                         }
                     }
                     break;
@@ -502,9 +492,9 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
             switch (v.getId()) {
                 case R.id.tv_amount:  //点击num显示数字按键
                     if (mNumInputArea.isShown()) {
-                        DongHuaYanChi.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.jz_menu_down, 300);
+                        AnimationDelay.dongHuaEnd(mNumInputArea, JournalAddActivity.this, mMsgHandler, R.anim.journal_main_menu_disappear, 300);
                     } else {
-                        mNumInputArea.setAnimation(AnimationUtils.loadAnimation(JournalAddActivity.this, R.anim.jz_menu_up));
+                        mNumInputArea.setAnimation(AnimationUtils.loadAnimation(JournalAddActivity.this, R.anim.journal_main_menu_appear));
                         mNumInputArea.setVisibility(View.VISIBLE);
                     }
                     break;
@@ -518,19 +508,19 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
                     onCreateDialog(R.id.tv_time);
                     break;
                 case R.id.tv_remark:  //添加备注
-                    String _remarkString = mRemark.getText().toString();
-                    if (_remarkString.equals("无备注")) {
+                    String strRemark = mRemark.getText().toString();
+                    if (strRemark.equals("无备注")) {
                         new DialogRemark(JournalAddActivity.this, "");
                     } else {
-                        new DialogRemark(JournalAddActivity.this, _remarkString);
+                        new DialogRemark(JournalAddActivity.this, strRemark);
                     }
                     break;
                 case R.id.iv_photo_add:
                     if (mPicPath != null && mPicPath.endsWith("jpg")) {
-                        Intent _intent = new Intent(Intent.ACTION_VIEW);
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
                         Uri uri = Uri.parse("file://" + mPicPath);
-                        _intent.setDataAndType(uri, "image/*");
-                        startActivity(_intent);
+                        intent.setDataAndType(uri, "image/*");
+                        startActivity(intent);
                     } else {
                         choosePic(JournalAddActivity.this);
                     }
@@ -550,40 +540,41 @@ public class JournalAddActivity extends PicBaseActivity implements View.OnClickL
 
         @Override
         public void onClick(View v) {
-            Button _button = (Button) v;
-            String _amount = tv.getText().toString().trim();
-            if (v.getId() != R.id.btn_num_delete && _amount.length() > 9) {
-                ToastUtils.showMsg(context, "你有这么多钱吗？");
+            Button btn = (Button) v;
+            String strAmount = tv.getText().toString().trim();
+            if (v.getId() != R.id.btn_num_delete && strAmount.length() > 9) {
+                Snackbar.make(mToolbar, R.string.too_much_money, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 return;
             }
             if (v.getId() != R.id.btn_num_delete) {
-                if (_amount.equals("0.00")) {
+                if (strAmount.equals("0.00")) {
                     //第一次输入时
-                    if (!_button.getText().equals(".") && !_button.getText().equals("0")) {
-                        tv.setText(_button.getText());
+                    if (!btn.getText().equals(".") && !btn.getText().equals("0")) {
+                        tv.setText(btn.getText());
                     }
                 } else {
-                    if (_amount.contains(".")) {
+                    if (strAmount.contains(".")) {
                         //金额中已经包含小数点
-                        if (_button.getText().equals(".")) {// 输入的为小数点
-                            ToastUtils.showMsg(context, "没学过数学呀？");
+                        if (btn.getText().equals(".")) {
+                            // 输入的为小数点
+                            Snackbar.make(mToolbar, R.string.journal_add_not_learn_math, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                             return;
                         }
                         //小数点后超过两位时
-                        if ((_amount.length() - _amount.indexOf(".")) <= 2) {
-                            tv.append(_button.getText());
+                        if ((strAmount.length() - strAmount.indexOf(".")) <= 2) {
+                            tv.append(btn.getText());
                         } else {
-                            ToastUtils.showMsg(context, "你有那么多零钱吗？");
+                            Snackbar.make(mToolbar, R.string.journal_add_no_enough_cash, Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                         }
                     } else {
-                        tv.append(_button.getText());
+                        tv.append(btn.getText());
                     }
                 }
             } else {
                 // 如果是删除键
-                if (!_amount.equals("0.00")) {
-                    if (_amount.length() > 1) {
-                        String _str = _amount.substring(0, _amount.length() - 1);
+                if (!strAmount.equals("0.00")) {
+                    if (strAmount.length() > 1) {
+                        String _str = strAmount.substring(0, strAmount.length() - 1);
                         tv.setText(_str);
                     } else {
                         tv.setText("0.00");

@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/jz_main_bg">
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/tv_budget_hint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/jz_yusuan"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-
-        <EditText
-            android:id="@+id/et_budget_amount"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:inputType="number"
-            android:maxLength="8">
+            android:orientation="horizontal">
 
-            <requestFocus />
-        </EditText>
+            <TextView
+                android:id="@+id/tv_budget_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/budget_amount_month"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+            <TextView
+                android:id="@+id/tv_budget_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/et_budget_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="@string/budget_less_than_10000000"
+                android:inputType="number"
+                android:textColor="@color/black"/>
+
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -40,22 +65,27 @@
 
             <Button
                 android:id="@+id/btn_budget_save"
+                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginRight="50dp"
-                android:background="@drawable/jz_addbt_selector"
-                android:text="@string/jz_add_save"
-                android:textColor="#000000" />
+                android:background="@drawable/button_round_corner"
+                android:text="@string/budget_btn_save"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
             <Button
                 android:id="@+id/btn_budget_cancel"
+                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginLeft="50dp"
-                android:background="@drawable/jz_addbt_selector"
-                android:text="@string/jz_add_quxiao"
-                android:textColor="#000000" />
+                android:background="@drawable/button_round_corner"
+                android:text="@string/budget_btn_cancel"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
         </LinearLayout>
+
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

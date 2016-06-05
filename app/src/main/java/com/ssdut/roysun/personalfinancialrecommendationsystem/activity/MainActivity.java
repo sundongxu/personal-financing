@@ -122,9 +122,9 @@ public class MainActivity extends BaseActivity {
             } else {
                 //登录失败
                 if (mUserManager.isUserExists(_userNameLastLogin)) {
-                    ToastUtils.showMsg(mContext, "密码错误！");
+                    Snackbar.make(mToolbar, "密码错误！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 } else {
-                    ToastUtils.showMsg(mContext, "用户名不存在！");
+                    Snackbar.make(mToolbar, "用户名不存在！", Snackbar.LENGTH_LONG).setAction(R.string.snackbar_hint, new SnackbarClickListener()).show();
                 }
             }
         }
@@ -317,9 +317,9 @@ public class MainActivity extends BaseActivity {
         mDrawerList.setAdapter(mDrawerAdapter);
         setDrawerListHeader(mDrawerList);
 
-        User _user = mUserManager.getCurUser();
-        if (_user != null) {
-            Log.v(TAG, _user.getPic());
+        User user = mUserManager.getCurUser();
+        if (user != null) {
+            Log.v(TAG, user.getPic());
         }
     }
 
@@ -350,9 +350,9 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setDrawerListHeader(RecyclerView recyclerView) {
-        View _header = LayoutInflater.from(this).inflate(R.layout.drawer_header, recyclerView, false);
-        mUserIconView = (CircleImageView) _header.findViewById(R.id.civ_menu_user_icon);
-        mUserNameText = (TextView) _header.findViewById(R.id.tv_menu_user_name);
+        View header = LayoutInflater.from(this).inflate(R.layout.drawer_header, recyclerView, false);
+        mUserIconView = (CircleImageView) header.findViewById(R.id.civ_menu_user_icon);
+        mUserNameText = (TextView) header.findViewById(R.id.tv_menu_user_name);
         // 触发情形（2）
         onLoginStateChanged(mUserManager.isSignIn());
         //设置用户头像
@@ -365,7 +365,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
-        mDrawerAdapter.setHeaderView(_header);
+        mDrawerAdapter.setHeaderView(header);
     }
 
     private void closeDrawer() {
@@ -377,15 +377,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showSearchDialog() {
-        ArrayList<String> _searchContent = SharedPreferenceUtils.loadList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT);
+        ArrayList<String> searchContent = SharedPreferenceUtils.loadList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT);
         View view = getLayoutInflater().inflate(R.layout.toolbar_search, null);
-        ImageView _backIcon = (ImageView) view.findViewById(R.id.iv_tool_back);
-        ImageView _searchIcon = (ImageView) view.findViewById(R.id.iv_tool_search);
-        final EditText _searchView = (EditText) view.findViewById(R.id.et_tool_search);
-        final ListView _searchList = (ListView) view.findViewById(R.id.lv_search_list);
-        final TextView _notFoundText = (TextView) view.findViewById(R.id.tv_not_found);
-        Utils.setListViewHeightBasedOnChildren(_searchList);
-        _searchView.setHint("你想要做什么");
+        ImageView backIcon = (ImageView) view.findViewById(R.id.iv_tool_back);
+        ImageView searchIcon = (ImageView) view.findViewById(R.id.iv_tool_search);
+        final EditText searchView = (EditText) view.findViewById(R.id.et_tool_search);
+        final ListView searchList = (ListView) view.findViewById(R.id.lv_search_list);
+        final TextView notFoundText = (TextView) view.findViewById(R.id.tv_not_found);
+        Utils.setListViewHeightBasedOnChildren(searchList);
+        searchView.setHint("你想要做什么");
 
         mDialog = new Dialog(mContext, R.style.MaterialSearch);
         mDialog.setContentView(view);
@@ -394,31 +394,31 @@ public class MainActivity extends BaseActivity {
         mDialog.getWindow().setGravity(Gravity.BOTTOM);
         mDialog.show();
         mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);  // 搜索dialog一出来输入框就显示软键盘，去掉这句要点击输入框才出现
-        _searchContent = (_searchContent != null && _searchContent.size() > 0) ? _searchContent : new ArrayList<String>();
-        final SearchAdapter _searchAdapter = new SearchAdapter(mContext, _searchContent, false);
-        _searchList.setVisibility(View.VISIBLE);
-        _searchList.setAdapter(_searchAdapter);
-        _searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        searchContent = (searchContent != null && searchContent.size() > 0) ? searchContent : new ArrayList<String>();
+        final SearchAdapter searchAdapter = new SearchAdapter(mContext, searchContent, false);
+        searchList.setVisibility(View.VISIBLE);
+        searchList.setAdapter(searchAdapter);
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String _strInput = String.valueOf(adapterView.getItemAtPosition(position));
-                if (_strInput.equals("删除历史记录")) {
+                String strInput = String.valueOf(adapterView.getItemAtPosition(position));
+                if (strInput.equals("删除历史记录")) {
                     SharedPreferenceUtils.deleteList(mContext, Utils.SEARCH_HISTORY);
-                    _searchList.setVisibility(View.GONE);
+                    searchList.setVisibility(View.GONE);
                 } else {
-                    SharedPreferenceUtils.addToList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT, _strInput);
-                    _searchView.setText(_strInput);
-                    _searchList.setVisibility(View.GONE);
+                    SharedPreferenceUtils.addToList(mContext, Utils.SEARCH_HISTORY, Utils.SEARCH_CONTENT, strInput);
+                    searchView.setText(strInput);
+                    searchList.setVisibility(View.GONE);
                 }
             }
         });
-        _searchView.addTextChangedListener(new TextWatcher() {
+        searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                String[] _fun = mContext.getResources().getStringArray(R.array.fun_array);
-                mThingList = new ArrayList<String>(Arrays.asList(_fun));
-                _searchList.setVisibility(View.VISIBLE);
-                _searchAdapter.updateList(mThingList, true);
+                String[] fun = mContext.getResources().getStringArray(R.array.fun_array);
+                mThingList = new ArrayList<String>(Arrays.asList(fun));
+                searchList.setVisibility(View.VISIBLE);
+                searchAdapter.updateList(mThingList, true);
             }
 
             @Override
@@ -429,19 +429,19 @@ public class MainActivity extends BaseActivity {
                     for (int i = 0; i < mThingList.size(); i++) {
                         if (mThingList.get(i).toLowerCase().startsWith(s.toString().trim().toLowerCase())) {
                             filterList.add(mThingList.get(i));
-                            _searchList.setVisibility(View.VISIBLE);
-                            _searchAdapter.updateList(filterList, true);
+                            searchList.setVisibility(View.VISIBLE);
+                            searchAdapter.updateList(filterList, true);
                             isNodata = true;
                         }
                     }
                     if (!isNodata) {
-                        _searchList.setVisibility(View.GONE);
-                        _notFoundText.setVisibility(View.VISIBLE);
-                        _notFoundText.setText("没有找到");
+                        searchList.setVisibility(View.GONE);
+                        notFoundText.setVisibility(View.VISIBLE);
+                        notFoundText.setText("没有找到");
                     }
                 } else {
-                    _searchList.setVisibility(View.GONE);
-                    _notFoundText.setVisibility(View.GONE);
+                    searchList.setVisibility(View.GONE);
+                    notFoundText.setVisibility(View.GONE);
                 }
             }
 
@@ -450,7 +450,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        _backIcon.setOnClickListener(new View.OnClickListener() {
+        backIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mInputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);  //点击按钮就隐藏软键盘，特么居然跟这里执行顺序有关系
@@ -461,13 +461,13 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        _searchIcon.setOnClickListener(new View.OnClickListener() {
+        searchIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //可以实现搜索跳转对应Activity功能
 //                edtToolSearch.setText("");
 //                SharedPreferenceUtils.deleteList(MainActivity.this, Utils.SEARCH_HISTORY); //清除历史
-                String _strInput = String.valueOf(_searchView.getText());
+                String _strInput = String.valueOf(searchView.getText());
                 if (!_strInput.equals("")) {
                     //输入框非空才跳转
                     if (mThingList.contains(_strInput)) {

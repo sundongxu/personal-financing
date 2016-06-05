@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/jz_main_bg">
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/jz_tab1_chose"
+            android:background="@drawable/journal_main_bg_tab"
             android:baselineAligned="false">
 
             <FrameLayout
@@ -22,15 +27,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/jz_bottombt_selector">
+                android:background="@drawable/journal_main_tab_bg_selector">
 
                 <ImageView
                     android:id="@+id/iv_expenditure_tab_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/jz_tab1_bt_bgs" />
+                    android:src="@drawable/journal_main_tab_pic"/>
 
                 <TextView
                     android:id="@+id/tv_expenditure_tab_name"
@@ -38,8 +42,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="@string/jz_tab2_zhichu"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/journal_add_expenditure_tab"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
             </FrameLayout>
 
             <FrameLayout
@@ -47,14 +53,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/jz_bottombt_selector">
+                android:background="@drawable/journal_main_tab_bg_selector">
 
                 <ImageView
                     android:id="@+id/iv_income_tab_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/app_name" />
+                    android:layout_gravity="center_horizontal"/>
 
                 <TextView
                     android:id="@+id/tv_income_tab_name"
@@ -62,8 +67,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="@string/jz_tab2_shouru"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/journal_add_income_tab"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"/>
             </FrameLayout>
 
             <FrameLayout
@@ -72,14 +78,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/jz_bottombt_selector">
+                android:background="@drawable/journal_main_tab_bg_selector">
 
                 <ImageView
                     android:id="@+id/iv_credit_debit_tab_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:contentDescription="@string/app_name" />
+                    android:layout_gravity="center_horizontal"/>
 
                 <TextView
                     android:id="@+id/tv_credit_debit_tab_name"
@@ -87,8 +92,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="@string/jz_tab2_jiedai"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:text="@string/journal_add_debit_crebit_tab"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/white"/>
             </FrameLayout>
         </LinearLayout>
 
@@ -98,7 +104,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/jz_bg_main_paper">
+            android:background="@drawable/journal_main_bg_content">
 
             <LinearLayout
                 android:id="@+id/ll_journal_content"
@@ -107,7 +113,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/jz_paper_bg"
+                android:background="@drawable/journal_main_bg_paper"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -126,9 +132,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/jz_tab2_jine"
+                            android:text="@string/journal_add_amount"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -142,11 +148,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:background="@drawable/jz_bottombt_selector"
-                            android:text="@string/jz_tab2_jinenum"
+                            android:background="@drawable/journal_main_tab_bg_selector"
+                            android:text="@string/zero"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#ff0066"
-                            android:textSize="22dp" />
+                            android:textColor="@color/colorAccent"
+                            android:textSize="20sp"/>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -165,9 +171,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/jz_tab2_leibie"
+                            android:text="@string/journal_add_category"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -181,10 +187,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:background="@drawable/jz_bottombt_selector"
-                            android:text="@string/jz_tab2_leibieres"
+                            android:background="@drawable/journal_main_tab_bg_selector"
+                            android:text="@string/journal_add_category_expenditure_default"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -204,9 +210,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:singleLine="true"
-                            android:text="@string/jz_tab2_shijian"
+                            android:text="@string/journal_add_time"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -220,22 +226,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:background="@drawable/jz_bottombt_selector"
+                            android:background="@drawable/journal_main_tab_bg_selector"
                             android:singleLine="true"
-                            android:text="@string/jz_tab2_timeres"
+                            android:text="@string/journal_add_date_default"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
 
                         <TextView
                             android:id="@+id/tv_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:background="@drawable/jz_bottombt_selector"
+                            android:background="@drawable/journal_main_tab_bg_selector"
                             android:singleLine="true"
-                            android:text="@string/jz_add_nowtime"
+                            android:text="@string/journal_add_time_default"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -253,10 +259,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:background="@drawable/jz_bottombt_selector"
-                            android:text="@string/jz_tab2_beizhu"
+                            android:background="@drawable/journal_main_tab_bg_selector"
+                            android:text="@string/journal_add_remark"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -273,9 +279,9 @@
                             android:marqueeRepeatLimit="marquee_forever"
                             android:maxLines="2"
                             android:singleLine="true"
-                            android:text="@string/jz_tab2_beizhures"
+                            android:text="@string/journal_add_no_remark"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -296,9 +302,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
-                            android:text="@string/jz_tab2_tianjiapic"
+                            android:text="@string/journal_add_photo"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#000000" />
+                            android:textColor="@color/black"/>
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -312,68 +318,51 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:contentDescription="@string/app_name"
-                            android:src="@drawable/jz_add_pic" />
+                            android:src="@drawable/journal_add_pic"/>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="19dp"
-            android:background="@drawable/jz_bg_bottom"/>
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-            <FrameLayout
-                android:id="@+id/fl_save"
+            <Button
+                android:id="@+id/btn_journal_save"
+                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/jz_addbt_selector">
+                android:layout_height="40dp"
+                android:background="@drawable/button_round_corner"
+                android:text="@string/journal_btn_save"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/jz_add_save"
-                    android:textColor="#000000" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/fl_delete"
+            <Button
+                android:id="@+id/btn_journal_cancel"
+                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/jz_addbt_selector">
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/button_round_corner"
+                android:text="@string/journal_btn_cancel"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/jz_add_del"
-                    android:textColor="#000000" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/fl_cancel"
+            <Button
+                android:id="@+id/btn_journal_delete"
+                style="?android:textAppearanceSmall"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/jz_addbt_selector">
+                android:layout_height="40dp"
+                android:layout_marginLeft="30dp"
+                android:background="@drawable/button_round_corner"
+                android:text="@string/journal_btn_delete"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/jz_add_quxiao"
-                    android:textColor="#000000" />
-            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -381,7 +370,8 @@
         android:id="@+id/ll_num_input_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
         android:background="@drawable/icon_bg"
         android:orientation="vertical">
 
@@ -391,51 +381,51 @@
 
             <Button
                 android:id="@+id/btn_num_1"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_1" />
+                android:text="@string/one"/>
 
             <Button
                 android:id="@+id/btn_num_2"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_2" />
+                android:text="@string/two"/>
 
             <Button
                 android:id="@+id/btn_num_3"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_3" />
+                android:text="@string/three"/>
 
             <Button
                 android:id="@+id/btn_num_4"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_4" />
+                android:text="@string/four"/>
 
             <Button
                 android:id="@+id/btn_num_5"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_5" />
+                android:text="@string/five"/>
 
             <Button
                 android:id="@+id/btn_num_delete"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_del" />
+                android:text="@string/del"/>
         </LinearLayout>
 
         <LinearLayout
@@ -444,52 +434,52 @@
 
             <Button
                 android:id="@+id/btn_num_6"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_6" />
+                android:text="@string/six"/>
 
             <Button
                 android:id="@+id/btn_num_7"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_7" />
+                android:text="@string/seven"/>
 
             <Button
                 android:id="@+id/btn_num_8"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_8" />
+                android:text="@string/eight"/>
 
             <Button
                 android:id="@+id/btn_num_9"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_9" />
+                android:text="@string/nine"/>
 
             <Button
                 android:id="@+id/btn_num_0"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_0" />
+                android:text="@string/zero"/>
 
             <Button
                 android:id="@+id/btn_num_point"
-                style="@style/jz_add_button_style"
+                style="@style/journal_add_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/jz_d" />
+                android:text="@string/point"/>
         </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

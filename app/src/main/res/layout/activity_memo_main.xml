@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/jz_add_numbt_selector"
+                android:background="@drawable/journal_add_number_selector"
                 android:text="@string/memo_main_select_all"/>
         </RelativeLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/jz_add_numbt_selector"
+                android:background="@drawable/journal_add_number_selector"
                 android:text="@string/memo_main_delete"/>
         </RelativeLayout>
 
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:background="@drawable/jz_add_numbt_selector"
+                android:background="@drawable/journal_add_number_selector"
                 android:text="@string/memo_main_cancelselect"/>
         </RelativeLayout>
     </LinearLayout>
